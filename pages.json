@@ -1,11 +1,9 @@
 {
 	/* 全局按需引入组件 */
 	"easycom": {
-		// "^u-(.*)": "uview-ui/components/u-$1/u-$1.vue",
-		// "^ru-(.*)": "@/components/ru-$1.vue",
-		// "^diy-(.*)": "@/components/diy-$1.vue"
+		"^u-(.*)": "uview-ui/components/u-$1/u-$1.vue"
 	},
-	/* 主包 */
+	/* 主包  仅存放tabbar页面*/
 	"pages": [{
 		"path": "pages/index/index",
 		"style": {

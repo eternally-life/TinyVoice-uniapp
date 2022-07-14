@@ -12,5 +12,12 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "uview-ui": "^2.0.31"
+  },
+  "devDependencies": {
+    "sass": "^1.53.0",
+    "sass-loader": "^10.3.1"
+  }
 }

@@ -5,6 +5,7 @@
 			<text class="title">{{title}}</text>
 		</view>
 		测试页 tabber1
+		<u-button type="primary" icon="map" text="uView组件"></u-button>
 	</view>
 </template>
 

@@ -3,7 +3,9 @@ import App from './App'
 import Vue from 'vue'
 import store from "./store"
 
-
+//引入uView
+import uView from "uview-ui";
+Vue.use(uView);
 
 // 挂载vuex
 Vue.prototype.$store = store
