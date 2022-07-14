@@ -1,0 +1,16 @@
+{
+  "name": "tinyvoice-uniapp",
+  "version": "1.0.0",
+  "description": "安装、更新依赖",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@114.132.248.160:tinyvoice/tinyvoice-uniapp.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
