@@ -1,59 +1,63 @@
+/* ======固定部分 开始====== */
 @font-face {
-  font-family: "iconfont"; /* Project id 3523630 */
-  src: 
-       url('static/icon/iconfont.woff?t=1657858423509') format('woff'),
-       url('static/icon/iconfont.ttf?t=1657858423509') format('truetype');
+	font-family: "iconfont";
+	/* Project id 3523630 */
+	src:
+		url('static/icon/iconfont.woff?t=1657858423509') format('woff'),
+		url('static/icon/iconfont.ttf?t=1657858423509') format('truetype');
 }
 
 .iconfont {
-  font-family: "iconfont" !important;
-  font-size: 16px;
-  font-style: normal;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+	font-family: "iconfont" !important;
+	font-size: 16px;
+	font-style: normal;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
 }
 
+/* ======固定部分 结束====== */
+/* ----以下为更新时替换部分---- */
+
 .icon-weixin-01:before {
-  content: "\e6b9";
+	content: "\e6b9";
 }
 
 .icon-QQ-01:before {
-  content: "\e6ba";
+	content: "\e6ba";
 }
 
 .icon-chengji:before {
-  content: "\e604";
+	content: "\e604";
 }
 
 .icon-shuaxin:before {
-  content: "\e60c";
+	content: "\e60c";
 }
 
 .icon-pingjiao:before {
-  content: "\e612";
+	content: "\e612";
 }
 
 .icon-xuefenji:before {
-  content: "\e61d";
+	content: "\e61d";
 }
 
 .icon-xuefen:before {
-  content: "\e620";
+	content: "\e620";
 }
 
 .icon-yingyupingjunfen:before {
-  content: "\e623";
+	content: "\e623";
 }
 
 .icon-ticejisuan:before {
-  content: "\e624";
+	content: "\e624";
 }
 
 .icon-yixuankecheng:before {
-  content: "\e627";
+	content: "\e627";
 }
 
 .icon-qiehuan:before {
-  content: "\e63b";
+	content: "\e63b";
 }
-
