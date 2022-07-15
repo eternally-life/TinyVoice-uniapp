@@ -1,0 +1,23 @@
+/* 
+彩色图标使用方法：
+	1.将矢量图表库项目整个下载下来  并解压
+	2.在解压目录执行命令下载工具包并执行
+		安装工具包	npm install -g iconfont-tools
+		执行转换工具	 iconfont-tools
+		然后一路回车即可
+	3.将生成目录下的 iconfont-weapp-icon.css 引入项目即可
+	4.使用时 类名前加 t-
+	转换后 是图片  不能再使用font-size调整大小 
+ */
+/* ======固定部分====== */
+.t-icon {
+	display: inline-block;
+	width: 16px;
+	height: 16px;
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: 100%;
+}
+
+/* ======固定部分====== */
+

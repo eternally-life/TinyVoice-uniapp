@@ -31,6 +31,14 @@ export default {
 </script>
 
 <style lang="scss">
-@import 'uview-ui/index.scss';
 /*每个页面公共css */
+@import 'uview-ui/index.scss';
+//icon图标
+@import './style/icon.css';
+// 彩色icon图标
+@import './style/color_icon.css';
+// animate动画库
+@import './style/animate.min.css';
+
+ 
 </style>
