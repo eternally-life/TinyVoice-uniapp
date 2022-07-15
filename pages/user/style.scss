@@ -1,0 +1,86 @@
+.content {
+	width: 686rpx;
+	background: #ccc;
+	margin: 0 auto;
+	display: flex;
+	flex-direction: column;
+
+	.top {
+		width: 100%;
+		height: 80rpx;
+		display: flex;
+
+		.left {
+			width: 80rpx;
+			height: 80rpx;
+
+			.logo {
+				width: 100%;
+				height: 100%;
+			}
+		}
+
+		.right {
+			width: 606rpx;
+			display: flex;
+			flex-direction: column;
+		}
+	}
+
+	.own {
+		width: 100%;
+		display: flex;
+		justify-content: space-around;
+		margin-top: 80rpx;
+		.box {
+			display: flex;
+			flex-direction: column;
+
+			align-items: center;
+
+			.num {
+				display: flex;
+				justify-content: center;
+			}
+		}
+	}
+	.mine {
+		display: flex;
+		justify-content: space-around;
+		margin-top: 80rpx;
+		.goto {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+		}
+	}
+	.about {
+		display: flex;
+		flex-direction: column;
+		margin-top: 80rpx;
+		.goto {
+			display: flex;
+			justify-content: space-between;
+			&>:first-child {
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				width: 80rpx;
+				height: 80rpx;
+			}
+			.target{
+				display: flex;
+				align-items: center;
+				justify-content: flex-start;
+				width: 100%;
+			}
+			&>:last-child {
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				width: 80rpx;
+				height: 80rpx;
+			}
+		}
+	}
+}
