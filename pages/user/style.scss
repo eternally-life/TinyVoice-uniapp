@@ -61,26 +61,26 @@
 		.goto {
 			display: flex;
 			justify-content: space-between;
-			&>:first-child {
-				display: flex;
-				align-items: center;
-				justify-content: center;
-				width: 80rpx;
-				height: 80rpx;
-			}
+			// &>:first-child {
+			// 	display: flex;
+			// 	align-items: center;
+			// 	justify-content: center;
+			// 	width: 80rpx;
+			// 	height: 80rpx;
+			// }
 			.target{
 				display: flex;
 				align-items: center;
 				justify-content: flex-start;
 				width: 100%;
 			}
-			&>:last-child {
-				display: flex;
-				align-items: center;
-				justify-content: center;
-				width: 80rpx;
-				height: 80rpx;
-			}
+			// &>:last-child {
+			// 	display: flex;
+			// 	align-items: center;
+			// 	justify-content: center;
+			// 	width: 80rpx;
+			// 	height: 80rpx;
+			// }
 		}
 	}
 }
