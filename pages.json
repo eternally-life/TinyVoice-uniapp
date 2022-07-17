@@ -1,7 +1,8 @@
 {
 	/* 全局按需引入组件 */
 	"easycom": {
-		"^u-(.*)": "uview-ui/components/u-$1/u-$1.vue"
+		"^u-(.*)": "uview-ui/components/u-$1/u-$1.vue",
+		"^guet-(.*)": "@/components/guet-plug/guet-$1.vue"
 	},
 	/* 主包  仅存放tabbar页面*/
 	"pages": [{
