@@ -31,7 +31,7 @@
 		}
 
 	}],
-	/* 分包 */
+	/* 基础分包 */
 	"subPackages": [{
 		"root": "subpages",
 		"pages": [{
@@ -40,8 +40,68 @@
 				"navigationBarTitleText": "",
 				"enablePullDownRefresh": false
 			}
-
 		}]
+	}],
+	/* 教务相关分包 */
+	"subpages_edu": [{
+		"root": "subpages_edu",
+		"pages": [{
+				"path": "final_exam/final_exam",
+				"style": {
+					"navigationBarTitleText": "查看 期末成绩",
+					"enablePullDownRefresh": false
+				}
+			},
+			{
+				"path": "selected_courses/selected_courses",
+				"style": {
+					"navigationBarTitleText": "查询 已选课程",
+					"enablePullDownRefresh": false
+				}
+			},
+			{
+				"path": "credit/credit",
+				"style": {
+					"navigationBarTitleText": "查询 学分",
+					"enablePullDownRefresh": false
+				}
+			},
+			{
+				"path": "english/english",
+				"style": {
+					"navigationBarTitleText": "英语均分",
+					"enablePullDownRefresh": false
+				}
+			},
+			{
+				"path": "gpa/gpa",
+				"style": {
+					"navigationBarTitleText": "查询 学分绩",
+					"enablePullDownRefresh": false
+				}
+			},
+			{
+				"path": "help_setting/help_setting",
+				"style": {
+					"navigationBarTitleText": "Q&A、相关设置",
+					"enablePullDownRefresh": false
+				}
+			},
+			{
+				"path": "test_physical/test_physical",
+				"style": {
+					"navigationBarTitleText": "体测成绩自助计算",
+					"enablePullDownRefresh": false
+				}
+			},
+			{
+				"path": "substitute_query_menu/substitute_query_menu",
+				"style": {
+					"navigationBarTitleText": "代 查 菜 单",
+					"enablePullDownRefresh": false
+				}
+			}
+		]
 	}],
 	// 全局样式
 	"globalStyle": {
@@ -51,6 +111,7 @@
 		"backgroundColor": "#F8F8F8"
 	},
 	"uniIdRouter": {},
+	/* tabbar 样式控制 */
 	"tabBar": {
 		"color": "#000000",
 		"selectedColor": "#2dc1cf",
