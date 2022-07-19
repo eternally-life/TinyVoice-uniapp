@@ -1,7 +1,7 @@
 // const BASE_URL = 'http://498812h08b.zicp.vip'
-// const BASE_URL = 'http://4122604mt1.51vip.biz' // 开发api
+const BASE_URL = 'http://106.52.58.11:28080' // 开发api
 // const BASE_URL = 'https://tinyvoice.glowxq.com:10000' 
-// const loginUtil = require('./loginUtil.js')
+const loginUtil = require('./loginUtil.js')
 
 export function request({
 	url,
@@ -24,7 +24,7 @@ export function request({
 			header: getHeader(),
 			success: (res) => {
 				if (res.statusCode === 200) {
-					// flag && loginUtil.loginStatus(res.data.code)
+					flag && loginUtil.loginStatus(res.data.code)
 					resolve(res)
 				}
 			},

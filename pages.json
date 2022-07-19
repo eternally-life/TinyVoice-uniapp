@@ -6,6 +6,13 @@
 	},
 	/* 主包  仅存放tabbar页面*/
 	"pages": [{
+		"path": "pages/user/user",
+		"style": {
+			"navigationBarTitleText": "我的",
+			"enablePullDownRefresh": false
+		}
+
+	}, {
 		"path": "pages/index/index",
 		"style": {
 			"navigationBarTitleText": "uni-app"
@@ -25,9 +32,16 @@
 		}
 
 	}, {
-		"path": "pages/user/user",
+		"path": "pages/login/login",
 		"style": {
-			"navigationBarTitleText": "",
+			"navigationBarTitleText": "登录",
+			"enablePullDownRefresh": false
+		}
+
+	}, {
+		"path": "pages/regist/regist",
+		"style": {
+			"navigationBarTitleText": "注册",
 			"enablePullDownRefresh": false
 		}
 

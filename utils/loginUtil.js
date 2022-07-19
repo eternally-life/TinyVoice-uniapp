@@ -1,13 +1,8 @@
-// import {
-// 	authTokenauthCommonLogin_Post
-// } from '@/api/admin-管理员.json/登录注册token.js'
-// import {
-// 	systemUsermanageGetInfo_Get,
-// 	systemUsermanageList
-// } from '@/api/SYS/用户信息管理.js'
-// import {
-// 	systemUsermsgnoticeList_Get
-// } from '@/api/SYS/消息公告.js'
+import {
+	authLoginregisterVerificationCodeLogin_Post,
+	authLoginregisterVerificationCode_Get,
+	authLoginregisterWxLogin_Post
+} from '@/api/SYSTEM/登录注册.js'
 
 
 // 检查登录状态 
@@ -90,15 +85,14 @@ export function qqLogin() {
 	})
 }
 
-// 登录方法
+// wx登录方法
 export function wxLogin() {
 	setGloalDataLoginNum()
 	uni.login({
 		success: (res) => {
 			provider: 'weixin'
 			// TODO 登录逻辑 - 更新token
-			authTokenauthCommonLogin_Post({
-				loginType: 2,
+			authLoginregisterWxLogin_Post({
 				wxCode: res.code
 			}).then(res => {
 				// 存储全局 token
