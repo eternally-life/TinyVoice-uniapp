@@ -17,6 +17,13 @@ Vue.prototype.$ShowToastNone = ShowToastNone
 import uView from "uview-ui";
 Vue.use(uView);
 
+//引入风控检测、全局oss
+import {
+	gMixins
+} from '@/utils/mixins.js'
+
+Vue.mixin(gMixins);
+
 // 挂载vuex
 Vue.prototype.$store = store
 App.mpType = 'app'

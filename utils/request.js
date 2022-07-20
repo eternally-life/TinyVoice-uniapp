@@ -73,3 +73,7 @@ function urlencode(data, isPrefix = true) {
 
 	return _result.length ? prefix + _result.join('&') : ''
 }
+
+export function get_baseUrl() {
+	return BASE_URL
+}

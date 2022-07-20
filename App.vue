@@ -12,6 +12,7 @@ export default {
 	globalData: {
 		windowHeight: null,
 		token: null || uni.getStorageSync('token'),
+		myDate: new Date(), //全局启动时间
 		loginNum: 0,
 		wxUserInfo: {},
 		qqUserInfo: {},
@@ -39,6 +40,4 @@ export default {
 @import './style/color_icon.css';
 // animate动画库
 @import './style/animate.min.css';
-
- 
 </style>

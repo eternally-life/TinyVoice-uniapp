@@ -94,7 +94,6 @@ npm install        //安装依赖
 
 1. 将图标项目下载至本地，并解压
    
-
 2. 安装工具包（已安装的跳过此步）
 
    - 在解压目录下使用npm安装
@@ -120,13 +119,44 @@ npm install        //安装依赖
 
 4. 将生成目录下的 `iconfont-weapp-icon.css` 中图标内容替换至项目中 `/style/color_icon.css` 文件对应的图标内容
    
-
 5. 使用时 类名前加 t-，具体看工具文档
    
-
 6. **注意事项**：转换后 是图片，不能再使用font-size调整大小。且无法调色
 
+### 7、文件上传（等接口即可实装）
 
+对图片、视频上传进行了封装。（内含风控接入，根据实际情况开关即可）
+
+调用方法示例(发布微音场景)
+
+```vue
+<template>
+	<view>
+        <ty-file-upload
+            @upPara="getImgData"
+            paraGetMethods="active"
+            iniTopPath="images/ty"
+            :initData="fileList1" 
+        /> 
+    </view>
+</template>
+
+<script>
+export default {
+    methods:{
+        getImgData(e){
+            console.log('组件返回数据列表', e);
+        }
+    }
+}
+</script>
+```
+
+理论上支持头像，但可能需要使用ref
+
+
+
+### 8、内容风控检测(等接口即可实装)
 
 
 
