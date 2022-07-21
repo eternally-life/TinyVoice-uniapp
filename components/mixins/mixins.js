@@ -99,30 +99,6 @@ function check_string(para) {
 	})
 }
 
-/**压缩图片
- * @param {object} file = {path:string,  size:number}  
- * @return {string} 直接返回图片原路径或处理后的临时文件路径
- * */
-function pictureCompression(file) {
-	return new Promise((resolve, rreject) => {
-		if (file.size > 1000) {
-			uni.compressImage({
-				src: file.path,
-				quality: 80,
-				width: '50%',
-				height: '50%',
-				success: ress => {
-					// console.log('压缩结果----------', ress, ress.tempFilePath);
-					resolve(ress.tempFilePath);
-				}
-			});
-		} else {
-			resolve(file.path);
-		}
-	})
-}
-
-
 /** 检测图片
  * @param {object} filePara = {path:string,  size:number}
  * @return {boolean} 返回布尔值
@@ -139,11 +115,10 @@ async function check_img(filePara) {
 			url: get_baseUrl() + '/system/file/upload/oss',
 			name: 'file',
 			filePath: newFilePath,
-			header: getHeader()
+			header: getHeader(),
 			success: res => {
 				let respon = JSON.parse(res.data);
 				console.log('图片风控检测结果', respon);
-
 
 				if (respon.code == 200) {
 					resolve(true);
