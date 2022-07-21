@@ -254,7 +254,7 @@
 					return;
 				}
 				uni.navigateTo({
-					url: '../login/login'
+					url: '/subpages/login/login'
 				});
 			},
 			async getNewList() { // 获取消息数目
@@ -325,7 +325,7 @@
 								getApp().globalData.token = null;
 								getApp().globalData.wxUserInfo = {};
 								uni.reLaunch({
-									url: '../login/login'
+									url: '/subpages/login/login'
 								});
 							}
 						}
@@ -359,7 +359,7 @@
 								getApp().globalData.token = null;
 								getApp().globalData.wxUserInfo = {};
 								uni.reLaunch({
-									url: '../login/login'
+									url: '/subpages/login/login'
 								});
 							}
 						}

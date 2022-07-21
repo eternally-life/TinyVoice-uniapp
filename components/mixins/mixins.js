@@ -6,13 +6,13 @@
 // 	apiBusinessNewCheckText_Get,
 // } from '@/API/新接口.js'
 
-// import {
-// 	apiStoreOssUploadFile_Get,
-// 	apiStoreUpload_Post
-// } from '@/API/文件上传存储.js';
-// import {
-// 	get_baseUrl
-// } from '@/utils/request.js'
+import {
+	systemFileUploadSignature_Get,
+} from '@/api/SYSTEM/文件请求处理.js';
+import {
+	get_baseUrl,
+	getHeader
+} from '@/utils/request.js'
 
 export const gMixins = {
 	data() {
@@ -62,7 +62,7 @@ export const gMixins = {
 		 * */
 		getOssToken() {
 			return new Promise((resolve, reject) => {
-				apiStoreOssUploadFile_Get().then(res => {
+				systemFileUploadSignature_Get().then(res => {
 					if (res.data.code == 200) {
 						resolve(res.data.data);
 					} else {
@@ -130,17 +130,22 @@ function pictureCompression(file) {
 async function check_img(filePara) {
 
 	// 检测接口限定图片1M以内 先处理图片再检测
-	const newFilePath = await pictureCompression(filePara);
+	// const newFilePath = await pictureCompression(filePara);
+
+	const newFilePath = filePara.path;
 
 	return new Promise((resolve, reject) => {
 		uni.uploadFile({
-			url: get_baseUrl() + '/api/business/new/checkImg',
+			url: get_baseUrl() + '/system/file/upload/oss',
 			name: 'file',
 			filePath: newFilePath,
+			header: getHeader()
 			success: res => {
 				let respon = JSON.parse(res.data);
 				console.log('图片风控检测结果', respon);
-				if (respon.code == 200 && respon.msg.indexOf('通过') != -1) {
+
+
+				if (respon.code == 200) {
 					resolve(true);
 				} else if (respon.code == 500 && respon.msg.indexOf('大于') != -1) {
 					imgTip('图片过大');

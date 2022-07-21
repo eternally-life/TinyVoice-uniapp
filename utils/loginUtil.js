@@ -53,7 +53,7 @@ export function qqLogin() {
 				console.log(reslut);
 				if (reslut.data.code === 8081) {
 					uni.navigateTo({
-						url: '/pages/login/login',
+						url: '/subpages/login/login',
 						success: () => {
 							uni.showToast({
 								title: '请先账号登录qq绑定',

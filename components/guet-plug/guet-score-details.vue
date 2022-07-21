@@ -36,7 +36,7 @@
 </template>
 
 <script>
-import { eduGuetUsingTheIntegral_Post } from '@/api/GUET/教务开放接口.js';
+// import { eduGuetUsingTheIntegral_Post } from '@/api/GUET/教务开放接口.js';
 import { mapState, mapGetters } from 'vuex';
 export default {
 	name: 'guet-score-details',

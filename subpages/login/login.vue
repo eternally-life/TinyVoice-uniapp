@@ -162,7 +162,7 @@
 						// uni.setStorageSync("wxuserInfo",res.userInfo)
 						var userInfo = JSON.stringify(res.userInfo);
 						uni.navigateTo({
-							url: '../regist/regist?userInfo=' + userInfo
+							url: '/subpages/regist/regist?userInfo=' + userInfo
 						})
 					},
 					fail: err => {
@@ -277,7 +277,7 @@
 													username: this.username,
 												}
 												uni.navigateTo({
-													url: '../regist/regist?userInfo=' +
+													url: '/subpages/regist/regist?userInfo=' +
 														userInfo +
 														'&loginData=' +
 														JSON.stringify(

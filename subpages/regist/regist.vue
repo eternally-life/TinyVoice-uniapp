@@ -178,7 +178,7 @@
 								console.log(result);
 								if (result.data.code === 200) {
 									uni.reLaunch({
-										url: '../login/login'
+										url: '/subpages/login/login'
 									});
 									this.$ShowToastNone('注册成功，请重新登录');
 									return;

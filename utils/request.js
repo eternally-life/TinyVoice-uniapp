@@ -1,5 +1,6 @@
 // const BASE_URL = 'http://498812h08b.zicp.vip'
 const BASE_URL = 'http://106.52.58.11:12574' // 开发api
+// http://106.52.58.11:12574
 // const BASE_URL = 'https://tinyvoice.glowxq.com:10000' 
 const loginUtil = require('./loginUtil.js')
 
@@ -39,7 +40,7 @@ export function request({
 	})
 }
 
-function getHeader() {
+export function getHeader() {
 	// 从全局变量拿token
 	var token = getApp().globalData.token
 	// 全局变量没有token,则去缓存拿

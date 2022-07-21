@@ -20,7 +20,7 @@ Vue.use(uView);
 //引入风控检测、全局oss
 import {
 	gMixins
-} from '@/utils/mixins.js'
+} from '@/components/mixins/mixins.js'
 
 Vue.mixin(gMixins);
 

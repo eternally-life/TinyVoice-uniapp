@@ -40,7 +40,7 @@ export default {
 		},
 		/** 参数获取方式
 		 * @param (string){paraGetMethods} = 'active'  通过upPara事件回传数据
-		 * @param (string){paraGetMethods} = 'passive' 外部同ref调用上传（缺省）
+		 * @param (string){paraGetMethods} = 'passive' 外部同ref调用upData方法上传（缺省）
 		 * */
 		paraGetMethods: {
 			type: String,
@@ -179,6 +179,7 @@ export default {
 		upData() {
 			/* 未选中图片、视频 */
 			if ((this.imgList.length == 0 && this.fileType) || (this.videoList.length == 0 && !this.fileType)) {
+				console.log('空');
 				return [];
 			}
 
@@ -215,39 +216,30 @@ export default {
 		 * */
 		async afterRead(event) {
 			uni.showLoading({ title: '图片加载中' });
-			if (Object.keys(this.ossToken).length == 0) {
-				const netResult = await this.getOssToken();
-				/* 当前无法获取OSS签名 */
-				if (netResult === false) {
-					console.error('获取不到OSS签名，当前无法上传文件', netResult);
-					return;
-				} else {
-					this.ossToken = netResult;
-				}
-			}
+			// if (Object.keys(this.ossToken).length == 0) {
+			// 	const netResult = await this.getOssToken();
+			// 	/* 当前无法获取OSS签名 */
+			// 	if (netResult === false) {
+			// 		console.error('获取不到OSS签名，当前无法上传文件', netResult);
+			// 		return;
+			// 	} else {
+			// 		this.ossToken = netResult;
+			// 	}
+			// }
+			console.log('选中图片', event);
 			new Promise((resolve, reject) => {
 				[].concat(event.file).map(async (item, index) => {
-					if (this.fileType) {
-						const isSafe = true; //未启用风控时  使用这个。开启风控后解开下一行注释
-						// const isSafe = await this.safe_dataContentCheck({ path: item.url, size: item.size }, 'img');
-						// console.log('风控状态', isSafe);
-						if (isSafe) {
-							this.imgList.push({ ...item, done: false });
-						}
-					} else {
-						this.videoList.push({ ...item, done: false });
+					const isSafe = await this.safe_dataContentCheck({ path: item.url, size: item.size }, 'img');
+					if (isSafe) {
+						this.fileType
+							? this.imgList.push({ ...item, done: false })
+							: this.videoList.push({ ...item, done: false });
 					}
 
-					/* 以上仅检测图片。  以下则图片、视频均检测  视频接口暂时没有*/
-					// const isSafe = await this.safe_dataContentCheck({ path: item.url, size: item.size }, 'img');
-					// if (isSafe) {
-					// 	this.fileType
-					// 		? this.imgList.push({ ...item, done: false })
-					// 		: this.videoList.push({ ...item, done: false });
-					// }
-
 					if (index == event.file.length - 1) {
+						console.log('最终结果', this.imgList);
 						// 遍历至最后一项才往下走
+						reject();
 						resolve();
 					}
 				});

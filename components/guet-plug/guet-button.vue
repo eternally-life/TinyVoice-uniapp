@@ -2,7 +2,13 @@
 <template>
 	<view class="school">
 		<u-scroll-list :indicator="false" indicatorColor="#ffffff" indicatorActiveColor="#cfcfcf">
-			<view v-for="(item, index) in educaList" :key="index" @click="schoolTap(item)" hover-class="hove_style" hover-stay-time="500">
+			<view
+				v-for="(item, index) in educaList"
+				:key="index"
+				@click="schoolTap(item)"
+				hover-class="hove_style"
+				hover-stay-time="500"
+			>
 				<view class="schoolItem"><view class="t-icon fix-t-icon" :class="item.icon"></view></view>
 				{{ item.name }}
 			</view>
@@ -13,7 +19,7 @@
 
 <script>
 const prf = 't-',
-	urlPrf = '/pages/';
+	urlPrf = '/subpages_edu/';
 export default {
 	name: 'guet-button',
 	data() {
@@ -22,45 +28,45 @@ export default {
 				{
 					name: '成绩',
 					icon: prf + 'icon-chengji',
-					src: 'edu_final_exam',
+					src: 'final_exam',
 					transferType: 0
 				},
 				{
 					name: '已选课程',
 					icon: prf + 'icon-yixuankecheng',
-					src: 'edu_selected_courses',
+					src: 'selected_courses',
 					transferType: 0
 				},
 				{
 					name: '学分',
 					icon: prf + 'icon-xuefen',
-					src: 'edu_credit',
+					src: 'credit',
 					transferType: -1
 				},
 				{
 					name: '学分绩',
 					icon: prf + 'icon-xuefenji',
-					src: 'edu_gpa',
+					src: 'gpa',
 					transferType: 1
 				},
 				{
 					name: '体测自算',
 					icon: prf + 'icon-ticejisuan',
-					src: 'edu_test_physical',
+					src: 'test_physical',
 					transferType: -1
 				},
 				{
 					name: '英语均分',
 					icon: prf + 'icon-yingyupingjunfen',
-					src: 'edu_english',
+					src: 'english',
 					transferType: -1
 				},
 				{
 					name: '代查',
 					icon: prf + 'icon-pingjiao',
-					src: 'edu_substitute_query_menu',
+					src: 'substitute_query_menu',
 					transferType: -1
-				},
+				}
 				/*{
 					name: '空教室',
 					icon: prf + 'icon-pingjiao',
@@ -90,16 +96,19 @@ export default {
 			} else {
 				this.transferTypeChange(para.transferType);
 				//此处 补全路径
-				this.toUrl(urlPrf + para.src + '/' + para.src);
+				let aaa = urlPrf + para.src + '/' + para.src;
+				this.toUrl(aaa);
 			}
 		},
 		toUrl(srcPara) {
-			// console.log(srcPara);
 			uni.navigateTo({
-				url: srcPara
+				url: srcPara,
+				fail(err) {
+					console.log(err);
+				}
 			});
 		},
-		
+
 		/* 修改跳转类型 */
 		transferTypeChange(type) {
 			if (type == -1) return;

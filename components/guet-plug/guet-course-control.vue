@@ -10,7 +10,7 @@
 
 <script>
 import { mapState, mapMutations, mapAction } from 'vuex';
-const GUET = require('@/api/GUET/教务开放接口.js');
+// const GUET = require('@/api/GUET/教务开放接口.js');
 const manageData = require('@/utils/manageData.js');
 export default {
 	name: 'guet-course-control',
@@ -67,7 +67,11 @@ export default {
 				} else {
 					//传入周数 < 最大数据长度时
 					this.oneWeekCourse = manageData.dataDeposit(this.all_course_data, week);
-					this.$refs.uToast.show({ type: 'success', message: '第' + (week + 1) + '周课表加载成功', duration: 1000 });
+					this.$refs.uToast.show({
+						type: 'success',
+						message: '第' + (week + 1) + '周课表加载成功',
+						duration: 1000
+					});
 
 					// 单次渲染
 					this._onceRender();
@@ -117,7 +121,12 @@ export default {
 						return this.grouping(res.data.data);
 					} else {
 						// this.$ShowToastErr('课表请求异常');
-						this.$refs.uToast.show({ type: 'error', message: '课表请求异常：' + res.data.code, duration: 1000, position: 'bottom' });
+						this.$refs.uToast.show({
+							type: 'error',
+							message: '课表请求异常：' + res.data.code,
+							duration: 1000,
+							position: 'bottom'
+						});
 					}
 				});
 				// 存储数据
@@ -140,7 +149,12 @@ export default {
 			} else {
 				console.error(key + '缓存错误');
 				// this.$ShowToastErr('缓存错误，教务异常');
-				this.$refs.uToast.show({ type: 'error', message: '缓存错误，教务异常', duration: 1000, position: 'bottom' });
+				this.$refs.uToast.show({
+					type: 'error',
+					message: '缓存错误，教务异常',
+					duration: 1000,
+					position: 'bottom'
+				});
 			}
 		},
 
