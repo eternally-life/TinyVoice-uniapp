@@ -37,7 +37,6 @@
 			"navigationBarTitleText": "工具",
 			"enablePullDownRefresh": false
 		}
-
 	}],
 	"subPackages": [
 		/* 基础分包 */

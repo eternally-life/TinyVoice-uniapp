@@ -70,7 +70,7 @@ npm install        //安装依赖
 
 
 
-### 6、iconfont引入、更新
+### 6、iconfont引入、更新方法
 
 阿里巴巴矢量图标不提供在线连接（2022年7月15日），需将在线引入转为本地引入。
 
@@ -78,7 +78,7 @@ npm install        //安装依赖
 
 #### 普通图标
 
-==操作步骤如下==：
+操作步骤如下：
 
 1. 图标库最新项目下载至本地，并解压
 
@@ -99,7 +99,7 @@ npm install        //安装依赖
    - 在解压目录下使用npm安装
 
      ```javascript
-     //此处建议全局安装 
+     //此处建议全局安装 ，但不要在项目目录下安装
      npm install -g iconfont-tools 
      ```
 
@@ -132,31 +132,21 @@ npm install        //安装依赖
 ```vue
 <template>
 	<view>
-        <ty-file-upload
-            @upPara="getImgData"
-            paraGetMethods="active"
-            iniTopPath="images/ty"
-            :initData="fileList1" 
-        /> 
-    </view>
+		<ty-file-upload @upPara="getImgData" paraGetMethods="active" />
+	</view>
 </template>
 
 <script>
 export default {
-    methods:{
-        getImgData(e){
-            console.log('组件返回数据列表', e);
-        }
-    }
-}
+	methods: {
+		getImgData(e) {
+			console.log('页面接收到的组件返回数据', e, '总长' + e.length);
+		}
+	}
+};
 </script>
 ```
 
 理论上支持头像，但可能需要使用ref
-
-
-
-### 8、内容风控检测(等接口即可实装)
-
 
 
