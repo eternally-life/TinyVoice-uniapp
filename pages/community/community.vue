@@ -12,7 +12,7 @@ export default {
 	},
 	methods: {
 		getImgData(e) {
-			console.log('页面接收到的组件返回数据', e);
+			console.log('页面接收到的组件返回数据', e, '总长' + e.length);
 		}
 	}
 };

@@ -19,10 +19,10 @@ Vue.use(uView);
 
 //引入风控检测、全局oss
 import {
-	gMixins
+	g_mixins
 } from '@/components/mixins/mixins.js'
 
-Vue.mixin(gMixins);
+Vue.mixin(g_mixins);
 
 // 挂载vuex
 Vue.prototype.$store = store

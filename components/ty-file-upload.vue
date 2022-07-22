@@ -40,8 +40,8 @@ export default {
 			default: true
 		},
 		/** 参数获取方式
-		 * @param (string){paraGetMethods} = 'active'  通过upPara事件回传数据
-		 * @param (string){paraGetMethods} = 'passive' 外部同ref调用upData方法上传（缺省）
+		 * @param (string){paraGetMethods} = 'active'  通过upPara事件回传数据 <同步>
+		 * @param (string){paraGetMethods} = 'passive' 外部同ref调用upData方法上传（缺省）<异步>
 		 * */
 		paraGetMethods: {
 			type: String,
@@ -78,24 +78,8 @@ export default {
 		},
 		/* 动态计算文件选择个数  */
 		imgMaxCount() {
-			return this.iniCount != 0 ? this.iniCount : this.avatarFlag ? 1 : 10;
-		},
-		/* 返回当前时间的字符串 防止意外情况小图片重名*/
-		toDayStr() {
-			return (
-				'_' +
-				getApp()
-					.globalData.myDate.getFullYear()
-					.toString() +
-				'_' +
-				getApp()
-					.globalData.myDate.getMonth()
-					.toString() +
-				'_' +
-				getApp()
-					.globalData.myDate.getDate()
-					.toString()
-			);
+			let count = this.iniCount != 0 ? this.iniCount : this.avatarFlag ? 1 : 9;
+			return count > 9 ? 9 : count;
 		}
 	},
 	watch: {
@@ -132,10 +116,6 @@ export default {
 					this.isInit = true;
 					console.log('-------存在初始传入数据');
 					this.uploadedFileList = this.reGetData();
-					if (this.paraGetMethods == 'active') {
-						//主动触发
-						this.returnData();
-					}
 				}
 			}
 		}
@@ -176,40 +156,45 @@ export default {
 		 * 方法返回上传成功的链接列表 uploadedFileList，也可以通过ref异步获取获取
 		 * */
 		upData() {
-			uni.showLoading({ title: '图片加载中' });
+			uni.showLoading({ title: '图片上传中' });
 			/* 未选中图片、视频 */
 			if ((this.imgList.length == 0 && this.fileType) || (this.videoList.length == 0 && !this.fileType)) {
 				return [];
 			}
-
 			this.uploadedFileList = [];
-			return new Promise((resolve, reject) => {
-				[].concat(this.fileType ? this.imgList : this.videoList).map(async (item, index, arr) => {
-					console.log('遍历的图片数据', item, item.type, arr.length);
 
+			return new Promise(async (resolve, reject) => {
+				let index = 0, //索引
+					errCount = 0; //错误数
+				for (let item of [].concat(this.fileType ? this.imgList : this.videoList)) {
+					// console.log('遍历的图片数据', item, item.type, arr.length);
 					if (item.type == undefined) {
-						console.log('过滤一个 <初始传入> 的图片', item);
+						// console.log('过滤一个 <初始传入> 的图片', item);
 						this.uploadedFileList.push(item.url);
 					} else if (item.done && item.okUrl != '') {
-						console.log('过滤一个 <已上传> 的图片', item);
+						// console.log('过滤一个 <已上传> 的图片', item);
 						this.uploadedFileList.push(item.okUrl);
 					} else {
 						// 上传图片 修改标记
 						try {
-							let url = await this.uploadFilePromise(item.url, index);
-							this.addOkUrl(index, url);
-						} catch (e) {}
+							const url = await this.uploadFilePromise(item.url, index);
+							this.addOkUrl(index - errCount, url);
+							this.uploadedFileList.push(url);
+							// console.log('返回数据', url);
+						} catch (e) {
+							errCount++;
+							this.deletePr(index);
+							console.log('图片检测异常');
+						}
 					}
-					if (index == arr.length - 1) {
-						resolve();
-					}
-				});
+					index++;
+				}
+				// this.filterList();
+				resolve();
 			})
 				.then(() => {
-					this.filterList();
-					console.log('---临时图片列表', this.imgList);
-					console.log('---返回图片列表', this.uploadedFileList);
-
+					// console.log('---临时图片列表', this.imgList);
+					// console.log('---返回图片列表', this.uploadedFileList);
 					if (this.paraGetMethods == 'active') {
 						//主动触发数据返回
 						this.returnData();
@@ -228,7 +213,7 @@ export default {
 		 * 	再将选中的文件添加进文件文件列表
 		 * */
 		async afterRead(event) {
-			console.log('选中图片', event);
+			// console.log('选中图片', event);
 
 			// 添加图片到临时预览列表
 			[].concat(event.file).map(async (item, index) => {
@@ -257,7 +242,7 @@ export default {
 			}
 		},
 
-		// 过滤无用数据
+		// 过滤临时列表中的无用数据，并返回过滤后的数据
 		filterList() {
 			if (this.fileType) {
 				this.imgList = this.imgList.filter(value => {
@@ -297,7 +282,7 @@ export default {
 
 		/* 主动回调数据列表 */
 		returnData() {
-			// console.log('触发回调');
+			// console.log('触发回调', this.uploadedFileList);
 			this.$emit('upPara', this.uploadedFileList);
 		}
 	}
