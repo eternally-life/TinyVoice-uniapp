@@ -16,9 +16,7 @@ import {
 
 export const gMixins = {
 	data() {
-		return {
-			ossToken: {}, //图片上传oss
-		}
+		return {}
 	},
 	methods: {
 		/**内容风控检测
@@ -27,20 +25,8 @@ export const gMixins = {
 		 * @param {string} type = 'str(@default) || string || img || imges'
 		 * @returns boolean
 		 */
-		async safe_dataContentCheck(target, type = 'str') {
+		async safe_dataContentCheck(target, type = 'img') {
 			console.log("----检测内容----", target, type);
-			if (target == undefined || target == null) return true;
-			if (type == 'str' || type == 'string') {
-				try {
-					if (typeof target == 'object') {
-						return await check_string(JSON.stringify(target));
-					}
-					return await check_string(target);
-				} catch (e) {
-					errTip();
-					return false
-				}
-			}
 			if (type == 'img' || type == 'imges') {
 				// 图片路径异常
 				if (target.path == null || target.path == undefined) {
@@ -55,48 +41,57 @@ export const gMixins = {
 				}
 			}
 		},
-
-		/** 异步获取oss签名
-		 * 请求成功  返回oss签名
-		 * 请求异常	返回false 并弹出模态框提醒
+		/** 上传文件
+		 * path 临时文件的路径
+		 * 		|-上传成功 返回 文件链接
+		 * index 显示文件列表的索引
 		 * */
-		getOssToken() {
+		uploadFilePromise(newFilePath, index) {
 			return new Promise((resolve, reject) => {
-				systemFileUploadSignature_Get().then(res => {
-					if (res.data.code == 200) {
-						resolve(res.data.data);
-					} else {
-						uni.showModal({
-							title: '图片上传失败提醒',
-							content: `网络异常,无法上传图片,请重试`,
-							showCancel: false,
-							confirmColor: "#04c354",
-							confirmText: "我知道了",
-						});
-						resolve(false);
+				uni.uploadFile({
+					url: get_baseUrl() + '/system/file/upload/oss',
+					name: 'file',
+					filePath: newFilePath,
+					header: getHeader(),
+					success: res => {
+						// console.log('后端回传', res);
+						let respon = JSON.parse(res.data);
+						console.log('结果---解析', respon);
+
+						if (respon.code == 200) {
+							resolve(respon.data.url);
+						} else if (respon.code == 500) {
+							errTip('图片');
+							reject();
+						}
+					},
+					fail: () => {
+						// 接口挂了就直接通过
+						resolve(true);
 					}
 				});
 			});
-		}
-	}
-}
 
-/* 检测字符串 */
-function check_string(para) {
-	return new Promise((resolve, reject) => {
-		apiBusinessNewCheckText_Get({
-			text: para
-		}).then(res => {
-			// console.log("判断依据", res);
-			if (res.data.code == 200) {
-				resolve(true);
-			} else {
-				reject(false);
-			}
-		}).catch(err => {
-			resolve(true);
-		})
-	})
+			// let ossTopPath = this.fileType ? this.ossBasePath : 'video',
+			// 	suffix = this.fileType ? '.jpg' : '.mp4';
+			// let fileName = ossTopPath + '/' + uni.$u.guid(10) + this.toDayStr + suffix;
+
+			// this.ossToken.key = fileName;
+			// this.uploadedFileList.push(this.ossToken.host + '/' + fileName);
+			// return new Promise((resolve, reject) => {
+			// 	uni.uploadFile({
+			// 		url: this.ossToken.host,
+			// 		filePath: path,
+			// 		name: 'file',
+			// 		formData: this.ossToken,
+			// 		success: res => {
+			// 			this.addOkUrl(index, this.ossToken.host + '/' + fileName);
+			// 			resolve(this.ossToken.host + '/' + fileName);
+			// 		}
+			// 	});
+			// });
+		},
+	}
 }
 
 /** 检测图片
@@ -122,14 +117,8 @@ async function check_img(filePara) {
 
 				if (respon.code == 200) {
 					resolve(true);
-				} else if (respon.code == 500 && respon.msg.indexOf('大于') != -1) {
-					imgTip('图片过大');
-					resolve(false);
-				} else if (respon.code == 500 && respon.msg.indexOf('违法违规') != -1) {
-					errTip('图片');
-					resolve(false);
 				} else if (respon.code == 500) {
-					imgTip('文件异常，请重新选择');
+					errTip('图片');
 					resolve(false);
 				}
 			},

@@ -2,9 +2,9 @@
 <template>
 	<view>
 		<u-toast ref="uToast"></u-toast>
-		<guet-course-style1 v-show="calendarType == 0" />
-		<guet-course-style2 v-show="calendarType == 1" :courseData="oneWeekCourse" />
-		<guet-course-style3 v-show="calendarType == 2" />
+		<edu-course-style1 v-show="calendarType == 0" />
+		<edu-course-style2 v-show="calendarType == 1" :courseData="oneWeekCourse" />
+		<edu-course-style3 v-show="calendarType == 2" />
 	</view>
 </template>
 
@@ -13,7 +13,7 @@ import { mapState, mapMutations, mapAction } from 'vuex';
 // const GUET = require('@/api/GUET/教务开放接口.js');
 const manageData = require('@/utils/manageData.js');
 export default {
-	name: 'guet-course-control',
+	name: 'edu-course-control',
 	data() {
 		return {
 			all_course_data: null,

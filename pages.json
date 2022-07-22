@@ -12,7 +12,6 @@
 			"navigationBarTitleText": "我的",
 			"enablePullDownRefresh": false
 		}
-
 	}, {
 		"path": "pages/edu/edu",
 		"style": {
@@ -29,6 +28,13 @@
 		"path": "pages/community/community",
 		"style": {
 			"navigationBarTitleText": "微音",
+			"enablePullDownRefresh": false
+		}
+
+	}, {
+		"path": "pages/appliance/appliance",
+		"style": {
+			"navigationBarTitleText": "工具",
 			"enablePullDownRefresh": false
 		}
 
@@ -148,6 +154,12 @@
 			{
 				"pagePath": "pages/community/community",
 				"text": "微音",
+				"iconPath": "static/logo.png",
+				"selectedIconPath": "static/logo.png"
+			},
+			{
+				"pagePath": "pages/appliance/appliance",
+				"text": "工具",
 				"iconPath": "static/logo.png",
 				"selectedIconPath": "static/logo.png"
 			},

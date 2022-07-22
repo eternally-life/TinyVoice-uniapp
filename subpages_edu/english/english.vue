@@ -6,7 +6,7 @@
 			<view class="slot-content"><rich-text :nodes="modStr"></rich-text></view>
 		</u-modal>
 		<!-- 仅用于获取自适应学期参数  不做显示 -->
-		<guet-datarelay v-show="false" ref="datarelay"></guet-datarelay>
+		<edu-datarelay v-show="false" ref="datarelay"></edu-datarelay>
 		<view class="top_contaoner fadeInDown" :class="[isOpenAnimat('edu')]" v-if="tabShow">
 			<view class="subitem">课程</view>
 			<view class="subitem" v-show="showStyle"></view>

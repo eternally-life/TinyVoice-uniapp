@@ -35,7 +35,7 @@
 import { mapState, mapGetters } from 'vuex';
 
 export default {
-	name: 'guet-datarelay',
+	name: 'edu-datarelay',
 	data() {
 		return {
 			placeholderFlage: false, //输入框默认标记

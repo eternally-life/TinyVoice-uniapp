@@ -21,7 +21,7 @@
 const prf = 't-',
 	urlPrf = '/subpages_edu/';
 export default {
-	name: 'guet-button',
+	name: 'edu-button',
 	data() {
 		return {
 			educaList: [

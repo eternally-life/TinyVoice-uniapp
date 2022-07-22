@@ -1,7 +1,7 @@
 <!-- 学分绩 -->
 <template>
 	<view>
-		<guet-datarelay @getEduPara="transmit_data" v-show="isSelectorShow" />
+		<edu-datarelay @getEduPara="transmit_data" v-show="isSelectorShow" />
 		<view class="data_table" v-show="!isSelectorShow">
 			<view class="list_item" v-for="(valObj, keyObj) in key_text" :key="keyObj">
 				<view class="item_left">{{ valObj }}</view>

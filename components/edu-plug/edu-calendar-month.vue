@@ -17,7 +17,7 @@
 import { mapState, mapGetters, mapMutations } from 'vuex';
 const manageData = require('@/utils/manageData.js');
 export default {
-	name: 'guet-calendar-month',
+	name: 'edu-calendar-month',
 	data() {
 		return {
 			year: null,

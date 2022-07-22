@@ -2,7 +2,7 @@
 	<view class="home_wrap">
 		<u-toast ref="uToast"></u-toast>
 		<!-- 教务滑块  此处阻止事件偏移 影响点击-->
-		<view @click.native.stop="toucheEnd()"><guet-button /></view>
+		<view @click.native.stop="toucheEnd()"><edu-button /></view>
 
 		<!-- 日期&课表  类型切换 -->
 		<view class="typeSwitch">
@@ -17,14 +17,14 @@
 		<!-- 滑动检测 -->
 		<view @touchstart.native.prevent="touchStart" @touchend.native.prevent="toucheEnd" :style="[getDynamicHeight]">
 			<!-- 日期模块 -->
-			<guet-calendar-control />
+			<edu-calendar-control />
 
 			<!-- 课块区域 -->
-			<guet-course-control ref="course" />
+			<edu-course-control ref="course" />
 		</view>
 
 		<!-- 课程详情模态框 -->
-		<guet-course-modal />
+		<edu-course-modal />
 	</view>
 </template>
 

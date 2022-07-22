@@ -21,7 +21,7 @@
 import { mapState, mapGetters } from 'vuex';
 const manageData = require('@/utils/manageData.js');
 export default {
-	name: 'guet-course-style1',
+	name: 'edu-course-style1',
 	data() {
 		return {
 			showData: null

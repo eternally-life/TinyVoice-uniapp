@@ -44,7 +44,7 @@
 <script>
 import { mapState, mapMutations, mapGetters } from 'vuex';
 export default {
-	name: 'guet-course-modal',
+	name: 'edu-course-modal',
 	data() {
 		return {};
 	},

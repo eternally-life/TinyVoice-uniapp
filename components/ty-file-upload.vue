@@ -30,6 +30,7 @@
 </template>
 
 <script>
+import { get_baseUrl, getHeader } from '@/utils/request.js';
 export default {
 	name: 'ty-file-upload',
 	props: {
@@ -51,13 +52,6 @@ export default {
 			type: Array,
 			default: []
 		},
-		/** 初始传入  自定义的上传路径
-		 * 构成： parent/children1/children2...
-		 * !!前后不带路径分隔符，仅节点间带有分隔符 */
-		iniTopPath: {
-			type: String,
-			default: ''
-		},
 		/* 外部调节图片数量 */
 		iniCount: {
 			type: Number,
@@ -78,10 +72,9 @@ export default {
 		/**上传首路径
 		 * 视频则 video
 		 * 图片 images
-		 * 自定义 this.iniTopPath
 		 * */
 		ossBasePath() {
-			return this.fileType == false ? 'video' : this.iniTopPath == '' ? 'images' : this.iniTopPath;
+			return this.fileType == false ? 'video' : 'images';
 		},
 		/* 动态计算文件选择个数  */
 		imgMaxCount() {
@@ -122,7 +115,7 @@ export default {
 					this.imgList = newVale.map(value => {
 						return {
 							url: value,
-							done: true
+							done: true //添加已存在标记
 						};
 					});
 					console.log('初始化图片数据', this.imgList);
@@ -130,7 +123,7 @@ export default {
 					this.videoList = newVale.map(value => {
 						return {
 							url: value,
-							done: true
+							done: true //添加已存在标记
 						};
 					});
 					console.log('初始化视频数据', this.videoList);
@@ -153,11 +146,8 @@ export default {
 		 * 	|- true 删除图片
 		 * 	|- false 删除文件*/
 		deletePic(event) {
-			if (this.fileType) {
-				this.imgList.splice(event.index, 1);
-			} else {
-				this.videoList.splice(event.index, 1);
-			}
+			this.deletePr(event.index);
+
 			// 初始传入数据  但是并没有上传新图片
 			if (this.isInit && this.uploadedFileList.length == 0) {
 				this.uploadedFileList = this.reGetData();
@@ -171,43 +161,66 @@ export default {
 			}
 		},
 
+		/* 删除 预览图片*/
+		deletePr(index) {
+			if (this.fileType) {
+				this.imgList.splice(index, 1);
+			} else {
+				this.videoList.splice(index, 1);
+			}
+		},
+
 		/**上传事件	用于外部调用触发
 		 * 图片列表为空	返回空数组
 		 * 否则	返回已上传的数组列表
-		 * 方法返回上传成功的链接列表 uploadedFileList，也可以通过ref获取
+		 * 方法返回上传成功的链接列表 uploadedFileList，也可以通过ref异步获取获取
 		 * */
 		upData() {
+			uni.showLoading({ title: '图片加载中' });
 			/* 未选中图片、视频 */
 			if ((this.imgList.length == 0 && this.fileType) || (this.videoList.length == 0 && !this.fileType)) {
-				console.log('空');
 				return [];
 			}
 
 			this.uploadedFileList = [];
-			[].concat(this.fileType ? this.imgList : this.videoList).map(async (item, index) => {
-				console.log('遍历的图片数据', item, item.type);
+			return new Promise((resolve, reject) => {
+				[].concat(this.fileType ? this.imgList : this.videoList).map(async (item, index, arr) => {
+					console.log('遍历的图片数据', item, item.type, arr.length);
 
-				if (item.type == undefined) {
-					console.log('过滤一个 <初始传入> 的图片', item);
-					this.uploadedFileList.push(item.url);
-				} else if (item.done && item.okUrl != '') {
-					console.log('过滤一个 <已上传> 的图片', item);
-					this.uploadedFileList.push(item.okUrl);
-				} else {
-					await this.uploadFilePromise(item.url, index);
-				}
-			});
+					if (item.type == undefined) {
+						console.log('过滤一个 <初始传入> 的图片', item);
+						this.uploadedFileList.push(item.url);
+					} else if (item.done && item.okUrl != '') {
+						console.log('过滤一个 <已上传> 的图片', item);
+						this.uploadedFileList.push(item.okUrl);
+					} else {
+						// 上传图片 修改标记
+						try {
+							let url = await this.uploadFilePromise(item.url, index);
+							this.addOkUrl(index, url);
+						} catch (e) {}
+					}
+					if (index == arr.length - 1) {
+						resolve();
+					}
+				});
+			})
+				.then(() => {
+					this.filterList();
+					console.log('---临时图片列表', this.imgList);
+					console.log('---返回图片列表', this.uploadedFileList);
 
-			console.log('---临时图片列表', this.imgList);
-			console.log('---返回图片列表', this.uploadedFileList);
-
-			if (this.paraGetMethods == 'active') {
-				//主动触发数据返回
-				this.returnData();
-			} else {
-				// 外部被动返回数据
-				return this.uploadedFileList;
-			}
+					if (this.paraGetMethods == 'active') {
+						//主动触发数据返回
+						this.returnData();
+					} else {
+						// 外部被动返回数据
+						return this.uploadedFileList;
+					}
+				})
+				.finally(fin => {
+					uni.hideLoading();
+				});
 		},
 
 		/**选择文件后触发 生成临时文件（选择好文件后执行）
@@ -215,70 +228,18 @@ export default {
 		 * 	再将选中的文件添加进文件文件列表
 		 * */
 		async afterRead(event) {
-			uni.showLoading({ title: '图片加载中' });
-			// if (Object.keys(this.ossToken).length == 0) {
-			// 	const netResult = await this.getOssToken();
-			// 	/* 当前无法获取OSS签名 */
-			// 	if (netResult === false) {
-			// 		console.error('获取不到OSS签名，当前无法上传文件', netResult);
-			// 		return;
-			// 	} else {
-			// 		this.ossToken = netResult;
-			// 	}
-			// }
 			console.log('选中图片', event);
-			new Promise((resolve, reject) => {
-				[].concat(event.file).map(async (item, index) => {
-					const isSafe = await this.safe_dataContentCheck({ path: item.url, size: item.size }, 'img');
-					if (isSafe) {
-						this.fileType
-							? this.imgList.push({ ...item, done: false })
-							: this.videoList.push({ ...item, done: false });
-					}
 
-					if (index == event.file.length - 1) {
-						console.log('最终结果', this.imgList);
-						// 遍历至最后一项才往下走
-						reject();
-						resolve();
-					}
-				});
-			})
-				.then(res => {
-					if (this.paraGetMethods == 'active') {
-						// 判断是否由组件 主动调用上传
-						this.upData();
-					}
-				})
-				.finally(() => {
-					uni.hideLoading();
-				});
-		},
-
-		/** 上传文件
-		 * path 临时文件的路径
-		 * 		|-上传成功 返回 文件链接
-		 * index 显示文件列表的索引
-		 * */
-		uploadFilePromise(path, index) {
-			let ossTopPath = this.fileType ? this.ossBasePath : 'video',
-				suffix = this.fileType ? '.jpg' : '.mp4';
-			let fileName = ossTopPath + '/' + uni.$u.guid(10) + this.toDayStr + suffix;
-
-			this.ossToken.key = fileName;
-			this.uploadedFileList.push(this.ossToken.host + '/' + fileName);
-			return new Promise((resolve, reject) => {
-				uni.uploadFile({
-					url: this.ossToken.host,
-					filePath: path,
-					name: 'file',
-					formData: this.ossToken,
-					success: res => {
-						this.addOkUrl(index, this.ossToken.host + '/' + fileName);
-						resolve(this.ossToken.host + '/' + fileName);
-					}
-				});
+			// 添加图片到临时预览列表
+			[].concat(event.file).map(async (item, index) => {
+				this.fileType
+					? this.imgList.push({ ...item, done: false })
+					: this.videoList.push({ ...item, done: false });
 			});
+			if (this.paraGetMethods == 'active') {
+				// 判断是否由组件 主动调用上传
+				this.upData();
+			}
 		},
 
 		/**增加上传成功的标记（用于显示的列表）
@@ -295,6 +256,20 @@ export default {
 				this.videoList[index].done = true;
 			}
 		},
+
+		// 过滤无用数据
+		filterList() {
+			if (this.fileType) {
+				this.imgList = this.imgList.filter(value => {
+					return value.done;
+				});
+			} else {
+				this.videoList = this.videoList.filter(value => {
+					return value.done;
+				});
+			}
+		},
+
 		/**重新获取url数据
 		 * 	根据已有的临时文件列表获取
 		 * 	--用于审查时 只删文件没有增加的情况

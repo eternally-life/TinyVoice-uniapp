@@ -32,7 +32,7 @@
 <script>
 import { mapState, mapGetters } from 'vuex';
 export default {
-	name: 'guet-course-style2',
+	name: 'edu-course-style2',
 	props: ['courseData'],
 	data() {
 		return {

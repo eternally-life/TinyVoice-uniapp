@@ -28,7 +28,7 @@
 let dayjs = require('dayjs');
 import { mapState, mapMutations } from 'vuex';
 export default {
-	name: 'guet-calendar-week',
+	name: 'edu-calendar-week',
 	data() {
 		return {
 			weekStrFlage_CN: false,

@@ -6,15 +6,15 @@
 			<text v-show="calendarType == 1" @click="goBack" class="smText">{{ goBackStr }}</text>
 			<text v-show="calendarType == 2">{{ showTime.year }} 年 {{ showTime.month + 1 }} 月</text>
 		</view>
-		<guet-calendar-week ref="weekStyle" />
-		<guet-calendar-month v-show="calendarType == 2" />
+		<edu-calendar-week ref="weekStyle" />
+		<edu-calendar-month v-show="calendarType == 2" />
 	</view>
 </template>
 
 <script>
 import { mapState, mapGetters, mapMutations } from 'vuex';
 export default {
-	name: 'guet-calendar-control',
+	name: 'edu-calendar-control',
 	data() {
 		return {};
 	},

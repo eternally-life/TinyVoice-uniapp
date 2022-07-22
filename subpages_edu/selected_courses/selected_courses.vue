@@ -2,7 +2,7 @@
 <template>
 	<view>
 		<u-toast ref="uToast"></u-toast>
-		<guet-datarelay @getEduPara="transmit_data" v-show="isSelectorShow" />
+		<edu-datarelay @getEduPara="transmit_data" v-show="isSelectorShow" />
 		<view class="table_container" v-show="!isSelectorShow">
 			<view class="top_term" @click="openSelect()">
 				{{ titStr }}

@@ -2,7 +2,7 @@
 <template>
 	<view>
 		<u-toast ref="uToast"></u-toast>
-		<guet-datarelay @getEduPara="transmit_data" v-show="showFlage == 0" />
+		<edu-datarelay @getEduPara="transmit_data" v-show="showFlage == 0" />
 		<view class="table_container" v-show="showFlage != 0">
 			<view class="top_term " hover-class="item_hover" hover-stay-time="100" @click="openSelect()">
 				<text v-show="transferType == 2">{{ stdName }}</text>
@@ -22,7 +22,7 @@
 		</view>
 		<view class="bottom_box" v-show="showFlage != 0"></view>
 
-		<guet-score-details :scoreData="detailsProp" :queryFlage="queryFlage" v-show="showFlage == 2" />
+		<edu-score-details :scoreData="detailsProp" :queryFlage="queryFlage" v-show="showFlage == 2" />
 	</view>
 </template>
 
