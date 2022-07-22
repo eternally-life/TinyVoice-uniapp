@@ -77,6 +77,11 @@
 		authLoginregisterVerificationCode_Get,
 		authLoginregisterWxLogin_Post
 	} from '@/api/SYSTEM/登录注册.js'
+	import {
+		systemParamsNoteList_Get,
+		systemParamsConfList_Get
+	} from '@/api/SYSTEM/参数字典公告.js'
+
 	let timer = null
 	export default {
 		data() {
@@ -97,32 +102,26 @@
 		},
 		methods: {
 			async getPamesList() {
-				const res = await systemUsermanageList();
+				const res = await systemParamsConfList_Get();
 				if (res.data.code === 200) {
-					let pamesList = res.data.rows;
+					console.log(res, '55');
+					let pamesList = res.data.data;
 					for (let i = 0; i < pamesList.length; i++) {
 						if (pamesList[i].configKey === 'judges:experience:button') {
 							pamesList[i].configValue == 'true' ? this.showJugdesButton = true : this.showJugdesButton =
 								false
-							// if (pamesList[i].configValue == 'true') {
-							// 	this.showJugdesButton = true;
-							// }
-							// if (pamesList[i].configValue == 'false') {
-							// 	this.showJugdesButton = false;
-							// }
 						}
 					}
 				}
-				console.log(res);
 			},
 			// 存储公告和参数信息
 			setNotic_Pamres() {
-				systemUsermsgnoticeList_Get().then(res => { // 存储公告信息
+				systemParamsNoteList_Get().then(res => { // 存储公告信息
 					if (res.data.code === 200) {
 						uni.setStorageSync("noticeList", res.data.rows)
 					}
 				})
-				systemUsermanageList().then(res => { // 存储参数信息
+				systemParamsConfList_Get().then(res => { // 存储参数信息
 					if (res.data.code === 200) {
 						uni.setStorageSync("pamesList", res.data.rows)
 					}
@@ -139,7 +138,7 @@
 						getApp().globalData.token = reslut.data.data.access_token
 						uni.setStorageSync("token", reslut.data.data.access_token)
 						uni.reLaunch({
-							url: '../user/user',
+							url: '/pages/user/user',
 							success: res => {
 								this.$ShowToastNone('登录成功')
 							}
@@ -222,7 +221,7 @@
 					}).then(res => {
 						console.log(res);
 						if (res.data.code === 200) {
-							// this.setNotic_Pamres()
+							this.setNotic_Pamres()
 							getApp().globalData.token = res.data.data.access_token
 							uni.setStorageSync("token", res.data.data.access_token)
 							// #ifdef MP-QQ
@@ -247,7 +246,7 @@
 							})
 							// #endif
 							uni.reLaunch({
-								url: "../user/user",
+								url: '/pages/user/user',
 								success: res => {
 									// #ifdef MP-WEIXIN
 									this.$ShowToastNone('登录成功')
@@ -324,7 +323,7 @@
 									getApp().globalData.token = reslut.data.data.access_token
 									uni.setStorageSync("token", reslut.data.data.access_token)
 									uni.reLaunch({
-										url: '../user/user',
+										url: '/pages/user/user',
 										success: res => {
 											this.$ShowToastNone('QQ登录成功')
 										}
@@ -361,12 +360,12 @@
 							}).then(reslut => {
 								console.log(reslut);
 								if (reslut.data.code === 200) {
-									// this.setNotic_Pamres()
+									this.setNotic_Pamres()
 									// 存储全局 token
 									getApp().globalData.token = reslut.data.data.access_token
 									uni.setStorageSync("token", reslut.data.data.access_token)
 									uni.reLaunch({
-										url: '../../user/user',
+										url: '/pages/user/user',
 										success: res => {
 											this.$ShowToastNone('微信登录成功')
 										}
@@ -398,7 +397,7 @@
 						if (res.cancel) {
 							// 点击取消 不登录 进入我的主页
 							uni.reLaunch({
-								url: '../user/user'
+								url: '/pages/user/user',
 							});
 						}
 					}

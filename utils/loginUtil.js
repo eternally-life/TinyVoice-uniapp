@@ -3,7 +3,13 @@ import {
 	authLoginregisterVerificationCode_Get,
 	authLoginregisterWxLogin_Post
 } from '@/api/SYSTEM/登录注册.js'
-
+import {
+	systemParamsNoteList_Get,
+	systemParamsConfList_Get
+} from '@/api/SYSTEM/参数字典公告.js'
+import {
+	systemTinyuserGetInfo_Get
+} from '@/api/SYSTEM/用户信息.js'
 
 // 检查登录状态 
 export function loginStatus(code) {
@@ -106,7 +112,7 @@ export function wxLogin() {
 					return
 				}
 				uni.navigateTo({
-					url: '/pages/login/login',
+					url: '/subpages/login/login',
 					success: () => {
 						uni.showToast({
 							title: '还未注册，请先注册',
@@ -146,7 +152,7 @@ export function setGloalDataToken(token) {
 
 // 存储全局用户信息
 export function setGloalDataUserInfo() {
-	systemUsermanageGetInfo_Get().then(res => {
+	systemTinyuserGetInfo_Get().then(res => {
 		if (res.data.code === 200) {
 			getApp().globalData.wxUserInfo = res.data.user
 			uni.setStorageSync('wxUserInfo', res.data.user)
@@ -156,7 +162,7 @@ export function setGloalDataUserInfo() {
 
 // 存储缓存公告信息
 export function setNoticeList() {
-	systemUsermsgnoticeList_Get().then(res => {
+	systemParamsNoteList_Get().then(res => {
 		if (res.data.code === 200) {
 			uni.setStorageSync("noticeList", res.data.rows)
 		}
@@ -165,7 +171,7 @@ export function setNoticeList() {
 
 // 存储缓存参数信息
 export function setPamesList() {
-	systemUsermanageList().then(res => {
+	systemParamsConfList_Get().then(res => {
 		if (res.data.code === 200) {
 			uni.setStorageSync("pamesList", res.data.rows)
 		}

@@ -69,7 +69,10 @@
 	import {
 		systemTinyuserGetInfo_Get
 	} from '@/api/SYSTEM/用户信息.js'
-
+	import {
+		systemParamsNoteList_Get,
+		systemParamsConfList_Get
+	} from '@/api/SYSTEM/参数字典公告.js'
 	export default {
 		data() {
 			return {
@@ -203,24 +206,10 @@
 			...mapMutations('edu', ['setEduSwitch']),
 			// 登录就签到
 			async signInNote() {
-				// const res = await systemUsermanageSign_Get();
-				// console.log(res);
-				// if (res.data.code === 200) {
-				// 	this.showSignExplain = true
-				// 	this.otherInfo[0].num += 30;
-				// 	this.$ShowToastSuc('签到成功');
-				// } else {
-				// 	this.showSignExplain = false
-				// 	this.$ShowToastErr('今天已签过');
-				// }
+
 			},
 			async getNoticeList() { // 获通知列表
-				// const res = await systemUsermsgnoticeList_Get()
-				// if (res.data.code === 200) {
-				// 	let noticeList = res.data.rows
-				// 	this.noticeTitle = noticeList[7].noticeTitle
-				// 	this.content = noticeList[7].noticeContent
-				// }
+
 			},
 			/* 跳转教务首页 */
 			toHome() {
