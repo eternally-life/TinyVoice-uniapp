@@ -32,7 +32,7 @@
 		}
 
 	}, {
-		"path": "pages/community-pub/community-pub",
+		"path": "pages/community-publish/community-publish",
 		"style": {
 			"navigationBarTitleText": "微音发表",
 			"enablePullDownRefresh": false
