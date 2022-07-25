@@ -25,12 +25,31 @@
 </template>
 
 <script>
+	import {
+
+		payTinymallCreateOrder_Post
+	} from '@/api/商城模块/商品信息下单.js'
 	export default {
 		data() {
 			return {
 				orderDetail: {},
 				value: 1,
-				price: 0
+				price: 0,
+				orderParmes: {
+					phonenumber: null,
+					/** 联系方式=电话   string required: */
+					addrId: null,
+					/** 地址ID   integer required: */
+					/** 订单数据   object required: */
+					orderData: {
+						commodityIds: [
+
+						],
+						skuIdAndQuantity: {
+
+						}
+					},
+				}
 			}
 		},
 		onLoad(opt) {
@@ -43,7 +62,20 @@
 				this.price = e.value * this.orderDetail.price
 
 			},
-
+			async confirmPayOrder() {
+				this.orderParmes.addrId = 1
+				this.orderParmes.orderData.commodityIds = this.orderDetail.commodityId
+				// Object.assign(this.orderParmes.orderData.skuIdAndQuantity, this.orderDetail.skuId, this.orderDetail
+				// 	.inventory)
+				let obj = {}
+				let key = this.orderDetail.skuId
+				let value = this.orderDetail.inventory
+				obj[key] = value
+				this.orderParmes.orderData.skuIdAndQuantity = obj
+				const res = await payTinymallCreateOrder_Post(this.orderParmes)
+				console.log(this.orderParmes);
+				console.log(res);
+			}
 		}
 	}
 </script>
