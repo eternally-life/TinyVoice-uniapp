@@ -21,7 +21,7 @@
 		"path": "pages/shop/shop",
 		"style": {
 			"navigationBarTitleText": "商城",
-			"enablePullDownRefresh": false
+			"enablePullDownRefresh": true
 		}
 
 	}, {
@@ -59,6 +59,32 @@
 				"path": "regist/regist",
 				"style": {
 					"navigationBarTitleText": "注册",
+					"enablePullDownRefresh": false
+				}
+
+			}]
+		},
+		/* 商城相关分包 */
+		{
+			"root": "subpages_shop",
+			"pages": [{
+				"path": "shopDetail/shopDetail",
+				"style": {
+					"navigationBarTitleText": "商品详情",
+					"enablePullDownRefresh": false
+				}
+
+			}, {
+				"path": "orderDetail/orderDetail",
+				"style": {
+					"navigationBarTitleText": "订单详情",
+					"enablePullDownRefresh": false
+				}
+
+			}, {
+				"path": "ShoppingCart/ShoppingCart",
+				"style": {
+					"navigationBarTitleText": "我的购物车",
 					"enablePullDownRefresh": false
 				}
 
