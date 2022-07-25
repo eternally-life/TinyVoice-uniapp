@@ -22,7 +22,7 @@ export default {
 		//发表跳转
 		publishVoice() {
 		  uni.navigateTo({
-		    url: '/pages/community-pub/community-pub',
+		    url: '/pages/community-publish/community-publish',
 		  })
 		}
 	}
