@@ -44,8 +44,7 @@
 			"navigationBarTitleText": "工具",
 			"enablePullDownRefresh": false
 		}
-	}      
-    ],
+	}],
 	"subPackages": [
 		/* 基础分包 */
 		{
@@ -94,6 +93,7 @@
 				"style": {
 					"navigationBarTitleText": "我的购物车",
 					"enablePullDownRefresh": false
+					// "navigationStyle": "custom"
 				}
 
 			}]
