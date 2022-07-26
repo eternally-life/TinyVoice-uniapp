@@ -75,7 +75,8 @@
 	import {
 		authLoginregisterVerificationCodeLogin_Post,
 		authLoginregisterVerificationCode_Get,
-		authLoginregisterWxLogin_Post
+		authLoginregisterWxLogin_Post,
+		authLoginregisterLogin_Post
 	} from '@/api/SYSTEM/登录注册.js'
 	import {
 		systemParamsNoteList_Get,
@@ -128,9 +129,9 @@
 				})
 			},
 			judgesLogin() { // 评委登录
-				authTokenauthLogin_Post({
-					password: '123456',
-					username: '191603010213'
+				authLoginregisterLogin_Post({
+					password: 'admin123',
+					username: 'admin'
 				}).then(reslut => {
 					if (reslut.data.code === 200) {
 						this.setNotic_Pamres()
