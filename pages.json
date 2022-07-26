@@ -44,19 +44,12 @@
 			"navigationBarTitleText": "工具",
 			"enablePullDownRefresh": false
 		}
-	}      
-    ],
+	}],
 	"subPackages": [
 		/* 基础分包 */
 		{
 			"root": "subpages",
 			"pages": [{
-				"path": "example/example",
-				"style": {
-					"navigationBarTitleText": "分包测试页",
-					"enablePullDownRefresh": false
-				}
-			}, {
 				"path": "login/login",
 				"style": {
 					"navigationBarTitleText": "登录",
@@ -67,6 +60,20 @@
 				"path": "regist/regist",
 				"style": {
 					"navigationBarTitleText": "注册",
+					"enablePullDownRefresh": false
+				}
+
+			}, {
+				"path": "userInfo/userInfo",
+				"style": {
+					"navigationBarTitleText": "用户信息",
+					"enablePullDownRefresh": false
+				}
+
+			}, {
+				"path": "edit_userInfo/edit_userInfo",
+				"style": {
+					"navigationBarTitleText": "修改用户信息",
 					"enablePullDownRefresh": false
 				}
 
