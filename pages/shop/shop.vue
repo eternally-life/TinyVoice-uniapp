@@ -66,7 +66,7 @@
 					this.isLoading = false
 
 				} else {
-					this.selfMsg(reslut.data.msg, 'warning')
+					this.selfMsg(res.data.msg, 'warning')
 				}
 				// 默认进来获取数据
 				this.btnColor(0, this.commodityCate[0].mallId)
@@ -82,7 +82,7 @@
 				if (res.data.code === 200) {
 					this.commodityList = res.data.data.records
 				} else {
-					this.selfMsg(reslut.data.msg, 'warning')
+					this.selfMsg(res.data.msg, 'warning')
 				}
 			},
 			toShopDetails(item) {
