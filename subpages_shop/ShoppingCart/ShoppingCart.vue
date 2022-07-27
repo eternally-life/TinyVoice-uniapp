@@ -101,6 +101,9 @@
 				],
 			}
 		},
+		onLoad() {
+			this.getShoppingCartData()
+		},
 		methods: {
 			goshopping() {
 				uni.navigateTo({
