@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<view class="avatar"><u-avatar :src="userInfo.avatar" size="90"></u-avatar></view>
+		<view class="avatar"><u-avatar :src="userInfo.avatar" size="90" @click="selectImg"></u-avatar></view>
 		<u-cell-group>
 			<u-cell
 				v-for="(item, index) in cellList"
@@ -56,6 +56,9 @@ export default {
 		}
 	},
 	methods: {
+		selectImg() {
+			console.log('选择修改头像');
+		},
 		itemTap(e) {
 			console.log('点击', e);
 			uni.navigateTo({
