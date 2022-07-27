@@ -32,13 +32,6 @@
 		}
 
 	}, {
-		"path": "pages/community-publish/community-publish",
-		"style": {
-			"navigationBarTitleText": "微音发表",
-			"enablePullDownRefresh": false
-		}
-
-	}, {
 		"path": "pages/appliance/appliance",
 		"style": {
 			"navigationBarTitleText": "工具",
@@ -50,26 +43,33 @@
 		{
 			"root": "subpages",
 			"pages": [{
-				"path": "example/example",
-				"style": {
-					"navigationBarTitleText": "分包测试页",
-					"enablePullDownRefresh": false
-				}
-			}, {
-				"path": "login/login",
-				"style": {
-					"navigationBarTitleText": "登录",
-					"enablePullDownRefresh": false
-				}
+					"path": "login/login",
+					"style": {
+						"navigationBarTitleText": "登录",
+						"enablePullDownRefresh": false
+					}
+				}, {
+					"path": "regist/regist",
+					"style": {
+						"navigationBarTitleText": "注册",
+						"enablePullDownRefresh": false
+					}
 
-			}, {
-				"path": "regist/regist",
-				"style": {
-					"navigationBarTitleText": "注册",
-					"enablePullDownRefresh": false
+				}, {
+					"path": "userInfo/userInfo",
+					"style": {
+						"navigationBarTitleText": "用户信息",
+						"enablePullDownRefresh": false
+					}
+				},
+				{
+					"path": "edit_userInfo/edit_userInfo",
+					"style": {
+						"navigationBarTitleText": "修改用户信息",
+						"enablePullDownRefresh": false
+					}
 				}
-
-			}]
+			]
 		},
 		/* 商城相关分包 */
 		{
@@ -92,11 +92,55 @@
 				"path": "ShoppingCart/ShoppingCart",
 				"style": {
 					"navigationBarTitleText": "我的购物车",
+<<<<<<< pages.json
 					"enablePullDownRefresh": false,
 					"navigationStyle": "custom"
+=======
+					"enablePullDownRefresh": false
+
+>>>>>>> pages.json
 				}
 
 			}]
+		},
+		/* 微音相关分包 */
+		{
+			"root": "subpages_publish",
+			"pages": [{
+				"path": "publishVoice/publishVoice",
+				"style": {
+					"navigationBarTitleText": "微音聆听您的声音",
+					"enablePullDownRefresh": false
+				}
+		
+			}    ,{
+		            "path" : "fleaMarket/fleaMarket",
+		            "style" :                                                                                    
+		        {
+		            "navigationBarTitleText": "二手市场",
+		            "enablePullDownRefresh": false
+		        }
+		        
+		        }
+		        ,{
+		            "path" : "lostFound/lostFound",
+		            "style" :                                                                                    
+		        {
+		            "navigationBarTitleText": "失物招领",
+		            "enablePullDownRefresh": false
+		        }
+		        
+		        }
+		        ,{
+		            "path" : "speakNow/speakNow",
+		            "style" :                                                                                    
+		        {
+		            "navigationBarTitleText": "表白",
+		            "enablePullDownRefresh": false
+		        }
+		        
+		        }
+		    ]
 		},
 		/* 教务相关分包 */
 		{

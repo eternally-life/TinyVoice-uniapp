@@ -24,13 +24,13 @@
 							</checkbox-group>
 						</view>
 						<view class="size">
-							<text style="font-size: 25rpx;">{{item.commodityName}}-{{item.specificationName}}</text>
-							<text class="goods-price">￥{{parseFloat(item.unitPrice / 100 ).toFixed(2)}}/单价</text>
+							<text style="font-size: 25rpx;">尺码：{{item.size}}</text>
+							<text class="goods-price">￥{{item.price}}/件</text>
 						</view>
 					</view>
 					<view class="detail-right">
 						<text class="subtract" @click="reduce(item)">-</text>
-						<text class="num">{{item.quantity}}</text>
+						<text class="num">{{item.num}}</text>
 						<text @click="add(item)" class="add">+</text>
 					</view>
 				</view>
@@ -44,16 +44,15 @@
 					</label>
 				</checkbox-group>
 				<view>
-					总计：<text style="color: #f00;font-weight: bold;">￥ {{parseFloat(totalPrice).toFixed(2)}}</text>
+					总计：<text style="color: #f00;font-weight: bold;">￥ {{totalPrice}}</text>
 				</view>
 			</view>
-			<view class="end-right" @click="allPay(totalNum)">
+			<view class="end-right">
 				结算({{totalNum}})
 			</view>
 
 
 		</view>
-		<u-toast ref="uToast"></u-toast>
 	</view>
 </template>
 
@@ -76,23 +75,42 @@
 				show: true,
 				allchecked: true,
 				checked: true,
-				goods: [],
-				orderParmes: {
-					phonenumber: null,
-					/** 联系方式=电话   string required: */
-					addrId: null,
-					/** 地址ID   integer required: */
-					/** 订单数据   object required: */
-					orderData: {
-						commodityIds: [
-
-						],
-						skuIdAndQuantity: {
-
-						}
+				goods: [{
+						size: "女款-M",
+						num: 1,
+						flag: true,
+						price: 149,
+						goodsImage: "https://img0.baidu.com/it/u=4158246207,3235707994&fm=26&fmt=auto&gp=0.jpg",
 					},
-				},
-				mapGoods: []
+					{
+						size: "女款-xs",
+						num: 1,
+						flag: true,
+						price: 219,
+						goodsImage: "https://img0.baidu.com/it/u=811765333,1656843554&fm=11&fmt=auto&gp=0.jpg",
+					},
+					{
+						size: "女款-L",
+						num: 1,
+						flag: true,
+						price: 240,
+						goodsImage: "https://img1.baidu.com/it/u=233755383,2522308225&fm=26&fmt=auto&gp=0.jpg",
+					},
+					{
+						size: "女款-XXL",
+						num: 1,
+						flag: true,
+						price: 410,
+						goodsImage: "https://img0.baidu.com/it/u=3894000947,2570065196&fm=26&fmt=auto&gp=0.jpg",
+					},
+					{
+						size: "女款-XXL",
+						num: 1,
+						flag: true,
+						price: 500,
+						goodsImage: "https://img2.baidu.com/it/u=1001625387,3275765924&fm=26&fmt=auto&gp=0.jpg",
+					},
+				],
 			}
 		},
 		onLoad() {
@@ -186,36 +204,9 @@
 				arr5 = this.mapGoods.map(x => {
 					return x.commodityIds
 				})
-				console.log(arr5);
-				this.orderParmes.orderData.commodityIds = arr5
-				let obj = {}
-				this.mapGoods.forEach(item => {
-					obj[item.skuId] = item.quantity
-				})
-				this.orderParmes.orderData.skuIdAndQuantity = obj
-				const res = await payTinymallCreateOrder_Post(this.orderParmes)
-				if (res.data.code === 200) {
-					this.wxPay(res)
-				} else {
-					this.selfMsg(res.data.msg, 'warning')
-				}
 			},
-			wxPay(res) { // 微信支付
-				uni.requestPayment({
-					timeStamp: res.data.data.timeStamp,
-					nonceStr: res.data.data.nonceStr,
-					appId: res.data.data.appId,
-					package: res.data.data.package,
-					signType: 'RSA',
-					paySign: res.data.data.paySign,
-					success: res => {
-						this.selfMsg('支付成功！', 'success')
-					},
-					fail: res => {
-						this.selfMsg('支付失败', 'error')
-					}
-				})
-
+			change(e) {
+				console.log(e)
 			},
 			selected(item) {
 				item.flag = !item.flag
@@ -248,32 +239,28 @@
 				}
 			},
 			reduce(item) {
-				let num = item.quantity
+				let num = item.num
 				if (num > 1) {
 					num -= 1
 				} else if (num = 1) {
-					this.selfMsg("该宝贝不能减少了哟~", 'warning')
+					uni.showToast({
+						title: "该宝贝不能减少了哟~"
+					})
 				}
 
 
-				item.quantity = num
+				item.num = num
 			},
 			add(item) {
-				let num = item.quantity
-				item.quantity = num + 1
-			},
-			selfMsg(msg, mod) {
-				this.$refs.uToast.show({
-					type: mod,
-					message: msg
-				})
+				let num = item.num
+				item.num = num + 1
 			}
 		},
 		computed: {
 			totalNum() {
 				let totalNum = 0;
 				this.goods.map(item => {
-					item.flag ? totalNum += item.quantity : totalNum += 0
+					item.flag ? totalNum += item.num : totalNum += 0
 				})
 				return totalNum
 			},
@@ -281,9 +268,9 @@
 			totalPrice() {
 				let totalPrice = 0;
 				this.goods.map(item => {
-					item.flag ? totalPrice += item.quantity * item.unitPrice : totalPrice += 0
+					item.flag ? totalPrice += item.num * item.price : totalPrice += 0
 				})
-				return totalPrice / 100
+				return totalPrice
 			}
 		}
 	}

@@ -1,5 +1,5 @@
 <template>
-	<view>分包示例页</view>
+	<view>修改用户信息</view>
 </template>
 
 <script>
