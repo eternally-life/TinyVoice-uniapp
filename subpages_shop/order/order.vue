@@ -27,5 +27,5 @@
 </script>
 
 <style lang="scss" scoped>
-	.container []
+	.container {}
 </style>

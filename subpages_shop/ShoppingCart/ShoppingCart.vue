@@ -129,9 +129,9 @@
 					cancelColor: '#000000',
 					success: async (res) => {
 						if (res.confirm) {
-							const result = await payTinymallshoppingDelete_Delete({
-								shoppingId: id
-							})
+							let deleteByIds = []
+							deleteByIds.push(id)
+							const result = await payTinymallshoppingDelete_Delete(deleteByIds)
 							console.log(result, id);
 							if (result.data.code === 200) {
 								this.getShoppingCartData()
