@@ -89,7 +89,6 @@
 		},
 		onLoad() {
 			this.getShoppingCartData()
-			// this.allDelShoppingCart()
 		},
 		methods: {
 			async getShoppingCartData() {
