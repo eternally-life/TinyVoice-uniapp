@@ -96,6 +96,13 @@
 					"navigationStyle": "custom"
 				}
 
+			}, {
+				"path": "order/order",
+				"style": {
+					"navigationBarTitleText": "我的订单",
+					"enablePullDownRefresh": false
+				}
+
 			}]
 		},
 		/* 微音相关分包 */

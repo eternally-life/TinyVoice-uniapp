@@ -148,10 +148,10 @@
 					cancelColor: '#000000',
 					success: async (res) => {
 						if (res.confirm) {
-							const result = await payTinymallshoppingDelete_Delete({
-								shoppingId: id
-							})
-							console.log(result, id);
+							let deleteByIds = []
+							deleteByIds.push(id)
+							const result = await payTinymallshoppingDelete_Delete(deleteByIds)
+							// console.log(result, id);
 							if (result.data.code === 200) {
 								this.getShoppingCartData()
 								this.selfMsg('删除成功', 'success')
@@ -177,7 +177,7 @@
 				})
 			},
 			async allPay(num) {
-				console.log(num);
+				// console.log(num);
 				if (num == 0) {
 					return this.selfMsg('未选择商品', 'warning')
 				}
