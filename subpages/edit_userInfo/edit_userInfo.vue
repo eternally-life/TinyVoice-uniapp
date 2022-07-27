@@ -6,6 +6,9 @@
 export default {
 	data() {
 		return {};
+	},
+	onLoad(option) {
+		console.log('开启参数', option.type);
 	}
 };
 </script>

@@ -61,14 +61,8 @@
 						"navigationBarTitleText": "用户信息",
 						"enablePullDownRefresh": false
 					}
-				},
-				{
-					"path": "edit_userInfo/edit_userInfo",
-					"style": {
-						"navigationBarTitleText": "修改用户信息",
-						"enablePullDownRefresh": false
-					}
 				}
+
 			]
 		},
 		/* 商城相关分包 */

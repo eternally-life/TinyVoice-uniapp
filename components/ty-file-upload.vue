@@ -177,7 +177,7 @@ export default {
 					} else {
 						// 上传图片 修改标记
 						try {
-							const url = await this.uploadFilePromise(item.url, index);
+							const url = await this.uploadFilePromise(item.url);
 							this.addOkUrl(index - errCount, url);
 							this.uploadedFileList.push(url);
 							// console.log('返回数据', url);
