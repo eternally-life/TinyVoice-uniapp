@@ -92,13 +92,8 @@
 				"path": "ShoppingCart/ShoppingCart",
 				"style": {
 					"navigationBarTitleText": "我的购物车",
-<<<<<<< HEAD
-					"enablePullDownRefresh": false
-
-=======
 					"enablePullDownRefresh": false,
 					"navigationStyle": "custom"
->>>>>>> hcy_dev/20220727
 				}
 
 			}]
@@ -112,35 +107,29 @@
 					"navigationBarTitleText": "微音聆听您的声音",
 					"enablePullDownRefresh": false
 				}
-		
-			}    ,{
-		            "path" : "fleaMarket/fleaMarket",
-		            "style" :                                                                                    
-		        {
-		            "navigationBarTitleText": "二手市场",
-		            "enablePullDownRefresh": false
-		        }
-		        
-		        }
-		        ,{
-		            "path" : "lostFound/lostFound",
-		            "style" :                                                                                    
-		        {
-		            "navigationBarTitleText": "失物招领",
-		            "enablePullDownRefresh": false
-		        }
-		        
-		        }
-		        ,{
-		            "path" : "speakNow/speakNow",
-		            "style" :                                                                                    
-		        {
-		            "navigationBarTitleText": "表白",
-		            "enablePullDownRefresh": false
-		        }
-		        
-		        }
-		    ]
+
+			}, {
+				"path": "fleaMarket/fleaMarket",
+				"style": {
+					"navigationBarTitleText": "二手市场",
+					"enablePullDownRefresh": false
+				}
+
+			}, {
+		 	"path": "lostFound/lostFound",
+				"style": {
+					"navigationBarTitleText": "失物招领",
+					"enablePullDownRefresh": false
+				}
+
+			}, {
+				"path": "speakNow/speakNow",
+				"style": {
+					"navigationBarTitleText": "表白",
+					"enablePullDownRefresh": false
+		 	}
+
+			}]
 		},
 		/* 教务相关分包 */
 		{

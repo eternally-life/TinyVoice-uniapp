@@ -101,8 +101,6 @@
 					url: '/subpages_shop/ShoppingCart/ShoppingCart'
 				})
 			},
-<<<<<<< HEAD
-=======
 			async addShoppingCart(commodityId, skuId) {
 				if (this.parmesList.inventory === 0) {
 					this.selfMsg('库存一点都不剩了', 'warning')
@@ -122,7 +120,6 @@
 				}
 
 			},
->>>>>>> hcy_dev/20220727
 			async getSku() {
 				const res = await payTinymallGetSku_Get({
 					commodityId: this.shopDetail.commodityId

@@ -1,17 +1,4 @@
 <template>
-<<<<<<< HEAD
-	<view>
-		<view class="empty" v-if="show==false">
-			<u-empty mode="car" icon="http://cdn.uviewui.com/uview/empty/car.png" text="空空如也的购物车">
-			</u-empty>
-			<!-- <image
-				src="https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fpic.51yuansu.com%2Fpic3%2Fcover%2F01%2F82%2F40%2F596fa6dc00bb4_610.jpg&refer=http%3A%2F%2Fpic.51yuansu.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1633499781&t=d37222e32213957ddbdd01d62e071309"
-				mode="widthFix" style="width: 400rpx;"></image>
-			<view class="empty-text">空空如也的购物</view> -->
-			<view class="empty-button" @click="goshopping">去选购</view>
-		</view>
-		<view v-if="show==true">
-=======
 	<view class="container">
 		<view class="header" :style="{ 'height' : navHeight + 'px','padding-top': statusBarHeight + 'rpx' }">
 			<view class="goBack" @tap="handleGoBack">
@@ -25,7 +12,6 @@
 			</u-empty>
 		</view>
 		<view class="goods" v-else>
->>>>>>> hcy_dev/20220727
 			<scroll-view scroll-y="true">
 				<view class="goods-detail" v-for="(item,index) in goods" :key="index"
 					@longpress="longTap(item.shoppingId)">
@@ -33,7 +19,8 @@
 						<view class="goods-left">
 							<checkbox-group @change="selected(item)">
 								<label>
-									<checkbox class="selected" color="#555555" :checked="checked" /><text></text>
+									<checkbox class="selected" color="#555555" :checked="checked" />
+									<text></text>
 								</label>
 							</checkbox-group>
 						</view>
@@ -71,8 +58,6 @@
 </template>
 
 <script>
-<<<<<<< HEAD
-=======
 	import {
 		payTinymallshoppingDeleteAll_Delete,
 		payTinymallshoppingUpdate_Put,
@@ -82,7 +67,6 @@
 	import {
 		payTinymallCreateOrder_Post
 	} from '@/api/商城模块/商品信息下单.js'
->>>>>>> hcy_dev/20220727
 	export default {
 		data() {
 			return {
@@ -130,8 +114,6 @@
 				],
 			}
 		},
-<<<<<<< HEAD
-=======
 		onLoad() {
 			this.getShoppingCartData()
 			let {
@@ -141,17 +123,7 @@
 			this.statusBarHeight = statusBarHeight
 			this.navHeight = statusBarHeight + (system.indexOf('iOS') > -1 ? 44 : 48)
 		},
->>>>>>> hcy
 		methods: {
-<<<<<<< HEAD
-			goshopping() {
-				uni.navigateTo({
-					url: '../contact/contact'
-				})
-			},
-			change(e) {
-				console.log(e)
-=======
 			async getShoppingCartData() {
 				this.goods = []
 				const res = await payTinymallshoppingPage_Get({
@@ -233,19 +205,6 @@
 				arr5 = this.mapGoods.map(x => {
 					return x.commodityIds
 				})
-				console.log(arr5);
-				this.orderParmes.orderData.commodityIds = arr5
-				let obj = {}
-				this.mapGoods.forEach(item => {
-					obj[item.skuId] = item.quantity
-				})
-				this.orderParmes.orderData.skuIdAndQuantity = obj
-				const res = await payTinymallCreateOrder_Post(this.orderParmes)
-				if (res.data.code === 200) {
-					this.wxPay(res)
-				} else {
-					this.selfMsg(res.data.msg, 'warning')
-				}
 			},
 			wxPay(res) { // 微信支付
 				uni.requestPayment({
@@ -262,8 +221,6 @@
 						this.selfMsg('支付失败', 'error')
 					}
 				})
-
->>>>>>> hcy_dev/20220727
 			},
 			selected(item) {
 				item.flag = !item.flag
@@ -461,7 +418,6 @@
 				text-align: center;
 				color: #fff;
 			}
-<<<<<<< HEAD
 
 			.detail-right {
 				text {
@@ -539,8 +495,6 @@
 			background-color: #F44545;
 			text-align: center;
 			color: #fff;
-=======
->>>>>>> hcy_dev/20220727
 		}
 	}
 </style>
