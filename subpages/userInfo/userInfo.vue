@@ -168,7 +168,7 @@ export default {
 					this.isShowPicke = false;
 					this.isShowPop = false;
 					Object.keys(para).map(key => {
-						console.log(key, para[key], this.userInfo[key]);
+						// console.log(key, para[key], this.userInfo[key]);
 						this.userInfo[key] = para[key];
 					});
 					setGloalDataUserInfo_static(this.userInfo);

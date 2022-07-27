@@ -61,14 +61,8 @@
 						"navigationBarTitleText": "用户信息",
 						"enablePullDownRefresh": false
 					}
-				},
-				{
-					"path": "edit_userInfo/edit_userInfo",
-					"style": {
-						"navigationBarTitleText": "修改用户信息",
-						"enablePullDownRefresh": false
-					}
 				}
+
 			]
 		},
 		/* 商城相关分包 */
@@ -107,35 +101,29 @@
 					"navigationBarTitleText": "微音聆听您的声音",
 					"enablePullDownRefresh": false
 				}
-		
-			}    ,{
-		            "path" : "fleaMarket/fleaMarket",
-		            "style" :                                                                                    
-		        {
-		            "navigationBarTitleText": "二手市场",
-		            "enablePullDownRefresh": false
-		        }
-		        
-		        }
-		        ,{
-		            "path" : "lostFound/lostFound",
-		            "style" :                                                                                    
-		        {
-		            "navigationBarTitleText": "失物招领",
-		            "enablePullDownRefresh": false
-		        }
-		        
-		        }
-		        ,{
-		            "path" : "speakNow/speakNow",
-		            "style" :                                                                                    
-		        {
-		            "navigationBarTitleText": "表白",
-		            "enablePullDownRefresh": false
-		        }
-		        
-		        }
-		    ]
+
+			}, {
+				"path": "fleaMarket/fleaMarket",
+				"style": {
+					"navigationBarTitleText": "二手市场",
+					"enablePullDownRefresh": false
+				}
+
+			}, {
+				"path": "lostFound/lostFound",
+				"style": {
+					"navigationBarTitleText": "失物招领",
+					"enablePullDownRefresh": false
+				}
+
+			}, {
+				"path": "speakNow/speakNow",
+				"style": {
+					"navigationBarTitleText": "表白",
+					"enablePullDownRefresh": false
+		 	}
+
+			}]
 		},
 		/* 教务相关分包 */
 		{
