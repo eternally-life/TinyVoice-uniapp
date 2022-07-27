@@ -9,9 +9,9 @@
 				<view class="name">周卡</view>
 				<view class="num">x {{value == 0 ? 1 : value}}</view>
 			</view>
-			<view class="mid">￥{{price}}</view>
+			<view class="mid">￥{{parseFloat(price).toFixed(2)}}</view>
 			<view class="right">
-				<u-number-box v-model="value" @change="valChange" :min="1" :max="10"></u-number-box>
+				<u-number-box v-model="value" @change="valChange" :min="1" :max="invoryMax"></u-number-box>
 
 			</view>
 		</view>
@@ -35,6 +35,8 @@
 				orderDetail: {},
 				value: 1,
 				price: 0,
+				invoryMax: 10,
+
 				orderParmes: {
 					phonenumber: null,
 					/** 联系方式=电话   string required: */
@@ -54,27 +56,57 @@
 		},
 		onLoad(opt) {
 			this.orderDetail = JSON.parse(opt.orderDetail)
-			this.price = this.orderDetail.price
+			this.value = opt.num
+			this.price = this.orderDetail.price / 100 * this.value
+			this.invoryMax = this.orderDetail.inventory
+			console.log(opt);
 		},
 		methods: {
 			valChange(e) {
 				console.log(e);
-				this.price = e.value * this.orderDetail.price
+				this.price = e.value * (this.orderDetail.price / 100)
 
 			},
 			async confirmPayOrder() {
 				this.orderParmes.addrId = 1
-				this.orderParmes.orderData.commodityIds = this.orderDetail.commodityId
+				this.orderParmes.orderData.commodityIds = [this.orderDetail.commodityId]
 				// Object.assign(this.orderParmes.orderData.skuIdAndQuantity, this.orderDetail.skuId, this.orderDetail
 				// 	.inventory)
 				let obj = {}
 				let key = this.orderDetail.skuId
-				let value = this.orderDetail.inventory
+
+				let value = this.value
 				obj[key] = value
 				this.orderParmes.orderData.skuIdAndQuantity = obj
 				const res = await payTinymallCreateOrder_Post(this.orderParmes)
-				console.log(this.orderParmes);
-				console.log(res);
+				if (res.data.code === 200) {
+					this.wxPay(res)
+				} else {
+					this.selfMsg(res.data.msg, 'warning')
+				}
+			},
+			wxPay(res) { // 微信支付
+				uni.requestPayment({
+					timeStamp: res.data.data.timeStamp,
+					nonceStr: res.data.data.nonceStr,
+					appId: res.data.data.appId,
+					package: res.data.data.package,
+					signType: 'RSA',
+					paySign: res.data.data.paySign,
+					success: res => {
+						this.selfMsg('支付成功！', 'success')
+					},
+					fail: res => {
+						this.selfMsg('支付失败', 'error')
+					}
+				})
+
+			},
+			selfMsg(msg, mod) {
+				this.$refs.uToast.show({
+					type: mod,
+					message: msg
+				})
 			}
 		}
 	}
