@@ -123,6 +123,10 @@
 				})
 			},
 			async addShoppingCart(commodityId, skuId) {
+				if (this.parmesList.inventory === 0) {
+					this.selfMsg('库存一点都不剩了', 'warning')
+					return
+				}
 				const res = await payTinymallshoppingSave_Post({
 					quantity: this.value,
 					commodityId: commodityId,

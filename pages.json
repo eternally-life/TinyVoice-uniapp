@@ -92,8 +92,8 @@
 				"path": "ShoppingCart/ShoppingCart",
 				"style": {
 					"navigationBarTitleText": "我的购物车",
-					"enablePullDownRefresh": false
-					// "navigationStyle": "custom"
+					"enablePullDownRefresh": false,
+					"navigationStyle": "custom"
 				}
 
 			}]

@@ -1,13 +1,20 @@
 <template>
-	<view>
+	<view class="container">
+		<view class="header" :style="{ 'height' : navHeight + 'px','padding-top': statusBarHeight + 'rpx' }">
+			<view class="goBack" @tap="handleGoBack">
+				<text class="iconfont icon-fanhui"></text>
+			</view>
+			<view class="isRead" @click="allDelShoppingCart">清空购物车</view>
+			<view class="title">购物车</view>
+		</view>
 		<view class="empty" v-if="!goods.length">
 			<u-empty mode="car" icon="http://cdn.uviewui.com/uview/empty/car.png" text="购物车竟然是空的">
 			</u-empty>
-
 		</view>
-		<view v-else>
+		<view class="goods" v-else>
 			<scroll-view scroll-y="true">
-				<view class="goods-detail" v-for="(item,index) in goods" :key="index">
+				<view class="goods-detail" v-for="(item,index) in goods" :key="index"
+					@longpress="longTap(item.shoppingId)">
 					<view class="detail-left">
 						<view class="goods-left">
 							<checkbox-group @change="selected(item)">
@@ -22,8 +29,6 @@
 						</view>
 					</view>
 					<view class="detail-right">
-						<!-- <u-number-box v-model="value" @change="valChange(item)" @click="reduce(item)" :min="1"
-							:max="10"></u-number-box> -->
 						<text class="subtract" @click="reduce(item)">-</text>
 						<text class="num">{{item.quantity}}</text>
 						<text @click="add(item)" class="add">+</text>
@@ -56,7 +61,8 @@
 	import {
 		payTinymallshoppingDeleteAll_Delete,
 		payTinymallshoppingUpdate_Put,
-		payTinymallshoppingPage_Get
+		payTinymallshoppingPage_Get,
+		payTinymallshoppingDelete_Delete
 	} from '@/api/商城模块/购物车测通.js'
 	import {
 		payTinymallCreateOrder_Post
@@ -65,6 +71,8 @@
 		data() {
 			return {
 				value: 1,
+				statusBarHeight: '',
+				navHeight: '',
 				show: true,
 				allchecked: true,
 				checked: true,
@@ -89,24 +97,65 @@
 		},
 		onLoad() {
 			this.getShoppingCartData()
+			let {
+				statusBarHeight,
+				system
+			} = uni.getSystemInfoSync()
+			this.statusBarHeight = statusBarHeight
+			this.navHeight = statusBarHeight + (system.indexOf('iOS') > -1 ? 44 : 48)
 		},
 		methods: {
 			async getShoppingCartData() {
-				const res = await payTinymallshoppingPage_Get()
+				this.goods = []
+				const res = await payTinymallshoppingPage_Get({
+					pageSize: 100
+				})
 				if (res.data.code === 200) {
 					this.goods = res.data.data.records
 				} else {
 					this.selfMsg(res.data.msg, 'warning')
 				}
 			},
-			async allDelShoppingCart() {
-				const res = await payTinymallshoppingDeleteAll_Delete()
-				if (res.data.code === 200) {
-					this.selfMsg('清空成功', 'success')
-				} else {
-					this.selfMsg(res.data.msg, 'warning')
-				}
-				console.log(res);
+			handleGoBack() {
+				uni.navigateBack({
+					delta: 1
+				});
+			},
+			longTap(id) {
+				console.log("长按触发事件?", id)
+				uni.showModal({
+					title: '是否删除此项商品？',
+					confirmColor: '#0099ff',
+					cancelColor: '#000000',
+					success: async (res) => {
+						if (res.confirm) {
+							const result = await payTinymallshoppingDelete_Delete({
+								shoppingId: id
+							})
+							console.log(result, id);
+							if (result.data.code === 200) {
+								this.getShoppingCartData()
+								this.selfMsg('删除成功', 'success')
+							}
+						}
+					}
+				})
+			},
+			allDelShoppingCart() {
+				uni.showModal({
+					title: '是否全部清空购物车？',
+					confirmColor: '#0099ff',
+					cancelColor: '#000000',
+					success: async (res) => {
+						if (res.confirm) {
+							const result = await payTinymallshoppingDeleteAll_Delete()
+							if (result.data.code === 200) {
+								this.getShoppingCartData()
+								this.selfMsg('清空成功', 'success')
+							}
+						}
+					}
+				})
 			},
 			async allPay(num) {
 				console.log(num);
@@ -240,103 +289,134 @@
 	}
 </script>
 
-<style lang="scss">
-	.goods {
-		line-height: 80rpx;
-		background-color: #FFFFFF;
-
-		&-detail {
+<style lang="scss" scoped>
+	.container {
+		.header {
+			position: fixed;
+			top: 0;
+			right: 0;
+			left: 0;
+			z-index: 1000;
+			background-color: #ffffff;
 			display: flex;
-			padding: 30rpx 15rpx 30rpx 30rpx;
-			background-color: #fff;
-			justify-content: space-between;
-			border-bottom: 5rpx solid #F1F1F1;
+			padding-left: 20rpx;
 			align-items: center;
-			margin-bottom: 10rpx;
 
-			.detail-left {
+			.goBack {
+				padding: 0 20rpx;
+
+				.iconfong {
+					font-size: 22rpx
+				}
+			}
+
+			.isRead {
+				padding-right: 120rpx;
+				font-size: 26rpx;
+				color: #a9a9a9;
+			}
+
+			.title {}
+		}
+
+		.goods {
+			// line-height: 80rpx;
+			// background-color: #FFFFFF;
+			padding-top: 230rpx;
+
+			&-detail {
 				display: flex;
+				padding: 30rpx 15rpx 30rpx 30rpx;
+				background-color: #fff;
+				justify-content: space-between;
+				border-bottom: 5rpx solid #F1F1F1;
+				align-items: center;
+				margin-bottom: 10rpx;
 
-				.goods-left {
+				.detail-left {
+					display: flex;
+
+					.goods-left {
+						display: flex;
+						align-items: center;
+					}
+				}
+
+				.size {
+					display: flex;
+					justify-content: space-around;
+					flex-direction: column;
+					margin-left: 30rpx;
+
+					.goods-price {
+						font-size: 25rpx;
+						color: #F44545;
+						padding-top: 10rpx;
+					}
+				}
+
+				.detail-right {
+					text {
+						width: 50rpx;
+						line-height: 50rpx;
+						text-align: center;
+						display: inline-block;
+						background-color: #F7F7F7;
+						margin-right: 10rpx;
+					}
+
+					.add {
+						color: #FA4305;
+						border-radius: 10rpx 30rpx 30rpx 10rpx;
+						margin-right: 20rpx;
+					}
+
+					.subtract {
+						border-radius: 30rpx 10rpx 10rpx 30rpx;
+					}
+				}
+			}
+		}
+
+		.empty {
+
+			position: relative;
+			top: 220rpx;
+			text-align: center;
+			display: flex;
+			align-items: center;
+			flex-direction: column;
+		}
+
+		.end {
+			width: 100%;
+			height: 90rpx;
+			background-color: #fff;
+			position: fixed;
+			bottom: 100rpx;
+			left: 0;
+			display: flex;
+			align-items: center;
+
+			&-left {
+				width: 70%;
+				display: flex;
+				justify-content: space-between;
+				padding: 0 30rpx;
+
+				.end-flex {
 					display: flex;
 					align-items: center;
 				}
 			}
 
-			.size {
-				display: flex;
-				justify-content: space-around;
-				flex-direction: column;
-				margin-left: 30rpx;
-
-				.goods-price {
-					font-size: 25rpx;
-					color: #F44545;
-					padding-top: 10rpx;
-				}
+			&-right {
+				width: 30%;
+				line-height: 90rpx;
+				background-color: #F44545;
+				text-align: center;
+				color: #fff;
 			}
-
-			.detail-right {
-				text {
-					width: 50rpx;
-					line-height: 50rpx;
-					text-align: center;
-					display: inline-block;
-					background-color: #F7F7F7;
-					margin-right: 10rpx;
-				}
-
-				.add {
-					color: #FA4305;
-					border-radius: 10rpx 30rpx 30rpx 10rpx;
-					margin-right: 20rpx;
-				}
-
-				.subtract {
-					border-radius: 30rpx 10rpx 10rpx 30rpx;
-				}
-			}
-		}
-	}
-
-	.empty {
-
-		position: relative;
-		top: 220rpx;
-		text-align: center;
-		display: flex;
-		align-items: center;
-		flex-direction: column;
-	}
-
-	.end {
-		width: 100%;
-		height: 90rpx;
-		background-color: #fff;
-		position: fixed;
-		bottom: 100rpx;
-		left: 0;
-		display: flex;
-		align-items: center;
-
-		&-left {
-			width: 70%;
-			display: flex;
-			justify-content: space-between;
-			padding: 0 30rpx;
-
-			.end-flex {
-				display: flex;
-				align-items: center;
-			}
-		}
-
-		&-right {
-			width: 30%;
-			line-height: 90rpx;
-			background-color: #F44545;
-			text-align: center;
-			color: #fff;
 		}
 	}
 </style>
