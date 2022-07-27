@@ -5,14 +5,14 @@
 
 				<view class="UserLoginItem ">
 					<view class="title">
-						<i class="iconfont">&#xe6c0;</i>
+						<view class="iconfont icon-shouji"></view>
 					</view>
 					<input type="text" style="width: 100%;" placeholder="请输入手机号" v-model="phonenumber"
 						id="phonenumber" />
 				</view>
 				<view class="UserLoginItem ">
 					<view class="title">
-						<i class="iconfont">&#xe6c3;</i>
+						<view class="iconfont icon-yanzhengma1"></view>
 					</view>
 					<input style="width: 100%;" placeholder="请输入验证码" v-model="verificationCode" id="verificationCode" />
 					<view class="right-icon">

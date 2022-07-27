@@ -17,6 +17,97 @@
 
 /* ======固定部分 结束====== */
 /* ----以下为更新时替换部分---- */
+.icon-gongju:before {
+	content: "\e6ae";
+}
+
+.icon-yanzhengma:before {
+	content: "\e636";
+}
+
+.icon-yanzhengma1:before {
+	content: "\e634";
+}
+
+.icon-dingdan:before {
+	content: "\e64c";
+}
+
+.icon-jiajianzujianjiahao:before {
+	content: "\e64d";
+}
+
+.icon-dayuhao:before {
+	content: "\e62d";
+}
+
+.icon-mima:before {
+	content: "\e640";
+}
+
+.icon-QQdenglu:before {
+	content: "\e63d";
+}
+
+.icon-weixindenglu:before {
+	content: "\e63e";
+}
+
+.icon-fanhui:before {
+	content: "\e62e";
+}
+
+.icon-fabu1:before {
+	content: "\e650";
+}
+
+.icon-zhanghao1:before {
+	content: "\e642";
+}
+
+.icon-wodedianpu3:before {
+	content: "\eb5b";
+}
+
+.icon-ruzhu1:before {
+	content: "\e659";
+}
+
+.icon-zhanghao:before {
+	content: "\e63f";
+}
+
+.icon-fanhui23:before {
+	content: "\e635";
+}
+
+.icon-gerenxinxi1:before {
+	content: "\e6aa";
+}
+
+.icon-lianxikefu1:before {
+	content: "\e6ab";
+}
+
+.icon-fenxiangweiyin1:before {
+	content: "\e6ac";
+}
+
+.icon-wodefabu1:before {
+	content: "\e6ad";
+}
+
+.icon-tuichuzhanghao1:before {
+	content: "\e6af";
+}
+
+.icon-guanyuwomen-01-01:before {
+	content: "\e6b1";
+}
+
+.icon-shouji:before {
+	content: "\e662";
+}
 
 .icon-weixin-01:before {
 	content: "\e6b9";

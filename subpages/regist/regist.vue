@@ -24,7 +24,7 @@
 			</view>
 			<view class="userItem">
 				<view class="left-icon">
-					<view class="iconfont icon-shouji"></view>
+					<view class="iconfont icon-yanzhengma1"></view>
 				</view>
 				<view class="input__content">
 					<input type="text" placeholder-class="input-placeholder" v-model="registInfo.verificationCode"
