@@ -32,13 +32,6 @@
 		}
 
 	}, {
-		"path": "pages/community-publish/community-publish",
-		"style": {
-			"navigationBarTitleText": "微音发表",
-			"enablePullDownRefresh": false
-		}
-
-	}, {
 		"path": "pages/appliance/appliance",
 		"style": {
 			"navigationBarTitleText": "工具",
@@ -104,6 +97,45 @@
 				}
 
 			}]
+		},
+		/* 微音相关分包 */
+		{
+			"root": "subpages_publish",
+			"pages": [{
+				"path": "publishVoice/publishVoice",
+				"style": {
+					"navigationBarTitleText": "微音聆听您的声音",
+					"enablePullDownRefresh": false
+				}
+		
+			}    ,{
+		            "path" : "fleaMarket/fleaMarket",
+		            "style" :                                                                                    
+		        {
+		            "navigationBarTitleText": "二手市场",
+		            "enablePullDownRefresh": false
+		        }
+		        
+		        }
+		        ,{
+		            "path" : "lostFound/lostFound",
+		            "style" :                                                                                    
+		        {
+		            "navigationBarTitleText": "失物招领",
+		            "enablePullDownRefresh": false
+		        }
+		        
+		        }
+		        ,{
+		            "path" : "speakNow/speakNow",
+		            "style" :                                                                                    
+		        {
+		            "navigationBarTitleText": "表白",
+		            "enablePullDownRefresh": false
+		        }
+		        
+		        }
+		    ]
 		},
 		/* 教务相关分包 */
 		{
