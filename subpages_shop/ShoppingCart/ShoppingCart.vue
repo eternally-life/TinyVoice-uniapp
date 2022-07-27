@@ -101,6 +101,12 @@
 				],
 			}
 		},
+<<<<<<< HEAD
+=======
+		onLoad() {
+			this.getShoppingCartData()
+		},
+>>>>>>> hcy
 		methods: {
 			goshopping() {
 				uni.navigateTo({
