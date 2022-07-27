@@ -86,8 +86,8 @@
 				"path": "ShoppingCart/ShoppingCart",
 				"style": {
 					"navigationBarTitleText": "我的购物车",
-					"enablePullDownRefresh": false
-
+					"enablePullDownRefresh": false,
+					"navigationStyle": "custom"
 				}
 
 			}]
@@ -110,7 +110,7 @@
 				}
 
 			}, {
-				"path": "lostFound/lostFound",
+		 	"path": "lostFound/lostFound",
 				"style": {
 					"navigationBarTitleText": "失物招领",
 					"enablePullDownRefresh": false
