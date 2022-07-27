@@ -150,7 +150,7 @@ export function setGloalDataToken(token) {
 }
 
 
-// 存储全局用户信息
+// 存储全局用户信息(请求接口)
 export function setGloalDataUserInfo() {
 	systemTinyuserGetInfo_Get().then(res => {
 		if (res.data.code === 200) {
@@ -158,6 +158,12 @@ export function setGloalDataUserInfo() {
 			uni.setStorageSync('wxUserInfo', res.data.user)
 		}
 	})
+}
+
+// 存储全局用户信息(静态修改)
+export function setGloalDataUserInfo_static(para) {
+	getApp().globalData.wxUserInfo = para
+	uni.setStorageSync('wxUserInfo', para)
 }
 
 // 存储缓存公告信息

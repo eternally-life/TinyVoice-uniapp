@@ -204,6 +204,10 @@ export default {
 		});
 		this.getNoticeList();
 	},
+	onShow() {
+		//更新页面静态数据
+		this.wxUserInfo = getApp().globalData.wxUserInfo;
+	},
 	onShareTimeline() {
 		// 用户点击右上角分享
 	},
