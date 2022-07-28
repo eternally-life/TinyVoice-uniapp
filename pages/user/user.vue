@@ -232,70 +232,50 @@ export default {
 				console.log('我是1 是客服');
 			} else if (index === 2) {
 				uni.navigateTo({
-					url: './about_us'
+					url: '/subpages/aboutUs/aboutUs'
 				});
 			} else if (index === 3) {
 				console.log('我是3 是分享');
 			} else {
-				uni.showModal({
-					content: '是否要退出？',
-					confirmText: '退出',
-					confirmColor: '#0099ff',
-					cancelColor: '#000000',
-					success: res => {
-						if (res.confirm) {
-							this.wxUserInfo = {};
-							uni.clearStorage();
-							/* uni.removeStorageSync('token');
-								uni.removeStorageSync('wxUserInfo');
-								uni.removeStorageSync('noticeList');
-								uni.removeStorageSync('pamesList');
-								uni.removeStorageSync(getApp().globalData.eduSwitchKEY);
-								uni.removeStorageSync(getApp().globalData.courseFTimeKEY); */
-							getApp().globalData.token = null;
-							getApp().globalData.wxUserInfo = {};
-							uni.reLaunch({
-								url: '/subpages/login/login'
-							});
-						}
-					}
-				});
+				this.exitLogin();
 			}
 			// #endif
 			// #ifdef MP-QQ
 			if (index === 0) {
-				uni.navigateTo({
-					url: './myInfo?userInfo=' + JSON.stringify(this.wxUserInfo)
-				});
+				this.toLogin();
 			} else if (index === 1) {
 				uni.navigateTo({
-					url: './about_us'
+					url: '/subpages/aboutUs/aboutUs'
 				});
 			} else if (index === 2) {
 				console.log('我是2 是分享');
 			} else {
-				uni.showModal({
-					content: '是否要退出？',
-					confirmText: '退出',
-					confirmColor: '#0099ff',
-					cancelColor: '#000000',
-					success: res => {
-						if (res.confirm) {
-							this.wxUserInfo = {};
-							uni.removeStorageSync('token');
-							uni.removeStorageSync('wxUserInfo');
-							uni.removeStorageSync('noticeList');
-							uni.removeStorageSync('pamesList');
-							getApp().globalData.token = null;
-							getApp().globalData.wxUserInfo = {};
-							uni.reLaunch({
-								url: '/subpages/login/login'
-							});
-						}
-					}
-				});
+				this.exitLogin();
 			}
 			// #endif
+		},
+		// 退出登录
+		exitLogin() {
+			uni.showModal({
+				content: '是否要退出？',
+				confirmText: '退出',
+				confirmColor: '#0099ff',
+				cancelColor: '#000000',
+				success: res => {
+					if (res.confirm) {
+						this.wxUserInfo = {};
+						uni.removeStorageSync('token');
+						uni.removeStorageSync('wxUserInfo');
+						uni.removeStorageSync('noticeList');
+						uni.removeStorageSync('pamesList');
+						getApp().globalData.token = null;
+						getApp().globalData.wxUserInfo = {};
+						uni.reLaunch({
+							url: '/subpages/login/login'
+						});
+					}
+				}
+			});
 		}
 	},
 	computed: {

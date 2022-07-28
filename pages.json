@@ -63,7 +63,16 @@
 					}
 				}
 
-			]
+			    ,{
+                    "path" : "aboutUs/aboutUs",
+                    "style" :                                                                                    
+                {
+                    "navigationBarTitleText": "关于我们",
+                    "enablePullDownRefresh": false
+                }
+                
+                }
+            ]
 		},
 		/* 商城相关分包 */
 		{
