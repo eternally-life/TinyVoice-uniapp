@@ -193,13 +193,8 @@ export default {
 			}
 		}
 	},
-	onLoad(option) {
-		const res = uni.getStorageSync('wxUserInfo');
-		console.log(res);
-		this.userInfo = res;
-		// if (option.userInfo) {
-		// 	this.userInfo = JSON.parse(option.userInfo);
-		// }
+	onLoad() {
+		this.userInfo = getApp().globalData.wxUserInfo;
 	},
 	filters: {
 		genderString(sex) {

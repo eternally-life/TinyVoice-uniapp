@@ -3,8 +3,8 @@
 		<view class="bgColor"></view>
 
 		<view class="topInfo">
-			<view class="userInfo" @click="toLogin">
-				<view class="user_avator">
+			<view class="userInfo">
+				<view class="user_avator" @click="toLogin">
 					<image
 						:src="
 							wxUserInfo.avatar
@@ -14,7 +14,7 @@
 						class="userAvatar"
 					/>
 				</view>
-				<view class="right">
+				<view class="right" @click="toLogin">
 					<view class="user">
 						<text class="name">{{ wxUserInfo.nickName || '点击登录' }}</text>
 						<text class="desc">{{ wxUserInfo.isAuth ? '已校园认证' : '未校园认证' }}</text>
@@ -182,7 +182,7 @@ export default {
 		toLogin() {
 			if (this.wxUserInfo) {
 				uni.navigateTo({
-					url: './myInfo?userInfo=' + JSON.stringify(this.wxUserInfo)
+					url: '/subpages/userInfo/userInfo'
 				});
 				return;
 			}
@@ -227,9 +227,7 @@ export default {
 			console.log(index);
 			// #ifdef MP-WEIXIN
 			if (index === 0) {
-				uni.navigateTo({
-					url: '/subpages/userInfo/userInfo?userInfo=' + JSON.stringify(this.wxUserInfo)
-				});
+				this.toLogin();
 			} else if (index === 1) {
 				console.log('我是1 是客服');
 			} else if (index === 2) {
