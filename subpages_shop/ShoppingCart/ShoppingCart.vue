@@ -43,6 +43,9 @@
 						<checkbox :checked="allchecked" />全选
 					</label>
 				</checkbox-group>
+				<view class="del">
+					<u-tag text="删除" size="large" type="error" @click="delByShopping()"></u-tag>
+				</view>
 				<view>
 					总计：<text style="color: #f00;font-weight: bold;">￥ {{parseFloat(totalPrice).toFixed(2)}}</text>
 				</view>
@@ -92,7 +95,8 @@
 						}
 					},
 				},
-				mapGoods: []
+				mapGoods: [],
+				delGoods: []
 			}
 		},
 		onLoad() {
@@ -105,6 +109,35 @@
 			this.navHeight = statusBarHeight + (system.indexOf('iOS') > -1 ? 44 : 48)
 		},
 		methods: {
+			delByShopping() {
+				uni.showModal({
+					title: '是否删除选中商品？',
+					confirmColor: '#0099ff',
+					cancelColor: '#000000',
+					success: async (res) => {
+						if (res.confirm) {
+							this.delGoods = []
+							this.goods.map((item) => {
+								if (item.flag === true) {
+									this.delGoods.push({
+										'shoppingId': item.shoppingId
+									})
+								}
+							})
+							let arr = []
+							arr = this.delGoods.map(x => {
+								return x.shoppingId
+							})
+							console.log(arr);
+							const result = await payTinymallshoppingDelete_Delete(arr)
+							if (result.data.code === 200) {
+								this.getShoppingCartData()
+								this.selfMsg('删除成功', 'success')
+							}
+						}
+					}
+				})
+			},
 			async getShoppingCartData() {
 				this.goods = []
 				const res = await payTinymallshoppingPage_Get({
@@ -390,17 +423,36 @@
 
 		.end {
 			width: 100%;
-			height: 90rpx;
+			height: 100rpx;
 			background-color: #fff;
 			position: fixed;
-			bottom: 100rpx;
+			bottom: 0rpx;
 			left: 0;
+			right: 0;
+			padding: 20rpx 0rpx 100rpx;
 			display: flex;
-			align-items: center;
+			align-items: baseline;
+
+			.del {
+				.u-tag-wrapper {
+					margin-bottom: 20rpx;
+				}
+
+				.u-tag {
+					height: 50rpx;
+				}
+
+				.u-tag--large.data-v-1481d46d {
+					height: 50rpx;
+					line-height: 50rpx;
+					padding: 0 20rpx;
+				}
+			}
 
 			&-left {
 				width: 70%;
 				display: flex;
+				align-items: center;
 				justify-content: space-between;
 				padding: 0 30rpx;
 
