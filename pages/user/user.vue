@@ -20,6 +20,10 @@
 						<text class="desc">{{ wxUserInfo.isAuth ? '已校园认证' : '未校园认证' }}</text>
 					</view>
 				</view>
+				<view class="sign">
+					<u-tag text="已签" size="mini" type="success" v-if="signined"></u-tag>
+					<u-tag text="签到" plain size="mini" type="success" v-else @click="signInNote"></u-tag>
+				</view>
 			</view>
 			<view class="otherInfo">
 				<view
@@ -77,10 +81,11 @@
 </template>
 
 <script>
-const prf = 't-';
 import { mapState, mapMutations } from 'vuex';
 import { systemTinyuserGetInfo_Get } from '@/api/SYSTEM/用户信息.js';
 import { systemParamsNoteList_Get, systemParamsConfList_Get } from '@/api/SYSTEM/参数字典公告.js';
+import { systemSyssignPage_Get, systemSyssignSave_Post } from '@/api/SYSTEM/签到.js';
+import { getSetInfo_QQ, getSetInfo_WX, getNaviList, getOtherInfo_WX, getOtherInfo_QQ } from './datalist.js';
 export default {
 	data() {
 		return {
@@ -88,105 +93,19 @@ export default {
 			content: '', // 富文本内容
 			noticeTitle: '', // 音符说明标题
 			wxUserInfo: {},
+			signined: false, //是否已签到
 			token: '',
 			// 导航区数据
-			navs: [
-				{
-					icon: 'iconfont icon-fabu1',
-					title: '我的发布',
-					path: '/pages/small_voice/MyVoice'
-				},
-				{
-					icon: 'iconfont icon-dingdan',
-					title: '我的订单',
-					path: '/pages/profile/order'
-				},
-				{
-					icon: 'iconfont icon-ruzhu1',
-					title: '店铺入驻',
-					path: '/pages/supermarket/mall/applyOpenShop'
-				},
-				{
-					icon: 'iconfont icon-wodedianpu3',
-					title: '我的店铺',
-					path: '/pages/supermarket/mall/myShop'
-				}
-			],
-			// #ifdef MP-QQ
-			otherInfo: [
-				{
-					num: '0',
-					text: '音符'
-				}
-			],
-			// #endif
+			navs: getNaviList(),
+
 			// #ifdef MP-WEIXIN
-			otherInfo: [
-				{
-					num: '0',
-					text: '音符'
-				},
-				{
-					num: '0',
-					text: '关注'
-				},
-				{
-					num: '0',
-					text: '粉丝'
-				},
-				{
-					num: '0',
-					text: '消息',
-					path: '/pages/profile/news'
-				}
-			],
+			otherInfo: getOtherInfo_WX(),
+			setInfo: getSetInfo_WX(),
 			// #endif
-			// #ifdef MP-WEIXIN
-			setInfo: [
-				{
-					icon: prf + 'icon-gerenxinxi1',
-					name: '个人信息'
-				},
-				{
-					icon: prf + 'icon-lianxikefu1',
-					name: '联系客服',
-					open_type: 'contact'
-				},
-				{
-					icon: prf + 'icon-guanyuwomen-01-01',
-					name: '关于我们'
-				},
-				{
-					icon: prf + 'icon-fenxiangweiyin1',
-					name: '分享微音',
-					open_type: 'share'
-				},
-				{
-					icon: prf + 'icon-tuichuzhanghao1',
-					name: '退出账号'
-				}
-			],
-			// #endif
+
 			// #ifdef MP-QQ
-			setInfo: [
-				{
-					icon: prf + 'icon-gerenxinxi1',
-					name: '个人信息'
-				},
-				{
-					icon: prf + 'icon-guanyuwomen-01-01',
-					name: '关于我们'
-				},
-				{
-					icon: prf + 'icon-fenxiangweiyin1',
-					name: '分享微音',
-					open_type: 'share'
-				},
-				{
-					icon: prf + 'icon-tuichuzhanghao1',
-					name: '退出账号'
-				}
-			]
+			otherInfo: getOtherInfo_QQ(),
+			setInfo: getSetInfo_QQ()
 			// #endif
 		};
 	},
@@ -197,12 +116,13 @@ export default {
 			this.getUserInfo();
 		});
 		/* 根据vuex缓存决定是否跳转教务 */
-		this.toHome();
+		// this.toHome();
 		this.getNewList();
 		uni.$on('refreshNews', () => {
 			this.getNewList();
 		});
 		this.getNoticeList();
+		this.signInNote();
 	},
 	onShow() {
 		//更新页面静态数据
@@ -222,10 +142,20 @@ export default {
 	methods: {
 		...mapMutations('edu', ['setEduSwitch']),
 		// 登录就签到
-		async signInNote() {},
-		async getNoticeList() {
-			// 获通知列表
+		async signInNote() {
+			systemSyssignSave_Post().then(res => {
+				console.log('签到结果', res);
+				if (res.data.code == 200) {
+					this.signined = true;
+					uni.showToast({ icon: 'none', title: '签到成功' });
+				} else if (res.data.code == 500 && res.data.msg.indexOf('已经') != -1) {
+					this.signined = true;
+				}
+			});
 		},
+
+		// 获通知列表
+		async getNoticeList() {},
 		/* 跳转教务首页 */
 		toHome() {
 			/* 初始化教务相关设置 */
@@ -271,7 +201,7 @@ export default {
 		// 获取自己信息
 		getUserInfo() {
 			systemTinyuserGetInfo_Get().then(res => {
-				console.log(res);
+				console.log('获取个人信息', res);
 				this.wxUserInfo = res.data.user;
 				this.otherInfo[0].num = res.data.user.integral;
 				getApp().globalData.wxUserInfo = res.data.user;
@@ -280,10 +210,6 @@ export default {
 		},
 		// 导航栏点击跳转
 		navOtherItemClick(path, index) {
-			if (index == '0') {
-				this.signInNote();
-				console.log('签到');
-			}
 			console.log(index);
 			uni.navigateTo({
 				url: path
@@ -423,7 +349,7 @@ export default {
 						white-space: nowrap;
 						overflow: hidden;
 						text-overflow: ellipsis;
-						max-width: 400rpx;
+						max-width: 40vw;
 					}
 
 					.desc {
@@ -432,6 +358,10 @@ export default {
 						color: #707070;
 					}
 				}
+			}
+
+			.sign {
+				padding: 2vw;
 			}
 		}
 
