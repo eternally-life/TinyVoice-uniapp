@@ -122,7 +122,6 @@ export default {
 			this.getNewList();
 		});
 		this.getNoticeList();
-		this.signInNote();
 	},
 	onShow() {
 		//更新页面静态数据
@@ -202,10 +201,13 @@ export default {
 		getUserInfo() {
 			systemTinyuserGetInfo_Get().then(res => {
 				console.log('获取个人信息', res);
-				this.wxUserInfo = res.data.user;
-				this.otherInfo[0].num = res.data.user.integral;
-				getApp().globalData.wxUserInfo = res.data.user;
-				uni.setStorageSync('wxUserInfo', res.data.user);
+				if (res.data.code == 200) {
+					this.wxUserInfo = res.data.user;
+					this.otherInfo[0].num = res.data.user.integral;
+					getApp().globalData.wxUserInfo = res.data.user;
+					uni.setStorageSync('wxUserInfo', res.data.user);
+					this.signInNote();
+				}
 			});
 		},
 		// 导航栏点击跳转
