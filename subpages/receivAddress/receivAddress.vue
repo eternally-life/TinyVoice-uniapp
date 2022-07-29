@@ -31,7 +31,8 @@ import { systemSysaddrPage_Get, /* 查询 */ systemSysaddrDelete_Delete /* 删�
 export default {
 	data() {
 		return {
-			addList: []
+			addList: [],
+			openType: 0 //0 正常进入  1用于外部选择
 		};
 	},
 	filters: {
@@ -41,6 +42,10 @@ export default {
 	},
 	methods: {
 		toEdit() {
+			if (this.openType == 1) {
+				
+				return;
+			}
 			uni.navigateTo({
 				url: '/subpages/edit_receivAddress/edit_receivAddress'
 			});
@@ -97,7 +102,13 @@ export default {
 			});
 		}
 	},
-	onLoad() {},
+	onLoad(option) {
+		if (option.openType == 1) {
+			this.openType = 1;
+		} else {
+			this.openType = 0;
+		}
+	},
 	onUnload() {
 		uni.$off('changeAddr');
 		uni.$off('refreshAddr');
