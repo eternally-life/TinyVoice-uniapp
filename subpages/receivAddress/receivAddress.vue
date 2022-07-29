@@ -41,106 +41,69 @@ export default {
 		}
 	},
 	methods: {
+		selectAdress(e) {
+			// 选中地址 传该地址的参数， 然后销毁该页面
+			uni.redirectTo({
+				url: '/subpages_shop/orderPay/orderPay/?addrId=' + e.addrId
+			});
+		},
 		toEdit() {
-			if (this.openType == 1) {
-				return;
-			}
 			uni.navigateTo({
 				url: '/subpages/edit_receivAddress/edit_receivAddress'
 			});
 		},
-		filters: {
-			getNameFirstWord(name) {
-				return name.substring(0, 1);
+		addressTap(e) {
+			if (this.openType == 1) {
+				this.selectAdress(e);
+				return;
 			}
+			this.$store.commit('sys/setTempAddressInfo', e);
+			this.toEdit();
 		},
-		methods: {
-			selectAdress(e) {
-				// 选中地址 传该地址的参数， 然后销毁该页面
-				uni.redirectTo({
-					url: '/subpages_shop/orderPay/orderPay/?addrId=' + e.addrId
-				});
-			},
-			toEdit() {
-				uni.navigateTo({
-					url: '/subpages/edit_receivAddress/edit_receivAddress'
-				});
-			},
-			addressTap(e) {
-				if (this.openType == 1) {
-					this.selectAdress(e);
-					return;
+		toDelete(e) {
+			console.log('点击要删除的地址', e);
+			uni.showModal({
+				title: '提醒',
+				content: '确定删除该地址',
+				confirmColor: '#04c354',
+				confirmText: '确认删除',
+				success: res => {
+					if (res.confirm) {
+						this.deleteAddr(e.addrId);
+						return;
+					} else if (res.cancel) {
+					}
 				}
-				this.$store.commit('sys/setTempAddressInfo', e);
-				this.toEdit();
-			},
-			toDelete(e) {
-				console.log('点击要删除的地址', e);
-				uni.showModal({
-					title: '提醒',
-					content: '确定删除该地址',
-					confirmColor: '#04c354',
-					confirmText: '确认删除',
-					success: res => {
-						if (res.confirm) {
-							this.deleteAddr(e.addrId);
-							return;
-						} else if (res.cancel) {
-						}
-					}
-				});
-			},
-			/* 调用删除接口 */
-			deleteAddr(addrId) {
-				systemSysaddrDelete_Delete([addrId]).then(res => {
-					// console.log('结果', res);
-					if (res.data.code == 200) {
-						this.addList = this.addList.filter(value => value.addrId != addrId);
-						uni.$u.toast('删除成功');
-					}
-				});
-			},
-			/* 更新静态数据 */
-			changeAddr(newAddr) {
-				console.log('触发修改', newAddr);
-				this.addList.forEach(value => {
-					if (value.addrId == newAddr.addrId) {
-						value = newAddr;
-					}
-				});
-			},
-			/* 刷新、覆盖所有地址数据 */
-			refreshAddr() {
-				systemSysaddrPage_Get({
-					pageNum: 1 /** 第几页    string required:false */,
-					pageSize: 20 /** 页码大小    string required:false */
-				}).then(res => {
-					console.log('更新自己的地址列表', res.data);
-					if (res.data.code == 200 && res.data.data.records.length != 0) {
-						this.addList = res.data.data.records;
-					}
-				});
-			}
+			});
 		},
-		onLoad() {},
-		onUnload() {
-			uni.$off('changeAddr');
-			uni.$off('refreshAddr');
+		/* 调用删除接口 */
+		deleteAddr(addrId) {
+			systemSysaddrDelete_Delete([addrId]).then(res => {
+				// console.log('结果', res);
+				if (res.data.code == 200) {
+					this.addList = this.addList.filter(value => value.addrId != addrId);
+					uni.$u.toast('删除成功');
+				}
+			});
 		},
-		onShow() {
-			this.$store.commit('sys/setTempAddressInfo', null);
+		/* 更新静态数据 */
+		changeAddr(newAddr) {
+			console.log('触发修改', newAddr);
+			this.addList.forEach(value => {
+				if (value.addrId == newAddr.addrId) {
+					value = newAddr;
+				}
+			});
 		},
-		onReady() {
-			uni.$on('changeAddr', this.changeAddr);
-			uni.$on('refreshAddr', this.refreshAddr);
-
+		/* 刷新、覆盖所有地址数据 */
+		refreshAddr() {
 			systemSysaddrPage_Get({
 				pageNum: 1 /** 第几页    string required:false */,
 				pageSize: 20 /** 页码大小    string required:false */
 			}).then(res => {
-				console.log('获取自己的地址列表', res.data);
+				console.log('更新自己的地址列表', res.data);
 				if (res.data.code == 200 && res.data.data.records.length != 0) {
-					this.addList = this.addList.concat(res.data.data.records);
+					this.addList = res.data.data.records;
 				}
 			});
 		}
