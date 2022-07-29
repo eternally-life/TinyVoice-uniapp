@@ -143,11 +143,12 @@ export default {
 		// 登录就签到
 		async signInNote() {
 			systemSyssignSave_Post().then(res => {
-				console.log('签到结果', res);
+				// console.log('签到结果', res);
 				if (res.data.code == 200) {
 					this.signined = true;
-					uni.showToast({ icon: 'none', title: '签到成功' });
+					uni.$u.toast('签到成功');
 				} else if (res.data.code == 500 && res.data.msg.indexOf('已经') != -1) {
+					uni.$u.toast('今日已签');
 					this.signined = true;
 				}
 			});
@@ -232,8 +233,8 @@ export default {
 				console.log('我是1 是客服');
 			} else if (name == '收货地址') {
 				uni.navigateTo({
-					url:'/subpages/receivAddress/receivAddress'
-				})
+					url: '/subpages/receivAddress/receivAddress'
+				});
 			} else if (name === '关于我们') {
 				uni.navigateTo({
 					url: '/subpages/aboutUs/aboutUs'

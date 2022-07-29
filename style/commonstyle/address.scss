@@ -1,0 +1,21 @@
+.bottom_box {
+	position: fixed;
+	bottom: 0%;
+	width: 100%;
+	padding-bottom: 1vh;
+	.btn {
+		width: 60%;
+		margin: 0 auto;
+		display: flex;
+		justify-content: space-around;
+	}
+}
+
+.view_shadow {
+	margin: 2vh 2vw;
+	padding: 2vh;
+	background-color: #fff;
+	border-radius: 30rpx;
+	/* 阴影尺寸为1px */
+	box-shadow: 10px 10px 20px 10px #e1e1e1;
+}

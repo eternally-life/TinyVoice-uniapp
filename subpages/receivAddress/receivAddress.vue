@@ -1,19 +1,138 @@
 <template>
 	<view>
-		收货地址
+		<u-empty mode="list" text="暂无收货地址" v-if="addList.length == 0"></u-empty>
+		<view>
+			<view class="view_shadow list" v-for="(item, index) in addList">
+				<view class="left">
+					<u-avatar :text="item.name | getNameFirstWord" fontSize="20" randomBgColor></u-avatar>
+				</view>
+				<view class="body" @click="addressTap(item)">
+					<view class="tit">
+						<text class="name">{{ item.name }}</text>
+						<text class="phonenumber">{{ item.phonenumber }}</text>
+					</view>
+					<view class="add">{{ item.school }} {{ item.apartment }}#{{ item.dormitoryNumber }}</view>
+				</view>
+				<view class="right" @click="toDelete(item)">
+					<u-icon name="close-circle" color="#fa3534" size="28"></u-icon>
+				</view>
+			</view>
+		</view>
+		<view class="bottom_box">
+			<view class="btn">
+				<u-button type="primary" icon="plus" text="添加新收货地址" @click="toEdit()"></u-button>
+			</view>
+		</view>
 	</view>
 </template>
 
 <script>
-	export default {
-		data() {
-			return {
-				
-			};
+import { systemSysaddrPage_Get, /* 查询 */ systemSysaddrDelete_Delete /* 删除 */ } from '@/api/SYSTEM/收货地址.js';
+export default {
+	data() {
+		return {
+			addList: []
+		};
+	},
+	filters: {
+		getNameFirstWord(name) {
+			return name.substring(0, 1);
 		}
+	},
+	methods: {
+		toEdit() {
+			uni.navigateTo({
+				url: '/subpages/edit_receivAddress/edit_receivAddress'
+			});
+		},
+		addressTap(e) {
+			this.$store.commit('sys/setTempAddressInfo', e);
+			this.toEdit();
+		},
+		toDelete(e) {
+			console.log('点击要删除的地址', e);
+			uni.showModal({
+				title: '提醒',
+				content: '确定删除该地址',
+				confirmColor: '#04c354',
+				confirmText: '确认删除',
+				success: res => {
+					if (res.confirm) {
+						uni.$u.toast('删除成功');
+						this.addList = this.addList.filter(value => value.addrId != e.addrId);
+					} else if (res.cancel) {
+					}
+				}
+			});
+		},
+		/* 更新静态数据 */
+		changeAddr() {
+			this.addList.forEach(value => {
+				if (value.addrId == newAddr.addrId) {
+					value = newAddr;
+				}
+			});
+		}
+	},
+	onLoad() {
+		uni.$on('changeAddr', this.changeAddr);
+	},
+	onUnload() {
+		uni.$off('changeAddr');
+	},
+	onShow() {
+		this.$store.commit('sys/setTempAddressInfo', null);
+	},
+	onReady() {
+		systemSysaddrPage_Get({
+			pageNum: 1 /** 第几页    string required:false */,
+			pageSize: 10 /** 页码大小    string required:false */
+		}).then(res => {
+			console.log('获取自己的地址列表', res.data);
+			if (res.data.code == 200 && res.data.data.records.length != 0) {
+				this.addList = this.addList.concat(res.data.data.records);
+			}
+		});
 	}
+};
 </script>
 
-<style lang="scss">
-
+<style lang="scss" scoped>
+@import '@/style/commonstyle/address.scss';
+.list {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	.left {
+	}
+	.body {
+		$bodymar: 2vw;
+		flex: 9;
+		display: flex;
+		flex-flow: column;
+		margin-left: $bodymar;
+		margin-right: $bodymar;
+		.tit {
+			.name {
+				max-width: 40vw;
+				display: inline-block;
+				font-weight: bolder;
+				white-space: nowrap;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				font-size: 40rpx;
+			}
+			.phonenumber {
+				font-size: 24rpx;
+				color: #bebebe;
+			}
+		}
+	}
+	.right {
+		flex: 1;
+		height: 6vh;
+		display: flex;
+		justify-content: flex-end;
+	}
+}
 </style>

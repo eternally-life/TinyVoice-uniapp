@@ -71,20 +71,18 @@
 			}, {
 				"path": "receivAddress/receivAddress",
 				"style": {
-					"navigationBarTitleText": "",
+					"navigationBarTitleText": "我的收货地址",
 					"enablePullDownRefresh": false
 				}
 
-			}    ,{
-                    "path" : "edit_receivAddress/edit_receivAddress",
-                    "style" :                                                                                    
-                {
-                    "navigationBarTitleText": "",
-                    "enablePullDownRefresh": false
-                }
-                
-                }
-            ]
+			}, {
+				"path": "edit_receivAddress/edit_receivAddress",
+				"style": {
+					"navigationBarTitleText": "编辑收货地址",
+					"enablePullDownRefresh": false
+				}
+
+			}]
 		},
 		/* 商城相关分包 */
 		{
