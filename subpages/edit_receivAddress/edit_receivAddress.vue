@@ -102,7 +102,7 @@ export default {
 			}, 1000);
 		},
 		getDefaultPhone() {
-			this.formData.formData = getApp().globalData.wxUserInfo.phonenumber;
+			this.formData.phonenumber = getApp().globalData.wxUserInfo.phonenumber;
 		}
 	},
 	onReady() {
