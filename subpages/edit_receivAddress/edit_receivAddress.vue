@@ -12,7 +12,7 @@
 					<u-input v-model="formData.school" maxlength="10"></u-input>
 				</u-form-item>
 				<u-form-item label="公寓楼" prop="apartment">
-					<u-input v-model="formData.apartment" maxlength="3">
+					<u-input v-model="formData.apartment" maxlength="2">
 						<u-text text="#" slot="suffix" margin="0 3px 0 3px" type="tips"></u-text>
 					</u-input>
 				</u-form-item>
@@ -69,29 +69,29 @@ export default {
 			this.$refs.uForm
 				.validate()
 				.then(res => {
-					// console.log('通过', res);
 					uni.showLoading({ title: '加载中' });
 					this.type == 0 ? this.add() : this.edit();
 				})
 				.catch(errors => {
-					// console.log('失败', errors);
 					uni.$u.toast('请完善信息');
 				});
 		},
+		/* 添加地址 */
 		add() {
 			systemSysaddrSave_Post({ ...this.formData }).then(res => {
-				// console.log('新增结果', res);
 				if (res.data.code == 200) {
+					uni.$emit('refreshAddr');
 					uni.$u.toast('添加成功');
 					this.goBack();
 				}
 			});
 		},
+		/* 修改地址信息 */
 		edit() {
 			systemSysaddrUpdate_Put({ ...this.formData }).then(res => {
-				// console.log('修改结果', res);
 				if (res.data.code == 200) {
 					uni.$u.toast('修改成功');
+					uni.$emit('changeAddr', this.formData);
 					this.goBack();
 				}
 			});
@@ -99,7 +99,7 @@ export default {
 		goBack() {
 			setTimeout(() => {
 				uni.navigateBack({ delta: 1 });
-			}, 500);
+			}, 1000);
 		}
 	},
 	onLoad() {

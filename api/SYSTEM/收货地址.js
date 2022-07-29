@@ -63,11 +63,11 @@ export function systemSysaddrSave_Post(   systemSysaddrSave_Body) {
  * tags: 收货地址
  */
     
-export function systemSysaddrDelete_Delete(   ) {
+export function systemSysaddrDelete_Delete( data  ) {
     return request({
          url:`/system/sysaddr/delete`,
          method:'delete',
-                      
+         data:data             
                 
     })
 }

@@ -58,35 +58,60 @@ export default {
 				confirmText: '确认删除',
 				success: res => {
 					if (res.confirm) {
-						uni.$u.toast('删除成功');
-						this.addList = this.addList.filter(value => value.addrId != e.addrId);
+						this.deleteAddr(e.addrId);
+						return;
 					} else if (res.cancel) {
 					}
 				}
 			});
 		},
+		/* 调用删除接口 */
+		deleteAddr(addrId) {
+			systemSysaddrDelete_Delete([addrId]).then(res => {
+				// console.log('结果', res);
+				if (res.data.code == 200) {
+					this.addList = this.addList.filter(value => value.addrId != addrId);
+					uni.$u.toast('删除成功');
+				}
+			});
+		},
 		/* 更新静态数据 */
-		changeAddr() {
+		changeAddr(newAddr) {
+			console.log('触发修改', newAddr);
 			this.addList.forEach(value => {
 				if (value.addrId == newAddr.addrId) {
 					value = newAddr;
 				}
 			});
+		},
+		/* 刷新、覆盖所有地址数据 */
+		refreshAddr() {
+			systemSysaddrPage_Get({
+				pageNum: 1 /** 第几页    string required:false */,
+				pageSize: 20 /** 页码大小    string required:false */
+			}).then(res => {
+				console.log('更新自己的地址列表', res.data);
+				if (res.data.code == 200 && res.data.data.records.length != 0) {
+					this.addList = res.data.data.records;
+				}
+			});
 		}
 	},
-	onLoad() {
-		uni.$on('changeAddr', this.changeAddr);
-	},
+	onLoad() {},
 	onUnload() {
 		uni.$off('changeAddr');
+		uni.$off('refreshAddr');
 	},
 	onShow() {
 		this.$store.commit('sys/setTempAddressInfo', null);
 	},
 	onReady() {
+		uni.$on('changeAddr', this.changeAddr);
+		uni.$on('refreshAddr', this.refreshAddr);
+
 		systemSysaddrPage_Get({
 			pageNum: 1 /** 第几页    string required:false */,
-			pageSize: 10 /** 页码大小    string required:false */
+			pageSize: 20 /** 页码大小    string required:false */
 		}).then(res => {
 			console.log('获取自己的地址列表', res.data);
 			if (res.data.code == 200 && res.data.data.records.length != 0) {

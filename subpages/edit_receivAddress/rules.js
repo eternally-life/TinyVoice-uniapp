@@ -8,6 +8,7 @@ export function getRule() {
 		}],
 		'phonenumber': [{
 			required: true,
+			min: 11,
 			message: '请填写联系手机号',
 			trigger: ['blur', 'change']
 		}],
