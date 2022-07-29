@@ -43,31 +43,43 @@
 		{
 			"root": "subpages",
 			"pages": [{
-					"path": "login/login",
-					"style": {
-						"navigationBarTitleText": "登录",
-						"enablePullDownRefresh": false
-					}
-				}, {
-					"path": "regist/regist",
-					"style": {
-						"navigationBarTitleText": "注册",
-						"enablePullDownRefresh": false
-					}
-
-				}, {
-					"path": "userInfo/userInfo",
-					"style": {
-						"navigationBarTitleText": "用户信息",
-						"enablePullDownRefresh": false
-					}
+				"path": "login/login",
+				"style": {
+					"navigationBarTitleText": "登录",
+					"enablePullDownRefresh": false
+				}
+			}, {
+				"path": "regist/regist",
+				"style": {
+					"navigationBarTitleText": "注册",
+					"enablePullDownRefresh": false
 				}
 
-			    ,{
-                    "path" : "aboutUs/aboutUs",
+			}, {
+				"path": "userInfo/userInfo",
+				"style": {
+					"navigationBarTitleText": "用户信息",
+					"enablePullDownRefresh": false
+				}
+			}, {
+				"path": "aboutUs/aboutUs",
+				"style": {
+					"navigationBarTitleText": "关于我们",
+					"enablePullDownRefresh": false
+				}
+
+			}, {
+				"path": "receivAddress/receivAddress",
+				"style": {
+					"navigationBarTitleText": "",
+					"enablePullDownRefresh": false
+				}
+
+			}    ,{
+                    "path" : "edit_receivAddress/edit_receivAddress",
                     "style" :                                                                                    
                 {
-                    "navigationBarTitleText": "关于我们",
+                    "navigationBarTitleText": "",
                     "enablePullDownRefresh": false
                 }
                 
@@ -126,7 +138,7 @@
 				}
 
 			}, {
-		 	"path": "lostFound/lostFound",
+				"path": "lostFound/lostFound",
 				"style": {
 					"navigationBarTitleText": "失物招领",
 					"enablePullDownRefresh": false
@@ -137,7 +149,7 @@
 				"style": {
 					"navigationBarTitleText": "表白",
 					"enablePullDownRefresh": false
-		 	}
+				}
 
 			}]
 		},

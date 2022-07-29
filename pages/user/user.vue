@@ -57,7 +57,7 @@
 				class="setItem"
 				v-for="(item, index) in setInfo"
 				:open-type="item.open_type"
-				@click="toDetail(index)"
+				@click="toDetail(item.name)"
 				:key="index"
 			>
 				<view class="setIcon"><view class="t-icon set-t-icon" :class="item.icon"></view></view>
@@ -223,31 +223,35 @@ export default {
 				url: path
 			});
 		},
-		toDetail(index) {
-			console.log(index);
+		toDetail(name) {
+			console.log(name);
 			// #ifdef MP-WEIXIN
-			if (index === 0) {
+			if (name === '个人信息') {
 				this.toLogin();
-			} else if (index === 1) {
+			} else if (name === '联系客服') {
 				console.log('我是1 是客服');
-			} else if (index === 2) {
+			} else if (name == '收货地址') {
+				uni.navigateTo({
+					url:'/subpages/receivAddress/receivAddress'
+				})
+			} else if (name === '关于我们') {
 				uni.navigateTo({
 					url: '/subpages/aboutUs/aboutUs'
 				});
-			} else if (index === 3) {
+			} else if (name === '分享微音') {
 				console.log('我是3 是分享');
 			} else {
 				this.exitLogin();
 			}
 			// #endif
 			// #ifdef MP-QQ
-			if (index === 0) {
+			if (name === '个人信息') {
 				this.toLogin();
-			} else if (index === 1) {
+			} else if (name === '关于我们') {
 				uni.navigateTo({
 					url: '/subpages/aboutUs/aboutUs'
 				});
-			} else if (index === 2) {
+			} else if (name === '分享微音') {
 				console.log('我是2 是分享');
 			} else {
 				this.exitLogin();

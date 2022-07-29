@@ -25,6 +25,9 @@ module.exports = {
 		return [{
 				icon: prf + 'icon-gerenxinxi1',
 				name: '个人信息'
+			}, {
+				icon: prf + 'icon-wodefabu1',
+				name: '收货地址'
 			},
 			{
 				icon: prf + 'icon-lianxikefu1',
