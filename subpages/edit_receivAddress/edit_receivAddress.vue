@@ -100,7 +100,13 @@ export default {
 			setTimeout(() => {
 				uni.navigateBack({ delta: 1 });
 			}, 1000);
+		},
+		getDefaultPhone() {
+			this.formData.formData = getApp().globalData.wxUserInfo.phonenumber;
 		}
+	},
+	onReady() {
+		this.getDefaultPhone();
 	},
 	onLoad() {
 		if (this.$store.state.sys.tempAddressInfo) {
