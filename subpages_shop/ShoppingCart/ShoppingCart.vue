@@ -44,7 +44,7 @@
 					</label>
 				</checkbox-group>
 				<view class="del">
-					<u-tag text="删除" size="large" type="error" @click="delByShopping()"></u-tag>
+					<u-tag text="删除" size="large" type="error" @click="delByShopping(totalNum)"></u-tag>
 				</view>
 				<view>
 					总计：<text style="color: #f00;font-weight: bold;">￥ {{parseFloat(totalPrice).toFixed(2)}}</text>
@@ -109,13 +109,16 @@
 			this.navHeight = statusBarHeight + (system.indexOf('iOS') > -1 ? 44 : 48)
 		},
 		methods: {
-			delByShopping() {
+			delByShopping(num) {
 				uni.showModal({
 					title: '是否删除选中商品？',
 					confirmColor: '#0099ff',
 					cancelColor: '#000000',
 					success: async (res) => {
 						if (res.confirm) {
+							if (num == 0) {
+								return this.selfMsg('请选择删除的商品', 'warning')
+							}
 							this.delGoods = []
 							this.goods.map((item) => {
 								if (item.flag === true) {
@@ -195,43 +198,10 @@
 				if (num == 0) {
 					return this.selfMsg('未选择商品', 'warning')
 				}
-				this.mapGoods = []
-				this.orderParmes.orderData.commodityIds = []
-				this.orderParmes.orderData.skuIdAndQuantity = {}
-				this.goods.map((item) => {
-					if (item.flag === true) {
-						this.mapGoods.push({
-							'commodityIds': item.commodityId,
-							'skuId': item.skuId,
-							'quantity': item.quantity
-						})
-					}
+				uni.navigateTo({
+					url: '/subpages_shop/orderPay/orderPay'
 				})
-				this.orderParmes.addrId = 1
-				// 从对象数组里取出某个值生成新的数组方法 ：
-				//第一种方法 如果相同的值只会输出一个
-				// const newArr = this.mapGoods.reduce((pre, cur) => Array.from(new Set([...pre.commodityIds] || pre,...cur.commodityIds)))
-				// console.log(newArr);
-				/**第二种方法 相同的值都会输出
-				let arr1 = this.mapGoods.map(item => item.commodityIds).join(",")
-				console.log(arr1);*/
-				let arr5 = []
-				arr5 = this.mapGoods.map(x => {
-					return x.commodityIds
-				})
-				console.log(arr5);
-				this.orderParmes.orderData.commodityIds = arr5
-				let obj = {}
-				this.mapGoods.forEach(item => {
-					obj[item.skuId] = item.quantity
-				})
-				this.orderParmes.orderData.skuIdAndQuantity = obj
-				const res = await payTinymallCreateOrder_Post(this.orderParmes)
-				if (res.data.code === 200) {
-					this.wxPay(res)
-				} else {
-					this.selfMsg(res.data.msg, 'warning')
-				}
+
 			},
 			wxPay(res) { // 微信支付
 				uni.requestPayment({

@@ -58,7 +58,7 @@
 				<view class="notice"></view>
 				<view class="pay">
 					<view class="bg">
-						<view class="price" @click="toShoppingCart()">
+						<view class="price">
 							￥{{parseFloat(price).toFixed(2)}}</view>
 						<button class="btn1"
 							@click="addShoppingCart(parmesList.commodityId,parmesList.skuId)">加入购物车</button>
@@ -112,14 +112,13 @@
 				this.price = this.parmesList.price / 100
 			},
 			toDetail(parmesList) {
+				if (this.parmesList.inventory === 0) {
+					this.selfMsg('库存一点都不剩了', 'warning')
+					return
+				}
 				uni.navigateTo({
 					url: '/subpages_shop/orderDetail/orderDetail?orderDetail=' + JSON.stringify(parmesList) +
 						'&num=' + this.value
-				})
-			},
-			toShoppingCart() {
-				uni.navigateTo({
-					url: '/subpages_shop/ShoppingCart/ShoppingCart'
 				})
 			},
 			async addShoppingCart(commodityId, skuId) {
