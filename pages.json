@@ -116,6 +116,13 @@
 					"enablePullDownRefresh": false
 				}
 
+			}, {
+				"path": "orderPay/orderPay",
+				"style": {
+					"navigationBarTitleText": "确认订单",
+					"enablePullDownRefresh": false
+				}
+
 			}]
 		},
 		/* 微音相关分包 */

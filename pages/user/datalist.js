@@ -58,12 +58,12 @@ module.exports = {
 			{
 				icon: 'iconfont icon-dingdan',
 				title: '我的订单',
-				path: '/pages/profile/order'
+				path: '/subpages_shop/order/order'
 			},
 			{
 				icon: 'iconfont icon-ruzhu1',
-				title: '店铺入驻',
-				path: '/pages/supermarket/mall/applyOpenShop'
+				title: '我的购物车',
+				path: '/subpages_shop/ShoppingCart/ShoppingCart'
 			},
 			{
 				icon: 'iconfont icon-wodedianpu3',

@@ -53,6 +53,10 @@
 			this.getcommodityCate()
 
 		},
+		onShow() {
+			//更新页面静态数据
+			this.wxUserInfo = getApp().globalData.wxUserInfo;
+		},
 		methods: {
 			// 获取图片分类
 			async getcommodityCate() {
