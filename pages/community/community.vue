@@ -80,7 +80,7 @@
 
 			// 发表跳转
 			publishVoice(index) {
-				console.log(index);
+				// console.log(index);
 				if(index == 0){
 					uni.navigateTo({
 						url:"/subpages_publish/publishVoice/publishVoice"
