@@ -4,18 +4,16 @@
 			<view class="addressItem" v-if="addressInfo.phonenumber">
 				<!-- <i class="iconfont left">&#xe64e;</i> -->
 				<view class="center">
-					<view class="t-icon fix-t-icon t-icon-shouhuodizhi"
-						style="width: 60rpx;height: 60rpx; margin-right: 20rpx;"></view>
-					<!-- <view class="left">
+					<view class="left">
 						<u-avatar :text="addressInfo.name | getNameFirstWord" fontSize="20" randomBgColor></u-avatar>
-					</view> -->
+					</view>
 					<view>
 						<view class="centerName">
-							<text class="name">{{addressInfo.name ? addressInfo.name : wxName}}</text>
+							<text class="name">{{addressInfo.name}}</text>
 							<text class="phone">{{addressInfo.phonenumber}}</text>
 						</view>
 						<view class="centerAddress">
-							{{ addressInfo.school }} {{ addressInfo.apartment }}#{{ addressInfo.dormitoryNumber }}
+							{{ addressInfo.school }} {{ addressInfo.apartment }}# {{ addressInfo.dormitoryNumber }}
 						</view>
 					</view>
 				</view>
@@ -32,17 +30,31 @@
 
 <script>
 	export default {
-		props: ['addressInfo', "wxName"],
+		props: ['addressInfo', "wxPhone", "skuId", "singleOrder", "MultipleOrder"],
 		data() {
 			return {}
+		},
+		filters: {
+			getNameFirstWord(name) {
+				return name.substring(0, 1);
+			}
 		},
 		onLoad() {},
 		methods: {
 			toAdress() {
 				console.log('555');
-				uni.navigateTo({
-					url: '/subpages/receivAddress/receivAddres'
-				})
+				if (this.addressInfo.phonenumber) return
+				if (this.singleOrder) {
+					uni.navigateTo({
+						url: '/subpages/receivAddress/receivAddress?openType=1&single=true&skuId=' + this.skuId
+					})
+				}
+				if (this.MultipleOrder) {
+					uni.navigateTo({
+						url: '/subpages/receivAddress/receivAddress?openType=1&multipte=true'
+					})
+				}
+
 			},
 		}
 	}
@@ -63,18 +75,15 @@
 				justify-content: space-between;
 
 				.left {
-					width: 60rpx;
-					height: 60rpx;
-					font-size: 60rpx;
-					border-radius: 50%;
-					text-align: center;
-					background-color: #f5f5f5;
+					margin-right: 20rpx;
 				}
 
 				.center {
-					margin: 0 25rpx;
+					// margin: 0 25rpx;
 					display: flex;
 					align-items: center;
+
+					.left {}
 
 					.centerName {
 						padding-bottom: 10rpx;

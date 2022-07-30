@@ -45,17 +45,11 @@
 		},
 		onLoad() {
 			this.getcommodityCate()
-			uni.$emit('refresh')
+			// uni.$emit('refresh')
 		},
 		onPullDownRefresh() {
-
 			//重新发起请求：请求发送成功以后传入一个回调函数，回调函数停止下拉刷新
 			this.getcommodityCate()
-
-		},
-		onShow() {
-			//更新页面静态数据
-			this.wxUserInfo = getApp().globalData.wxUserInfo;
 		},
 		methods: {
 			// 获取图片分类
