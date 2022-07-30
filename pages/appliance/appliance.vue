@@ -42,7 +42,7 @@ export default {
 			navs: [{
 										icon: 'iconfont icon-fabu1',
 										title: '留言板',
-										path: '/subpages_tool/message_bored/message'
+										path: '/subpages_tool/message/message'
 									},
 									{
 										icon: 'iconfont icon-dingdan',
