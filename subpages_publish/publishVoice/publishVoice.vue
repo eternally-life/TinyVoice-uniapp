@@ -2,6 +2,13 @@
 	<view class="community_pub_wrap">
 		<view class="community_pub">
 			<view class="pub_card">
+				<view class="voice_title">
+				  <u--input
+				    placeholder="请输入您的标题内容"
+				    border="bottom"
+				    v-model="voiceTitle"
+				  ></u--input>
+				</view>
 				<view class="pub_content">
 					<u--textarea
 					  v-model="pubContent"

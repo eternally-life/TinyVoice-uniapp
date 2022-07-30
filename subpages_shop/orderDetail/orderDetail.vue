@@ -1,12 +1,15 @@
 <template>
 	<view class="container">
-		<select-address :addressInfo="addressInfo" :wxName="wxUserInfo.name"></select-address>
+		<select-address :addressInfo="addressInfo" :wxPhone="wxUserInfo.phonenumber" :singleOrder="singleOrder"
+			:skuId="skuId">
+		</select-address>
 		<view class="content">
 			<view class="left">
 				<view class="name">{{orderDetail.specification}}</view>
 				<view class="num">x {{value == 0 ? 1 : value}}</view>
 			</view>
-			<view class="mid">￥{{parseFloat(price).toFixed(2)}}</view>
+			<view class="mid">￥{{price ? parseFloat(price).toFixed(2) : parseFloat(orderDetail.price / 100).toFixed(2)}}
+			</view>
 			<view class="right">
 				<u-number-box v-model="value" @change="valChange" :min="1" :max="invoryMax"></u-number-box>
 
@@ -24,7 +27,8 @@
 <script>
 	import selectAddress from '@/components/selectAddress/selectAddress.vue'
 	import {
-		payTinymallCreateOrder_Post
+		payTinymallCreateOrder_Post,
+		payskuId_Get
 	} from '@/api/商城模块/商品信息下单.js'
 	import {
 		systemSysaddrById_Get
@@ -39,7 +43,8 @@
 				value: 1,
 				price: 0,
 				invoryMax: 10,
-
+				singleOrder: true,
+				skuId: null,
 				orderParmes: {
 					phonenumber: null,
 					/** 联系方式=电话   string required: */
@@ -53,22 +58,30 @@
 						skuIdAndQuantity: {
 
 						}
-					},
-					addressInfo: {}
-				}
+					}
+				},
+				addressInfo: {},
+				wxUserInfo: {}
 			}
 		},
 		onLoad(opt) {
-			this.orderDetail = JSON.parse(opt.orderDetail)
+			this.skuId = opt.skuId
+			this.getSkuIdPames()
+			this.addrId = opt.addrId
 			this.value = opt.num
-			this.price = this.orderDetail.price / 100 * this.value
 			this.invoryMax = this.orderDetail.inventory
-			console.log(opt);
+			this.wxUserInfo = getApp().globalData.wxUserInfo
 			this.getAddressIdData()
-
 		},
 		methods: {
-			getAddressIdData() { // 根据address页面传过来的地址ID 获取数据
+			async getSkuIdPames() {
+				const res = await payskuId_Get({
+					skuId: this.skuId
+				})
+				this.orderDetail = res.data.data
+				this.price = this.orderDetail.price / 100 * this.value
+			},
+			getAddressIdData() { // 根据页面传过来的地址ID 获取数据
 				if (!this.addrId) return
 				console.log('111');
 				systemSysaddrById_Get({
@@ -83,7 +96,10 @@
 
 			},
 			async confirmPayOrder() {
-				this.orderParmes.addrId = 1
+				this.orderParmes.addrId = this.addrId
+				if (!this.orderParmes.addrId) {
+					return this.selfMsg('请先选择收货地址', 'warning')
+				}
 				this.orderParmes.orderData.commodityIds = [this.orderDetail.commodityId]
 				// Object.assign(this.orderParmes.orderData.skuIdAndQuantity, this.orderDetail.skuId, this.orderDetail
 				// 	.inventory)
@@ -99,6 +115,7 @@
 				} else {
 					this.selfMsg(res.data.msg, 'warning')
 				}
+				console.log(res);
 			},
 			wxPay(res) { // 微信支付
 				uni.requestPayment({

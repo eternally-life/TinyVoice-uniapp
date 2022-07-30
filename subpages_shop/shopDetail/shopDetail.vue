@@ -117,7 +117,7 @@
 					return
 				}
 				uni.navigateTo({
-					url: '/subpages_shop/orderDetail/orderDetail?orderDetail=' + JSON.stringify(parmesList) +
+					url: '/subpages_shop/orderDetail/orderDetail?skuId=' + this.parmesList.skuId +
 						'&num=' + this.value
 				})
 			},

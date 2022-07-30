@@ -4,24 +4,47 @@
 			style="display: flex; justify-content: space-between; padding-left: 50rpx; padding: 30rpx 40rpx;background-color: #ffffff;">
 			请选择收货地址<text class="iconfont icon-dayuhao"></text>
 		</view> -->
-		<select-address :addressInfo="addressInfo" :wxName="wxUserInfo.name"></select-address>
+		<select-address :addressInfo="addressInfo" :wxPhone="wxUserInfo.phonenumber" :MultipleOrder="MultipleOrder">
+		</select-address>
 		<scroll-view scroll-y="true">
 			<view class="content" v-for="(item,index) in goods" :key="index">
 				<view class="left">
 					<view class="name">
-						<!-- {{item.commodityName}}- -->{{item.specificationName}}
+						{{item.commodityName}}-{{item.specificationName}}
 					</view>
 					<view class="num">x {{item.quantity}}</view>
 				</view>
-				<view class="mid">￥{{parseFloat(item.unitPrice / 100 ).toFixed(2)}}/单价</view>
-				<view class="right">
-					<u-number-box v-model="value" @change="valChange" :min="1" :max="invoryMax"></u-number-box>
+				<view class="mid">￥{{parseFloat(item.unitPrice / 100 ).toFixed(2)}} / 件</view>
+				<view class="detail-right">
+					<text class="subtract" @click="reduce(item)">-</text>
+					<text class="num">{{item.quantity}}</text>
+					<text @click="add(item)" class="add">+</text>
 				</view>
 			</view>
 		</scroll-view>
-		<view class="bot">
+		<!-- <view class="bot">
+			<view>
+				<view class="end-right" >
+					共({{totalNum}})件
+				</view>
+				合计：￥ <text
+					style="color: #f00;font-weight: bold;font-size: 36rpx;">{{parseFloat(totalPrice).toFixed(2)}}</text>
+			</view>
 			<view class="nextStep">
 				<button class="btn" @click="confirmPayOrder">提交订单</button>
+			</view>
+		</view> -->
+		<view class="end">
+			<view class="end-left">
+				<view class="" style="color: #333;">
+				</view>
+				<view style="color: #000;font-weight: bold;">
+					共 {{totalNum}} 件 合计:<text style="color: #f00;">￥</text> <text style="color: #f00;font-size: 55rpx;">
+						{{parseFloat(totalPrice).toFixed(2)}}</text>
+				</view>
+			</view>
+			<view class="end-right" @click="confirmPayOrder">
+				提交订单
 			</view>
 		</view>
 		<u-toast ref="uToast"></u-toast>
@@ -48,7 +71,7 @@
 				value: 1,
 				price: 0,
 				invoryMax: 10,
-
+				MultipleOrder: true,
 				orderParmes: {
 					phonenumber: null,
 					/** 联系方式=电话   string required: */
@@ -67,7 +90,24 @@
 				mapGoods: [],
 				goods: [],
 				addrId: '',
-				addressInfo: {}
+				addressInfo: {},
+				wxUserInfo: {}
+			}
+		},
+		computed: {
+			totalNum() {
+				let totalNum = 0;
+				this.goods.map(item => {
+					item.flag ? totalNum += item.quantity : totalNum += 0
+				})
+				return totalNum
+			},
+			totalPrice() {
+				let totalPrice = 0;
+				this.goods.map(item => {
+					item.flag ? totalPrice += item.quantity * item.unitPrice : totalPrice += 0
+				})
+				return totalPrice / 100
 			}
 		},
 		onLoad(opt) {
@@ -87,8 +127,18 @@
 					this.addressInfo = res.data.data
 				})
 			},
-			valChange(e) {
-				console.log(e);
+			reduce(item) {
+				let num = item.quantity
+				if (num > 1) {
+					num -= 1
+				} else if (num = 1) {
+					this.selfMsg("该宝贝不能减少了哟~", 'warning')
+				}
+				item.quantity = num
+			},
+			add(item) {
+				let num = item.quantity
+				item.quantity = num + 1
 
 			},
 			async getShoppingCartData() {
@@ -106,10 +156,10 @@
 				this.mapGoods = []
 				this.orderParmes.orderData.commodityIds = []
 				this.orderParmes.orderData.skuIdAndQuantity = {}
+				this.orderParmes.addrId = this.addrId
 				if (!this.orderParmes.addrId) {
 					return this.selfMsg('请先选择收货地址', 'warning')
 				}
-				this.orderParmes.addrId = 1
 				this.goods.map((item) => {
 					if (item.flag === true) {
 						this.mapGoods.push({
@@ -175,7 +225,7 @@
 <style lang="scss" scoped>
 	.container {
 		.content {
-			padding: 40rpx;
+			padding: 20rpx 40rpx;
 			margin: 20rpx 0;
 			background-color: #ffffff;
 			display: flex;
@@ -184,12 +234,18 @@
 
 			.left {
 				.name {
-					font-size: 48rpx;
 					max-width: 200rpx; // 允许最宽400rpx
-					white-space: nowrap; // 不允许换行
 					font-weight: bolder;
 					color: #60C5BA;
 					margin-bottom: 10rpx;
+
+					font-size: 26rpx;
+					overflow: hidden;
+					text-overflow: ellipsis;
+					display: -webkit-box;
+					-webkit-box-orient: vertical;
+					/*设置对其模式*/
+					-webkit-line-clamp: 2;
 				}
 
 				.num {
@@ -199,7 +255,26 @@
 
 			.mid {}
 
-			.right {}
+			.detail-right {
+				text {
+					width: 50rpx;
+					line-height: 50rpx;
+					text-align: center;
+					display: inline-block;
+					background-color: #F7F7F7;
+					margin-right: 10rpx;
+				}
+
+				.add {
+					color: #FA4305;
+					border-radius: 10rpx 30rpx 30rpx 10rpx;
+					margin-right: 20rpx;
+				}
+
+				.subtract {
+					border-radius: 30rpx 10rpx 10rpx 30rpx;
+				}
+			}
 		}
 
 		.bot {
@@ -209,7 +284,7 @@
 			left: 0;
 			z-index: 1000;
 			background-color: #ffffff;
-			padding: 50rpx 20rpx 100rpx;
+			padding: 50rpx 20rpx 60rpx;
 			align-items: center;
 
 			.nextStep {
@@ -220,6 +295,40 @@
 				}
 			}
 
+		}
+
+		.end {
+			width: 100%;
+			height: 100rpx;
+			background-color: #fff;
+			position: fixed;
+			bottom: 0rpx;
+			left: 0;
+			right: 0;
+			padding: 20rpx 0rpx 100rpx;
+			display: flex;
+			align-items: baseline;
+
+			&-left {
+				width: 70%;
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+				padding: 0 30rpx;
+
+				.end-flex {
+					display: flex;
+					align-items: center;
+				}
+			}
+
+			&-right {
+				width: 30%;
+				line-height: 90rpx;
+				background-color: #60C5BA;
+				text-align: center;
+				color: #fff;
+			}
 		}
 	}
 </style>
