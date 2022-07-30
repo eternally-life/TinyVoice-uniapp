@@ -218,6 +218,75 @@
 					}
 				}
 			]
+		},
+		/* 工具相关分包 */
+		{
+			"root": "subpages_tool",
+			"pages": [{
+					"path": "message_bored/message",
+					"style": {
+						"navigationBarTitleText": "给他人留言",
+						"enablePullDownRefresh": false
+					}
+				},
+				{
+					"path": "message_bored/name_message",
+					"style": {
+						"navigationBarTitleText": "根据姓名获得所有留言",
+						"enablePullDownRefresh": false
+					}
+				},
+				{
+					"path": "id_photo/IdPhoto",
+					"style": {
+						"navigationBarTitleText": "证件照",
+						"enablePullDownRefresh": false
+					}
+				},
+				{
+					"path": "resources/upload_resources",
+					"style": {
+						"navigationBarTitleText": "上传资源",
+						"enablePullDownRefresh": false
+					}
+				},
+				{
+					"path": "resources/download_resources",
+					"style": {
+						"navigationBarTitleText": "下载资源",
+						"enablePullDownRefresh": false
+					}
+				},
+				{
+					"path": "resources/resources_information",
+					"style": {
+						"navigationBarTitleText": "资源共享",
+						"enablePullDownRefresh": false
+					}
+				},
+				{
+					"path": "resources/comment_resources",
+					"style": {
+						"navigationBarTitleText": "评论资源",
+						"enablePullDownRefresh": false
+					}
+				},
+				{
+					"path": "stamina_test/stamina_test",
+					"style": {
+						"navigationBarTitleText": "体测计算",
+						"enablePullDownRefresh": false
+					}
+				},
+				{
+					"path": "id_photo/Cphoto",
+					"style": {
+						"navigationBarTitleText": "计算机证件照",
+						"enablePullDownRefresh": false
+					}
+				}
+			]
+			
 		}
 	],
 	"globalStyle": {
