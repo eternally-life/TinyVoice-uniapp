@@ -1,13 +1,11 @@
 <template>
 	<view>
-		测试 tabbar3 图片上传示例
-		<ty-file-upload @upPara="getImgData" paraGetMethods="active" />
-
-		
+	<!-- 	测试 tabbar3 图片上传示例
+		<ty-file-upload @upPara="getImgData" paraGetMethods="active" /> -->
 		
 		<!-- 微音发表跳转按钮 -->
 		<view class="publish_btn">
-			<u-button icon="plus" size="large" shape="circle" iconColor="#31B6C3" @click="openPopup"></u-button>
+			<u-button icon="plus" size="large" shape="circle" iconColor="#31b6c3" @click="openPopup"></u-button>
 		</view>
 		<u-popup :safeAreaInsetBottom="true" :safeAreaInsetTop="true" :show="show" :round="popupData.round"
 			:overlay="popupData.overlay" :closeOnClickOverlay="popupData.closeOnClickOverlay" @close="close"
@@ -24,6 +22,7 @@
 </template>
 
 <script>
+	const bbs = require('@/api/社区模块/微音论坛.js')
 	export default {
 		data() {
 			return {
@@ -56,7 +55,26 @@
 				}],
 			}
 		},
+		onLoad() {
+			this.getBbsList()
+		},
 		methods: {
+			// 获取微音数据
+		 async	getBbsList(){
+				let communityTinybbsPage_Param = {
+				     pageNum: null,   /** 第几页    string required:false */
+				     pageSize: null,   /** 页码大小    string required:false */
+				     keyword: null,   /**     string required:false */
+				     userId: null,   /** 根据用户ID筛选,可为空默认不筛选 可用于查询自己的微音,别人的微音    string required:false */
+				     targetId: null,   /** 根据微音ID筛选,用于跳转目标    string required:false */
+				     type: null,   /** 微音类型,可为空 默认不筛选 1-微音,2-二手市场,,3-失物招领,4-表白,5-官方,6-匿名    string required:false */
+				     sort: null,   /** 排序类型,可为空 默认不筛选 1-热度,2-点赞,3-回复,4-时间    string required:false */
+				     screenTime: null,   /** 时间筛选-可为空 默认筛选3天 值为筛选第 n 天内微音    string required:false */
+				   }
+				   
+			const bbsDataList = await	bbs.communityTinybbsPage_Get(communityTinybbsPage_Param)
+			this.bbsList =bbsDataList.data.records
+			},
 			getImgData(e) {
 				console.log('页面接收到的组件返回数据', e, '总长' + e.length);
 			},
