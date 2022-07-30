@@ -223,14 +223,14 @@
 		{
 			"root": "subpages_tool",
 			"pages": [{
-					"path": "message_bored/message",
+					"path": "message/message",
 					"style": {
 						"navigationBarTitleText": "给他人留言",
 						"enablePullDownRefresh": false
 					}
 				},
 				{
-					"path": "message_bored/name_message",
+					"path": "message/name_message",
 					"style": {
 						"navigationBarTitleText": "根据姓名获得所有留言",
 						"enablePullDownRefresh": false
