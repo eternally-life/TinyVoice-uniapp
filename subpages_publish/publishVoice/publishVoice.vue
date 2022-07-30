@@ -13,6 +13,9 @@
 				</view>
 				<view class="content_upload">
 				  <ty-file-upload @upPara="getImgData" paraGetMethods="active" />
+				  <view class="justText">
+				  	上传图片 
+				  </view>
 				  <u-button
 				    type="primary"
 				    @click="sendcomunityPub"
@@ -59,6 +62,9 @@ import { communityTinybbsSave_Post } from '@/api/社区模块/微音论坛.js'
 	.pub_content {
 	  .content_upload {
 	    padding: 20rpx;
+		.justText{
+			
+		}
 	  }
 	}
 }

@@ -3,7 +3,8 @@
 		测试 tabbar3 图片上传示例
 		<ty-file-upload @upPara="getImgData" paraGetMethods="active" />
 
-		<u-button @click="test"></u-button>
+		
+		
 		<!-- 微音发表跳转按钮 -->
 		<view class="publish_btn">
 			<u-button icon="plus" size="large" shape="circle" iconColor="#31B6C3" @click="openPopup"></u-button>
@@ -35,22 +36,22 @@
 					round: 10,
 				},
 				publishList: [{
-					icon: "/static/logo.png",
+					icon: "/static/Popup/shuoshuo.png",
 					msg: "说说"
 				}, {
-					icon: "/static/logo.png",
+					icon: "/static/Popup/ershou.png",
 					msg: "二手发布"
 				}, {
-					icon: "/static/logo.png",
+					icon: "/static/Popup/shiwuzhaoling.png",
 					msg: "失物招领"
 				}, {
-					icon: "/static/logo.png",
+					icon: "/static/Popup/biaobai.png",
 					msg: "表白"
 				}, {
-					icon: "/static/logo.png",
+					icon: "/static/Popup/guangfang.png",
 					msg: "官方"
 				}, {
-					icon: "/static/logo.png",
+					icon: "/static/Popup/niming.png",
 					msg: "匿名"
 				}],
 			}
