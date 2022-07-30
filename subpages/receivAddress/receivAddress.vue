@@ -27,160 +27,173 @@
 </template>
 
 <script>
-import { systemSysaddrPage_Get, /* 查询 */ systemSysaddrDelete_Delete /* 删除 */ } from '@/api/SYSTEM/收货地址.js';
-export default {
-	data() {
-		return {
-			addList: [],
-			openType: 0 //0 正常进入  1用于外部选择
-		};
-	},
-	filters: {
-		getNameFirstWord(name) {
-			return name.substring(0, 1);
-		}
-	},
-	methods: {
-		selectAdress(e) {
-			// 选中地址 传该地址的参数， 然后销毁该页面
-			uni.redirectTo({
-				url: '/subpages_shop/orderPay/orderPay/?addrId=' + e.addrId
-			});
+	import {
+		systemSysaddrPage_Get,
+		/* 查询 */
+		systemSysaddrDelete_Delete /* 删除 */
+	} from '@/api/SYSTEM/收货地址.js';
+	export default {
+		data() {
+			return {
+				addList: [],
+				openType: 0, //0 正常进入  1用于外部选择
+				skuId: null
+			};
 		},
-		toEdit() {
-			uni.navigateTo({
-				url: '/subpages/edit_receivAddress/edit_receivAddress'
-			});
-		},
-		addressTap(e) {
-			if (this.openType == 1) {
-				this.selectAdress(e);
-				return;
+		filters: {
+			getNameFirstWord(name) {
+				return name.substring(0, 1);
 			}
-			this.$store.commit('sys/setTempAddressInfo', e);
-			this.toEdit();
 		},
-		toDelete(e) {
-			console.log('点击要删除的地址', e);
-			uni.showModal({
-				title: '提醒',
-				content: '确定删除该地址',
-				confirmColor: '#04c354',
-				confirmText: '确认删除',
-				success: res => {
-					if (res.confirm) {
-						this.deleteAddr(e.addrId);
-						return;
-					} else if (res.cancel) {
+		methods: {
+			selectAdress(e) {
+				// 选中地址 传该地址的参数， 然后销毁该页面
+				if (this.single) {
+					uni.navigateTo({
+						url: '/subpages_shop/orderDetail/orderDetail?addrId=' + e.addrId + '&skuId=' + this.skuId
+					});
+				}
+				if (this.multipte) {
+					uni.redirectTo({
+						url: '/subpages_shop/orderPay/orderPay?addrId=' + e.addrId
+					});
+				}
+			},
+			toEdit() {
+				uni.navigateTo({
+					url: '/subpages/edit_receivAddress/edit_receivAddress'
+				});
+			},
+			addressTap(e) {
+				if (this.openType == 1) {
+					this.selectAdress(e);
+					return;
+				}
+				this.$store.commit('sys/setTempAddressInfo', e);
+				this.toEdit();
+			},
+			toDelete(e) {
+				console.log('点击要删除的地址', e);
+				uni.showModal({
+					title: '提醒',
+					content: '确定删除该地址',
+					confirmColor: '#04c354',
+					confirmText: '确认删除',
+					success: res => {
+						if (res.confirm) {
+							this.deleteAddr(e.addrId);
+							return;
+						} else if (res.cancel) {}
 					}
-				}
-			});
+				});
+			},
+			/* 调用删除接口 */
+			deleteAddr(addrId) {
+				systemSysaddrDelete_Delete([addrId]).then(res => {
+					// console.log('结果', res);
+					if (res.data.code == 200) {
+						this.addList = this.addList.filter(value => value.addrId != addrId);
+						uni.$u.toast('删除成功');
+					}
+				});
+			},
+			/* 更新静态数据 */
+			changeAddr(newAddr) {
+				console.log('触发修改', newAddr);
+				this.addList.forEach(value => {
+					if (value.addrId == newAddr.addrId) {
+						value = newAddr;
+					}
+				});
+			},
+			/* 刷新、覆盖所有地址数据 */
+			refreshAddr() {
+				systemSysaddrPage_Get({
+					pageNum: 1 /** 第几页    string required:false */ ,
+					pageSize: 20 /** 页码大小    string required:false */
+				}).then(res => {
+					console.log('更新自己的地址列表', res.data);
+					if (res.data.code == 200 && res.data.data.records.length != 0) {
+						this.addList = res.data.data.records;
+					}
+				});
+			}
 		},
-		/* 调用删除接口 */
-		deleteAddr(addrId) {
-			systemSysaddrDelete_Delete([addrId]).then(res => {
-				// console.log('结果', res);
-				if (res.data.code == 200) {
-					this.addList = this.addList.filter(value => value.addrId != addrId);
-					uni.$u.toast('删除成功');
-				}
-			});
+		onLoad(option) {
+			this.single = option.single
+			this.multipte = option.multipte
+			this.skuId = option.skuId
+			if (option.openType == 1) {
+				this.openType = 1;
+			} else {
+				this.openType = 0;
+			}
 		},
-		/* 更新静态数据 */
-		changeAddr(newAddr) {
-			console.log('触发修改', newAddr);
-			this.addList.forEach(value => {
-				if (value.addrId == newAddr.addrId) {
-					value = newAddr;
-				}
-			});
+		onUnload() {
+			uni.$off('changeAddr');
+			uni.$off('refreshAddr');
 		},
-		/* 刷新、覆盖所有地址数据 */
-		refreshAddr() {
+		onShow() {
+			this.$store.commit('sys/setTempAddressInfo', null);
+		},
+		onReady() {
+			uni.$on('changeAddr', this.changeAddr);
+			uni.$on('refreshAddr', this.refreshAddr);
+
 			systemSysaddrPage_Get({
-				pageNum: 1 /** 第几页    string required:false */,
+				pageNum: 1 /** 第几页    string required:false */ ,
 				pageSize: 20 /** 页码大小    string required:false */
 			}).then(res => {
-				console.log('更新自己的地址列表', res.data);
+				console.log('获取自己的地址列表', res.data);
 				if (res.data.code == 200 && res.data.data.records.length != 0) {
-					this.addList = res.data.data.records;
+					this.addList = this.addList.concat(res.data.data.records);
 				}
 			});
 		}
-	},
-	onLoad(option) {
-		if (option.openType == 1) {
-			this.openType = 1;
-		} else {
-			this.openType = 0;
-		}
-	},
-	onUnload() {
-		uni.$off('changeAddr');
-		uni.$off('refreshAddr');
-	},
-	onShow() {
-		this.$store.commit('sys/setTempAddressInfo', null);
-	},
-	onReady() {
-		uni.$on('changeAddr', this.changeAddr);
-		uni.$on('refreshAddr', this.refreshAddr);
-
-		systemSysaddrPage_Get({
-			pageNum: 1 /** 第几页    string required:false */,
-			pageSize: 20 /** 页码大小    string required:false */
-		}).then(res => {
-			console.log('获取自己的地址列表', res.data);
-			if (res.data.code == 200 && res.data.data.records.length != 0) {
-				this.addList = this.addList.concat(res.data.data.records);
-			}
-		});
-	}
-};
+	};
 </script>
 
 <style lang="scss" scoped>
-@import '@/style/commonstyle/address.scss';
+	@import '@/style/commonstyle/address.scss';
 
-.list {
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-
-	.left {
-	}
-
-	.body {
-		$bodymar: 2vw;
-		flex: 9;
+	.list {
 		display: flex;
-		flex-flow: column;
-		margin-left: $bodymar;
-		margin-right: $bodymar;
+		align-items: center;
+		justify-content: space-between;
 
-		.tit {
-			.name {
-				max-width: 40vw;
-				display: inline-block;
-				font-weight: bolder;
-				white-space: nowrap;
-				overflow: hidden;
-				text-overflow: ellipsis;
-				font-size: 40rpx;
-			}
+		.left {}
 
-			.phonenumber {
-				font-size: 24rpx;
-				color: #bebebe;
+		.body {
+			$bodymar: 2vw;
+			flex: 9;
+			display: flex;
+			flex-flow: column;
+			margin-left: $bodymar;
+			margin-right: $bodymar;
+
+			.tit {
+				.name {
+					max-width: 40vw;
+					display: inline-block;
+					font-weight: bolder;
+					white-space: nowrap;
+					overflow: hidden;
+					text-overflow: ellipsis;
+					font-size: 40rpx;
+				}
+
+				.phonenumber {
+					font-size: 24rpx;
+					color: #bebebe;
+				}
 			}
 		}
-	}
 
-	.right {
-		flex: 1;
-		height: 6vh;
-		display: flex;
-		justify-content: flex-end;
+		.right {
+			flex: 1;
+			height: 6vh;
+			display: flex;
+			justify-content: flex-end;
+		}
 	}
-}
 </style>

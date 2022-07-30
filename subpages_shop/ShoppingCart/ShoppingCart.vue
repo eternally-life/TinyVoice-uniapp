@@ -193,7 +193,7 @@
 					}
 				})
 			},
-			async allPay(num) {
+			allPay(num) {
 				// console.log(num);
 				if (num == 0) {
 					return this.selfMsg('未选择商品', 'warning')
@@ -250,20 +250,32 @@
 					})
 				}
 			},
-			reduce(item) {
+			async reduce(item) {
 				let num = item.quantity
 				if (num > 1) {
 					num -= 1
 				} else if (num = 1) {
 					this.selfMsg("该宝贝不能减少了哟~", 'warning')
 				}
-
-
 				item.quantity = num
+				// const res = await payTinymallshoppingUpdate_Put({
+				// 	shoppingId: item.shoppingId,
+				// 	quantity: item.quantity,
+				// 	commodityId: item.commodityId,
+				// 	skuId: item.skuId,
+				// })
+				// console.log(res);
 			},
-			add(item) {
+			async add(item) {
 				let num = item.quantity
 				item.quantity = num + 1
+				// const res = await payTinymallshoppingUpdate_Put({
+				// 	shoppingId: item.shoppingId,
+				// 	quantity: item.quantity,
+				// 	commodityId: item.commodityId,
+				// 	skuId: item.skuId,
+				// })
+				// console.log(res);
 			},
 			selfMsg(msg, mod) {
 				this.$refs.uToast.show({
