@@ -191,6 +191,7 @@
 				if (res.data.code === 200) {
 					this.selfMsg("申请成功", 'success')
 					this.showAfterSales = false
+					this.getShopOrder()
 				} else {
 					this.selfMsg(res.data.msg, 'warning')
 				}
@@ -208,6 +209,7 @@
 							})
 							if (result.data.code === 200) {
 								this.selfMsg("取消成功", 'success')
+								this.getShopOrder()
 							} else {
 								this.selfMsg(result.data.msg, 'warning')
 							}
