@@ -16,13 +16,13 @@
 					<view class="orderItem" v-for="(item,index) in orderList" :key="index">
 						<view class="top">
 							<view class="left">
-								<view class="title">微音店铺</view>
+								<view class="title">{{item.addrName}} - {{item.addrPhone}}</view>
 								<view class="wxPayNumber">
 									订单编号：{{item.orderId == null ? '未付款' : item.orderId}}
 								</view>
 							</view>
 							<view class="orderStatus">
-								{{item.status == '0' ? '已退款' : item.status == '1' ? '待付款' : item.status == '2' ? '已付款' : item.status == '3' ? '待配送' : item.status == '4' ? '配送中' : item.status == '5' ? '已完成' : '退款' }}
+								{{item.status == '0' ? '已退款' : item.status == '1' ? '待付款' : item.status == '2' ? '已付款' : item.status == '3' ? '出库' : item.status == '4' ? '订单完成' : item.status == '5' ? '退款关闭' :  item.status == '6' ? '售后中' :'售后完成' }}
 							</view>
 						</view>
 						<view class="mid" v-for="(i,idx) in item.orderDataList" :key="idx">
@@ -54,17 +54,39 @@
 											<u-tag text="退款" size="large" v-if="item.status == 2" type="success"
 												@click="refundMall(item.orderId)">
 											</u-tag>
-											<u-tag text="售后" size="large" v-if="orderCurrent == 4" type="success">
+											<u-tag text="申请售后" size="large" v-if="item.status == 4" type="success"
+												@click="AfterSales()">
+											</u-tag>
+											<u-tag text="取消售后" size="large" v-if="item.status == 6" type="success"
+												@click="CloseAfterSales(item.orderId)">
 											</u-tag>
 										</view>
 									</view>
 								</u-collapse-item>
 							</u-collapse>
 						</view>
+						<u-popup :show="showAfterSales" @close="close" @open="open" mode="bottom" :round="10">
+							<view class="sales">
+								<view class="salesItem">
+									申请原因：<u--input placeholder="请输入内容" border="surround" clearable
+										v-model="AfterSalesList.reason">
+									</u--input>
+								</view>
+								<view class="salesItem">
+									申请需求：<u--input placeholder="请输入内容" border="surround" clearable
+										v-model="AfterSalesList.demand">
+									</u--input>
+								</view>
+								<view class="nextStep">
+									<button class="btn" @click="cancelAfterSales(item.orderId)">确定申请</button>
+								</view>
+							</view>
+						</u-popup>
 					</view>
 				</scroll-view>
 			</view>
 		</view>
+
 		<u-toast ref="uToast"></u-toast>
 	</view>
 </template>
@@ -75,13 +97,19 @@
 		payTinymallReloadPay_Get,
 		payTinymallRefund_Get
 	} from '@/api/商城模块/商品信息下单.js'
+	import {
+		payTinymallafterPayAfter_Post,
+		payTinymallafterCloseAfter_Get
+	} from '@/api/商城模块/售后测通.js'
 	export default {
 		data() {
 			return {
 				orderList: [],
 				pgSize: 10,
+				pgNum: 1,
 				status: "",
 				orderCurrent: 0,
+				isRefresh: false, // 标示scroll-view下拉刷新是否被触发
 				orderNav: [{
 					name: '全部',
 				}, {
@@ -92,7 +120,16 @@
 					name: '已完成'
 				}, {
 					name: '售后'
-				}]
+				}],
+				showAfterSales: false,
+				AfterSalesList: {
+					reason: "",
+					/** 原因   string required: */
+					orderId: null,
+					/** 订单ID   string required: */
+					demand: "",
+					/** 需求   string required: */
+				}
 			}
 		},
 		onLoad() {
@@ -102,6 +139,7 @@
 			btnNav(item) {
 				console.log(item);
 				this.orderCurrent = item.index
+				this.orderList = []
 				if (item.index == 0) {
 					this.status = ""
 					this.getShopOrder()
@@ -140,18 +178,63 @@
 					this.pgSize = 10
 					this.getShopOrder()
 				} else {
-					this.selfMsg('退款失败，请联系客服', 'error')
+					this.selfMsg(res.data.msg, 'warning')
+					// this.selfMsg('退款失败，请联系客服', 'error')
 				}
 			},
-			async getShopOrder() {
-				this.orderList = []
+			AfterSales() {
+				this.showAfterSales = true
+			},
+			async cancelAfterSales(id) {
+				this.AfterSalesList.orderId = id
+				const res = await payTinymallafterPayAfter_Post(this.AfterSalesList)
+				if (res.data.code === 200) {
+					this.selfMsg("申请成功", 'success')
+					this.showAfterSales = false
+					this.getShopOrder()
+				} else {
+					this.selfMsg(res.data.msg, 'warning')
+				}
+				console.log(res);
+			},
+			async CloseAfterSales(id) {
+				uni.showModal({
+					title: '确定取消售后？',
+					confirmColor: '#0099ff',
+					cancelColor: '#000000',
+					success: async (res) => {
+						if (res.confirm) {
+							const result = await payTinymallafterCloseAfter_Get({
+								tinyMallOrderId: id,
+							})
+							if (result.data.code === 200) {
+								this.selfMsg("取消成功", 'success')
+								this.getShopOrder()
+							} else {
+								this.selfMsg(result.data.msg, 'warning')
+							}
+							console.log(result);
+						}
+					}
+				})
+
+			},
+			async getShopOrder(num) {
+
 				const res = await payTinymallPageOrder_Get({
 					screenTime: 365,
 					pageSize: this.pgSize,
 					status: this.status,
 				})
+				if (res.data.data.total == this.orderList.length) {
+					if (num) {
+						return this.selfMsg('没有更多了~', 'warning')
+					}
+				}
 				if (res.data.code === 200) {
 					this.orderList = res.data.data.records
+					uni.hideLoading()
+					this.isRefresh = false
 				} else {
 					this.selfMsg(res.data.msg, 'warning')
 				}
@@ -164,8 +247,15 @@
 					console.log(len);
 					this.pgSize = this.orderList.length + 5
 					const num = 1
-					this.getShopOrder()(num)
+					this.getShopOrder(num)
 				}
+			},
+			open() {
+				// console.log('open');
+			},
+			close() {
+				this.showAfterSales = false
+				// console.log('close');
 			},
 			// 下拉刷新
 			handleRefresh() {
@@ -175,7 +265,7 @@
 				})
 				this.pgSize = 10
 				setTimeout(() => {
-					this.getShopOrder()()
+					this.getShopOrder()
 					uni.hideLoading()
 					this.$ShowToastNone('刷新成功~')
 				}, 1000)
@@ -209,6 +299,26 @@
 
 <style lang="scss" scoped>
 	.container {
+		.sales {
+			padding: 40rpx 30rpx 50rpx;
+			margin: 40rpx;
+
+			.salesItem {
+				display: flex;
+				padding-bottom: 20rpx;
+			}
+
+			.nextStep {
+				padding-top: 20rpx;
+
+				.btn {
+					background-color: #60C5BA;
+					color: #fff;
+					font-weight: bold;
+				}
+			}
+		}
+
 		.order {
 			.all {
 				.orderItem {

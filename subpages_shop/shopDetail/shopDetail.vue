@@ -178,6 +178,8 @@
 
 <style scoped lang="scss">
 	.container {
+		position: relative;
+
 		.tip {
 			font-size: 28rpx;
 			color: #aaa;
@@ -241,7 +243,7 @@
 		}
 
 		.bot {
-			position: absolute;
+			// position: absolute;
 			bottom: 0rpx;
 			left: 0;
 			width: 100%;
