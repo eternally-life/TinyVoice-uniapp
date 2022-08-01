@@ -1,11 +1,9 @@
 <template>
   <view>
-    <!-- 测试 tabbar3 图片上传示例
-    <ty-file-upload @upPara="getImgData" paraGetMethods="active" /> -->
-    <SmallVoice/>
-
+    <!-- <ty-file-upload @upPara="getImgData" paraGetMethods="active" /> -->
+    <SmallVoice ref="smallVoice"/>
     <!-- 微音发表跳转按钮 -->
-    <view class="publish_btn">
+    <!-- <view class="publish_btn">
       <u-button icon="plus" size="large" shape="circle" iconColor="#31b6c3" @click="openPopup"></u-button>
     </view>
     <u-popup :safeAreaInsetBottom="true" :safeAreaInsetTop="true" :show="show" :round="popupData.round"
@@ -17,7 +15,7 @@
           <text class="item_text">{{ item.msg }}</text>
         </u-grid-item>
       </u-grid>
-    </u-popup>
+    </u-popup> -->
   </view>
 </template>
 
@@ -130,10 +128,9 @@ export default {
           url: "/subpages_publish/publishVoice/publishVoice"
         })
       }
-    }
-
+    },
   },
-  components:{
+  components: {
     smallVoice
   }
 };

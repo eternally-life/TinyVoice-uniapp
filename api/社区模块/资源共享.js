@@ -1,19 +1,19 @@
 
-/*** glowxq glowxq@163.com  2022-07-20 18:30:16  生成模板  */
+/*** glowxq glowxq@163.com  2022-07-31 19:39:29  生成模板  */
 import { request } from "@/utils/request"
 
 
 
 /***  ===========================================================================
  * path: /community/tinyserveresource/save
-  * summary: 新增 资源共享
+  * summary: 新增 资源
  * tags: 资源共享
  */
 let communityTinyserveresourceSave_Body = {
       integral: null,   /** 所需积分   integer required: */
       name: null,   /** 资源名   string required: */
       describe: null,   /** 资源描述   string required: */
-      url: null,   /** $property.description   string required: */
+      url: null,   /** 资源地址   string required: */
     }
     
 export function communityTinyserveresourceSave_Post(   communityTinyserveresourceSave_Body) {
@@ -27,23 +27,59 @@ export function communityTinyserveresourceSave_Post(   communityTinyserveresourc
 /**  =========================================================================== ***/
 
 /***  ===========================================================================
- * path: /community/tinyserveresource/update
-  * summary: 修改 资源共享 - 根据id更新非空值
+ * path: /community/tinyserveresource/byResourceId
+  * summary: 获取单个资源的所有回复 - 根据资源id获取
  * tags: 资源共享
  */
-let communityTinyserveresourceUpdate_Body = {
-      integral: null,   /** 所需积分   integer required: */
-      name: null,   /** 资源名   string required: */
-      describe: null,   /** 资源描述   string required: */
-      url: null,   /** $property.description   string required: */
+let communityTinyserveresourceByResourceId_Param = {
+     resourceId: null,   /** 资源ID    string required:false */
+   }
+    
+export function communityTinyserveresourceByResourceId_Get( communityTinyserveresourceByResourceId_Param    ) {
+    return request({
+         url:`/community/tinyserveresource/byResourceId`,
+         method:'get',
+                     params:communityTinyserveresourceByResourceId_Param  
+                
+    })
+}
+/**  =========================================================================== ***/
+
+/***  ===========================================================================
+ * path: /community/tinyserveresource/down
+  * summary: 下载资源
+ * tags: 资源共享
+ */
+let communityTinyserveresourceDown_Param = {
+     id: null,   /**     string required:false */
+   }
+    
+export function communityTinyserveresourceDown_Get( communityTinyserveresourceDown_Param    ) {
+    return request({
+         url:`/community/tinyserveresource/down`,
+         method:'get',
+                     params:communityTinyserveresourceDown_Param  
+                
+    })
+}
+/**  =========================================================================== ***/
+
+/***  ===========================================================================
+ * path: /community/tinyserveresource/saveReply
+  * summary: 评论资源
+ * tags: 资源共享
+ */
+let communityTinyserveresourceSaveReply_Body = {
+      resourceId: null,   /** 资源ID   integer required: */
+      content: null,   /** 回复文本   string required: */
     }
     
-export function communityTinyserveresourceUpdate_Put(   communityTinyserveresourceUpdate_Body) {
+export function communityTinyserveresourceSaveReply_Post(   communityTinyserveresourceSaveReply_Body) {
     return request({
-         url:`/community/tinyserveresource/update`,
-         method:'put',
+         url:`/community/tinyserveresource/saveReply`,
+         method:'post',
                       
-                 data: communityTinyserveresourceUpdate_Body
+                 data: communityTinyserveresourceSaveReply_Body
     })
 }
 /**  =========================================================================== ***/
@@ -63,22 +99,6 @@ export function communityTinyserveresourcePage_Get( communityTinyserveresourcePa
          url:`/community/tinyserveresource/page`,
          method:'get',
                      params:communityTinyserveresourcePage_Param  
-                
-    })
-}
-/**  =========================================================================== ***/
-
-/***  ===========================================================================
- * path: /community/tinyserveresource/delete
-  * summary: 删除 资源共享 - 根据id删除
- * tags: 资源共享
- */
-    
-export function communityTinyserveresourceDelete_Delete(   ) {
-    return request({
-         url:`/community/tinyserveresource/delete`,
-         method:'delete',
-                      
                 
     })
 }

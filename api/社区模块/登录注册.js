@@ -1,5 +1,5 @@
 
-/*** glowxq glowxq@163.com  2022-07-20 18:30:16  生成模板  */
+/*** glowxq glowxq@163.com  2022-07-31 19:39:29  生成模板  */
 import { request } from "@/utils/request"
 
 
@@ -16,6 +16,46 @@ export function authLoginregisterLogout_Delete(   ) {
          method:'delete',
                       
                 
+    })
+}
+/**  =========================================================================== ***/
+
+/***  ===========================================================================
+ * path: /auth/login-register/verificationCode/login
+  * summary: 短信验证码登录
+ * tags: 登录注册
+ */
+let authLoginregisterVerificationCodeLogin_Param = {
+     phonenumber: null,   /** 手机号    string required:false */
+     verificationCode: null,   /** 短信验证码    string required:false */
+   }
+    
+export function authLoginregisterVerificationCodeLogin_Post( authLoginregisterVerificationCodeLogin_Param    ) {
+    return request({
+         url:`/auth/login-register/verificationCode/login`,
+         method:'post',
+                     params:authLoginregisterVerificationCodeLogin_Param  
+                
+    })
+}
+/**  =========================================================================== ***/
+
+/***  ===========================================================================
+ * path: /auth/login-register/login
+  * summary: 账号密码登录
+ * tags: 登录注册
+ */
+let authLoginregisterLogin_Body = {
+      password: null,   /** 用户密码   string required: */
+      username: null,   /** 用户名   string required: */
+    }
+    
+export function authLoginregisterLogin_Post(   authLoginregisterLogin_Body) {
+    return request({
+         url:`/auth/login-register/login`,
+         method:'post',
+                      
+                 data: authLoginregisterLogin_Body
     })
 }
 /**  =========================================================================== ***/
@@ -41,26 +81,6 @@ export function authLoginregisterWxRegister_Post(   authLoginregisterWxRegister_
          method:'post',
                       
                  data: authLoginregisterWxRegister_Body
-    })
-}
-/**  =========================================================================== ***/
-
-/***  ===========================================================================
- * path: /auth/login-register/verificationCode/login
-  * summary: 短信验证码登录
- * tags: 登录注册
- */
-let authLoginregisterVerificationCodeLogin_Param = {
-     phonenumber: null,   /** 手机号    string required:false */
-     verificationCode: null,   /** 短信验证码    string required:false */
-   }
-    
-export function authLoginregisterVerificationCodeLogin_Post( authLoginregisterVerificationCodeLogin_Param    ) {
-    return request({
-         url:`/auth/login-register/verificationCode/login`,
-         method:'post',
-                     params:authLoginregisterVerificationCodeLogin_Param  
-                
     })
 }
 /**  =========================================================================== ***/
@@ -99,26 +119,6 @@ export function authLoginregisterWxLogin_Post( authLoginregisterWxLogin_Param   
          method:'post',
                      params:authLoginregisterWxLogin_Param  
                 
-    })
-}
-/**  =========================================================================== ***/
-
-/***  ===========================================================================
- * path: /auth/login-register/login
-  * summary: 账号密码登录
- * tags: 登录注册
- */
-let authLoginregisterLogin_Body = {
-      password: null,   /** 用户密码   string required: */
-      username: null,   /** 用户名   string required: */
-    }
-    
-export function authLoginregisterLogin_Post(   authLoginregisterLogin_Body) {
-    return request({
-         url:`/auth/login-register/login`,
-         method:'post',
-                      
-                 data: authLoginregisterLogin_Body
     })
 }
 /**  =========================================================================== ***/

@@ -29,7 +29,7 @@
         </view>
       </view>
       <view class="voice_content" @click="enterVoiceDetail(index)">
-        <text>{{ item.text }}</text>
+        <text>{{ item.content }}</text>
       </view>
       <view class="voice_imgs" v-if="item.images && item.images.length !== 0">
         <u-album :urls="item.images" multipleSize="220rpx" singleMode="aspectFill"></u-album>
@@ -49,7 +49,7 @@
           喜欢：{{ item.likeNum }}
         </view>
       </view>
-      <view class="comments_wrap" v-if="item.replyList && item.replyList.length !== 0">
+      <view class="comments_wrap" @click="enterVoiceDetail(index)" v-if="item.replyList && item.replyList.length !== 0">
         <view class="comments_item" v-for="(reply, index) in item.replyList" :key="index"
           :class="index >= showReplyNumber ? 'hidden' : ''">
           <view class="content">
@@ -65,15 +65,19 @@
           </view>
         </view>
         <view class="show_more_btn" v-if="item.replyList.length > 2 && showReplyNumber === 2"
-          @click.once="showReplyNumber = 10">
+          @click.stop="showReplyNumber = 10">
           展示更多
         </view>
       </view>
     </view>
 
-    <!-- <view class="publish_btn">
+    <view class="loadmore_wrap" v-if="smallVoiceData.length !== 0" @click="() => { isNoMore ? '' : getSmallVoiceData() }">
+      <text>{{ isNoMore ? '到底啦' : '加载更多' }}</text>
+    </view>
+
+    <view class="publish_btn">
       <u-button icon="chat" shape="circle" iconColor="#31B6C3" @click="publishVoice"></u-button>
-    </view> -->
+    </view>
   </view>
 </template>
 
@@ -100,7 +104,7 @@ export default {
           }
         },
       ],
-      lostFoundNumber: 0
+      isNoMore: false
     }
   },
   onShareTimeline() {
@@ -167,25 +171,20 @@ export default {
           pageSize: 10,
           type: this.voiceType
         })
-        console.log(res);
-        if (this.voiceType === 2) {
-          this.lostFoundNumber = res.data.data.records.length
+        if (res.data.data.records.length === 0) {
+          this.isNoMore = true
         }
         res.data.data.records.map((v) => {
           if (v.imgList !== '' && v.imgList !== null && v.imgList.length !== 0) {
-            if (!v.images) {
-              v.images = []
-            } else {
-              v.imgList.forEach(item => {
-                v.images.push(item.url)
-              })
-            }
+            v.images = []
+            v.imgList.forEach(item => {
+              v.images.push(item.url)
+            })
           }
           return v
         })
         this.currentPageNumber++
         this.smallVoiceData = [...this.smallVoiceData, ...res.data.data.records]
-        console.log(this.smallVoiceData)
         this.isLoading = false
       } catch (error) {
         console.log(error)
@@ -196,20 +195,18 @@ export default {
       const res = await communityTinybbsLike_Get({
         tinyBbsId: bbsId,
       })
-      console.log(res.data)
-      if (res.data.code === 500) {
+      if (res.data.msg === '取消点赞') {
         //已经点过赞了
-        uni.$u.toast('已经喜欢啦~')
+        this.smallVoiceData[index].likeNum--
       } else {
         //点赞
-        this.smallVoiceData[index].isLike = true
         this.smallVoiceData[index].likeNum++
       }
     },
     //查看微音详情
     enterVoiceDetail(index) {
       uni.navigateTo({
-        url: '/pages/small_voice/VoiceDetails',
+        url: '/subpages_publish/voice_details/VoiceDetails',
         success: (res) => {
           res.eventChannel.emit('acceptVoiceData', {
             data: this.smallVoiceData[index],
@@ -222,12 +219,9 @@ export default {
       this.userinfo = getApp().globalData.wxUserInfo
     },
     //触底加载更多
-    onReachBottom() {
-      this.getSmallVoiceData()
-    },
     publishVoice() {
       uni.navigateTo({
-        url: '/pages/publish_voice/index',
+        url: '/subpages_publish/publishVoice/publishVoice',
       })
     },
     async tabsChange(payload) {
@@ -239,6 +233,7 @@ export default {
         this.voiceType = 1
       }
       this.isLoading = true
+      this.isNoMore = false
       this.smallVoiceData = []
       this.currentPageNumber = 1
       await this.getSmallVoiceData()
@@ -274,6 +269,11 @@ export default {
 
     &:nth-child(n + 4) {
       margin-top: 30rpx;
+    }
+
+    &:last-child {
+      padding-bottom: 0 !important;
+      background: #000;
     }
 
     .userinfo {
@@ -333,7 +333,7 @@ export default {
     }
 
     .voice_content {
-      padding: 20rpx 20rpx;
+      padding: 20rpx 0rpx;
       color: #4a4a4a;
 
       text {
@@ -396,10 +396,13 @@ export default {
     .comments_wrap {
       display: flex;
       flex-direction: column;
+      background: #c5c5c533;
+      border-radius: 5px;
+      padding: 10px;
 
       .comments_item {
         display: flex;
-        color: #515151;
+        color: #000;
 
         &:nth-child(n + 2) {
           margin-top: 10rpx;
@@ -408,12 +411,13 @@ export default {
         .content {
           font-size: 30rpx;
           display: flex;
+          font-weight: 100;
 
           .name {
-            font-weight: bold;
             max-width: 200rpx;
             white-space: nowrap;
             text-overflow: ellipsis;
+            font-weight: normal;
           }
 
           .content_right {
@@ -437,6 +441,15 @@ export default {
       font-size: 28rpx;
       padding: 10rpx 0;
     }
+  }
+
+  .loadmore_wrap {
+    width: 750rpx;
+    text-align: center;
+    font-size: 24rpx;
+    color: #888888;
+    background: #fff;
+    padding: 10rpx 0 20rpx 0;
   }
 
   .publish_btn {

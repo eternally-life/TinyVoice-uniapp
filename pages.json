@@ -1,336 +1,354 @@
 {
-	/* 全局按需引入组件 */
-	"easycom": {
-		"^u-(.*)": "uview-ui/components/u-$1/u-$1.vue",
-		"^edu-(.*)": "@/components/edu-plug/edu-$1.vue",
-		"^ty-(.*)": "@/components/ty-$1.vue"
-	},
-	/* 主包  仅存放tabbar页面*/
-	"pages": [{
-		"path": "pages/user/user",
-		"style": {
-			"navigationBarTitleText": "我的",
-			"enablePullDownRefresh": false
-		}
-	}, {
-		"path": "pages/edu/edu",
-		"style": {
-			"navigationBarTitleText": "教务相关"
-		}
-	}, {
-		"path": "pages/shop/shop",
-		"style": {
-			"navigationBarTitleText": "商城",
-			"enablePullDownRefresh": true
-		}
-
-	}, {
-		"path": "pages/community/community",
-		"style": {
-			"navigationBarTitleText": "微音",
-			"enablePullDownRefresh": false
-		}
-
-	}, {
-		"path": "pages/appliance/appliance",
-		"style": {
-			"navigationBarTitleText": "工具",
-			"enablePullDownRefresh": false
-		}
-	}],
-	"subPackages": [
-		/* 基础分包 */
-		{
-			"root": "subpages",
-			"pages": [{
-				"path": "login/login",
-				"style": {
-					"navigationBarTitleText": "登录",
-					"enablePullDownRefresh": false
-				}
-			}, {
-				"path": "regist/regist",
-				"style": {
-					"navigationBarTitleText": "注册",
-					"enablePullDownRefresh": false
-				}
-
-			}, {
-				"path": "userInfo/userInfo",
-				"style": {
-					"navigationBarTitleText": "用户信息",
-					"enablePullDownRefresh": false
-				}
-			}, {
-				"path": "aboutUs/aboutUs",
-				"style": {
-					"navigationBarTitleText": "关于我们",
-					"enablePullDownRefresh": false
-				}
-
-			}, {
-				"path": "receivAddress/receivAddress",
-				"style": {
-					"navigationBarTitleText": "我的收货地址",
-					"enablePullDownRefresh": false
-				}
-
-			}, {
-				"path": "edit_receivAddress/edit_receivAddress",
-				"style": {
-					"navigationBarTitleText": "编辑收货地址",
-					"enablePullDownRefresh": false
-				}
-
-			}]
-		},
-		/* 商城相关分包 */
-		{
-			"root": "subpages_shop",
-			"pages": [{
-				"path": "shopDetail/shopDetail",
-				"style": {
-					"navigationBarTitleText": "商品详情",
-					"enablePullDownRefresh": false
-				}
-
-			}, {
-				"path": "orderDetail/orderDetail",
-				"style": {
-					"navigationBarTitleText": "订单详情",
-					"enablePullDownRefresh": false
-				}
-
-			}, {
-				"path": "ShoppingCart/ShoppingCart",
-				"style": {
-					"navigationBarTitleText": "我的购物车",
-					"enablePullDownRefresh": false,
-					"navigationStyle": "custom"
-				}
-
-			}, {
-				"path": "order/order",
-				"style": {
-					"navigationBarTitleText": "我的订单",
-					"enablePullDownRefresh": false
-				}
-
-			}, {
-				"path": "orderPay/orderPay",
-				"style": {
-					"navigationBarTitleText": "确认订单",
-					"enablePullDownRefresh": false
-				}
-
-			}]
-		},
-		/* 微音相关分包 */
-		{
-			"root": "subpages_publish",
-			"pages": [{
-				"path": "publishVoice/publishVoice",
-				"style": {
-					"navigationBarTitleText": "微音聆听您的声音",
-					"enablePullDownRefresh": false
-				}
-
-			}, {
-				"path": "fleaMarket/fleaMarket",
-				"style": {
-					"navigationBarTitleText": "二手市场",
-					"enablePullDownRefresh": false
-				}
-
-			}, {
-				"path": "lostFound/lostFound",
-				"style": {
-					"navigationBarTitleText": "失物招领",
-					"enablePullDownRefresh": false
-				}
-
-			}, {
-				"path": "speakNow/speakNow",
-				"style": {
-					"navigationBarTitleText": "表白",
-					"enablePullDownRefresh": false
-				}
-
-			}]
-		},
-		/* 教务相关分包 */
-		{
-			"root": "subpages_edu",
-			"pages": [{
-					"path": "final_exam/final_exam",
-					"style": {
-						"navigationBarTitleText": "查看 期末成绩",
-						"enablePullDownRefresh": false
-					}
-				},
-				{
-					"path": "selected_courses/selected_courses",
-					"style": {
-						"navigationBarTitleText": "查询 已选课程",
-						"enablePullDownRefresh": false
-					}
-				},
-				{
-					"path": "credit/credit",
-					"style": {
-						"navigationBarTitleText": "查询 学分",
-						"enablePullDownRefresh": false
-					}
-				},
-				{
-					"path": "english/english",
-					"style": {
-						"navigationBarTitleText": "英语均分",
-						"enablePullDownRefresh": false
-					}
-				},
-				{
-					"path": "gpa/gpa",
-					"style": {
-						"navigationBarTitleText": "查询 学分绩",
-						"enablePullDownRefresh": false
-					}
-				},
-				{
-					"path": "help_setting/help_setting",
-					"style": {
-						"navigationBarTitleText": "Q&A、相关设置",
-						"enablePullDownRefresh": false
-					}
-				},
-				{
-					"path": "test_physical/test_physical",
-					"style": {
-						"navigationBarTitleText": "体测成绩自助计算",
-						"enablePullDownRefresh": false
-					}
-				},
-				{
-					"path": "substitute_query_menu/substitute_query_menu",
-					"style": {
-						"navigationBarTitleText": "代 查 菜 单",
-						"enablePullDownRefresh": false
-					}
-				}
-			]
-		},
-		/* 工具相关分包 */
-		{
-			"root": "subpages_tool",
-			"pages": [{
-					"path": "message/message",
-					"style": {
-						"navigationBarTitleText": "给他人留言",
-						"enablePullDownRefresh": false
-					}
-				},
-				{
-					"path": "message/name_message",
-					"style": {
-						"navigationBarTitleText": "根据姓名获得所有留言",
-						"enablePullDownRefresh": false
-					}
-				},
-				{
-					"path": "id_photo/IdPhoto",
-					"style": {
-						"navigationBarTitleText": "证件照",
-						"enablePullDownRefresh": false
-					}
-				},
-				{
-					"path": "resources/upload_resources",
-					"style": {
-						"navigationBarTitleText": "上传资源",
-						"enablePullDownRefresh": false
-					}
-				},
-				{
-					"path": "resources/download_resources",
-					"style": {
-						"navigationBarTitleText": "下载资源",
-						"enablePullDownRefresh": false
-					}
-				},
-				{
-					"path": "resources/resources_information",
-					"style": {
-						"navigationBarTitleText": "资源共享",
-						"enablePullDownRefresh": false
-					}
-				},
-				{
-					"path": "resources/comment_resources",
-					"style": {
-						"navigationBarTitleText": "评论资源",
-						"enablePullDownRefresh": false
-					}
-				},
-				{
-					"path": "stamina_test/stamina_test",
-					"style": {
-						"navigationBarTitleText": "体测计算",
-						"enablePullDownRefresh": false
-					}
-				},
-				{
-					"path": "id_photo/Cphoto",
-					"style": {
-						"navigationBarTitleText": "计算机证件照",
-						"enablePullDownRefresh": false
-					}
-				}
-			]
-			
-		}
-	],
-	"globalStyle": {
-		"navigationBarTextStyle": "black",
-		"navigationBarTitleText": "uni-app",
-		"navigationBarBackgroundColor": "#F8F8F8",
-		"backgroundColor": "#F8F8F8"
-	},
-	"uniIdRouter": {},
-	/* tabbar 样式控制 */
-	"tabBar": {
-		"color": "#000000",
-		"selectedColor": "#2dc1cf",
-		"backgroundColor": "#FFFFFF",
-		"list": [{
-				"pagePath": "pages/edu/edu",
-				"text": "学习",
-				"iconPath": "static/tabBar/unchecked_home.png",
-				"selectedIconPath": "static/tabBar/select_home.png"
-			},
-			{
-				"pagePath": "pages/shop/shop",
-				"text": "商城",
-				"iconPath": "static/tabBar/unchecked_shopping.png",
-				"selectedIconPath": "static/tabBar/select_shopping.png"
-			},
-			{
-				"pagePath": "pages/community/community",
-				"text": "微音",
-				"iconPath": "static/tabBar/unchecked_tinyVoice.png",
-				"selectedIconPath": "static/tabBar/select_tinyVoice.png"
-			},
-			{
-				"pagePath": "pages/appliance/appliance",
-				"text": "工具",
-				"iconPath": "static/tabBar/unchecked_tool.png",
-				"selectedIconPath": "static/tabBar/select_tool.png"
-			},
-			{
-				"pagePath": "pages/user/user",
-				"text": "我的",
-				"iconPath": "static/tabBar/unchecked_my.png",
-				"selectedIconPath": "static/tabBar/select_my.png"
-			}
-		]
-	}
+  /* 全局按需引入组件 */
+  "easycom": {
+    "^u-(.*)": "uview-ui/components/u-$1/u-$1.vue",
+    "^edu-(.*)": "@/components/edu-plug/edu-$1.vue",
+    "^ty-(.*)": "@/components/ty-$1.vue"
+  },
+  /* 主包  仅存放tabbar页面*/
+  "pages": [
+    {
+      "path": "pages/user/user",
+      "style": {
+        "navigationBarTitleText": "我的",
+        "enablePullDownRefresh": false
+      }
+    },
+    {
+      "path": "pages/edu/edu",
+      "style": {
+        "navigationBarTitleText": "教务相关"
+      }
+    },
+    {
+      "path": "pages/shop/shop",
+      "style": {
+        "navigationBarTitleText": "商城",
+        "enablePullDownRefresh": true
+      }
+    },
+    {
+      "path": "pages/community/community",
+      "style": {
+        "navigationBarTitleText": "微音",
+        "enablePullDownRefresh": false
+      }
+    },
+    {
+      "path": "pages/appliance/appliance",
+      "style": {
+        "navigationBarTitleText": "工具",
+        "enablePullDownRefresh": false
+      }
+    }
+  ],
+  "subPackages": [
+    /* 基础分包 */
+    {
+      "root": "subpages",
+      "pages": [
+        {
+          "path": "login/login",
+          "style": {
+            "navigationBarTitleText": "登录",
+            "enablePullDownRefresh": false
+          }
+        },
+        {
+          "path": "regist/regist",
+          "style": {
+            "navigationBarTitleText": "注册",
+            "enablePullDownRefresh": false
+          }
+        },
+        {
+          "path": "userInfo/userInfo",
+          "style": {
+            "navigationBarTitleText": "用户信息",
+            "enablePullDownRefresh": false
+          }
+        },
+        {
+          "path": "aboutUs/aboutUs",
+          "style": {
+            "navigationBarTitleText": "关于我们",
+            "enablePullDownRefresh": false
+          }
+        },
+        {
+          "path": "receivAddress/receivAddress",
+          "style": {
+            "navigationBarTitleText": "我的收货地址",
+            "enablePullDownRefresh": false
+          }
+        },
+        {
+          "path": "edit_receivAddress/edit_receivAddress",
+          "style": {
+            "navigationBarTitleText": "编辑收货地址",
+            "enablePullDownRefresh": false
+          }
+        }
+      ]
+    },
+    /* 商城相关分包 */
+    {
+      "root": "subpages_shop",
+      "pages": [
+        {
+          "path": "shopDetail/shopDetail",
+          "style": {
+            "navigationBarTitleText": "商品详情",
+            "enablePullDownRefresh": false
+          }
+        },
+        {
+          "path": "orderDetail/orderDetail",
+          "style": {
+            "navigationBarTitleText": "订单详情",
+            "enablePullDownRefresh": false
+          }
+        },
+        {
+          "path": "ShoppingCart/ShoppingCart",
+          "style": {
+            "navigationBarTitleText": "我的购物车",
+            "enablePullDownRefresh": false,
+            "navigationStyle": "custom"
+          }
+        },
+        {
+          "path": "order/order",
+          "style": {
+            "navigationBarTitleText": "我的订单",
+            "enablePullDownRefresh": false
+          }
+        },
+        {
+          "path": "orderPay/orderPay",
+          "style": {
+            "navigationBarTitleText": "确认订单",
+            "enablePullDownRefresh": false
+          }
+        }
+      ]
+    },
+    /* 微音相关分包 */
+    {
+      "root": "subpages_publish",
+      "pages": [
+        {
+          "path": "publishVoice/publishVoice",
+          "style": {
+            "navigationBarTitleText": "微音聆听您的声音",
+            "enablePullDownRefresh": false
+          }
+        },
+        {
+          "path": "fleaMarket/fleaMarket",
+          "style": {
+            "navigationBarTitleText": "二手市场",
+            "enablePullDownRefresh": false
+          }
+        },
+        {
+          "path": "lostFound/lostFound",
+          "style": {
+            "navigationBarTitleText": "失物招领",
+            "enablePullDownRefresh": false
+          }
+        },
+        {
+          "path": "speakNow/speakNow",
+          "style": {
+            "navigationBarTitleText": "表白",
+            "enablePullDownRefresh": false
+          }
+        },
+        {
+          "path": "voice_details/VoiceDetails",
+          "style": {
+            "navigationBarTitleText": "微音详情",
+            "enablePullDownRefresh": false
+          }
+        }
+      ]
+    },
+    /* 教务相关分包 */
+    {
+      "root": "subpages_edu",
+      "pages": [
+        {
+          "path": "final_exam/final_exam",
+          "style": {
+            "navigationBarTitleText": "查看 期末成绩",
+            "enablePullDownRefresh": false
+          }
+        },
+        {
+          "path": "selected_courses/selected_courses",
+          "style": {
+            "navigationBarTitleText": "查询 已选课程",
+            "enablePullDownRefresh": false
+          }
+        },
+        {
+          "path": "credit/credit",
+          "style": {
+            "navigationBarTitleText": "查询 学分",
+            "enablePullDownRefresh": false
+          }
+        },
+        {
+          "path": "english/english",
+          "style": {
+            "navigationBarTitleText": "英语均分",
+            "enablePullDownRefresh": false
+          }
+        },
+        {
+          "path": "gpa/gpa",
+          "style": {
+            "navigationBarTitleText": "查询 学分绩",
+            "enablePullDownRefresh": false
+          }
+        },
+        {
+          "path": "help_setting/help_setting",
+          "style": {
+            "navigationBarTitleText": "Q&A、相关设置",
+            "enablePullDownRefresh": false
+          }
+        },
+        {
+          "path": "test_physical/test_physical",
+          "style": {
+            "navigationBarTitleText": "体测成绩自助计算",
+            "enablePullDownRefresh": false
+          }
+        },
+        {
+          "path": "substitute_query_menu/substitute_query_menu",
+          "style": {
+            "navigationBarTitleText": "代 查 菜 单",
+            "enablePullDownRefresh": false
+          }
+        }
+      ]
+    },
+    /* 工具相关分包 */
+    {
+      "root": "subpages_tool",
+      "pages": [
+        {
+          "path": "message/message",
+          "style": {
+            "navigationBarTitleText": "给他人留言",
+            "enablePullDownRefresh": false
+          }
+        },
+        {
+          "path": "message/name_message",
+          "style": {
+            "navigationBarTitleText": "根据姓名获得所有留言",
+            "enablePullDownRefresh": false
+          }
+        },
+        {
+          "path": "id_photo/IdPhoto",
+          "style": {
+            "navigationBarTitleText": "证件照",
+            "enablePullDownRefresh": false
+          }
+        },
+        {
+          "path": "resources/upload_resources",
+          "style": {
+            "navigationBarTitleText": "上传资源",
+            "enablePullDownRefresh": false
+          }
+        },
+        {
+          "path": "resources/download_resources",
+          "style": {
+            "navigationBarTitleText": "下载资源",
+            "enablePullDownRefresh": false
+          }
+        },
+        {
+          "path": "resources/resources_information",
+          "style": {
+            "navigationBarTitleText": "资源共享",
+            "enablePullDownRefresh": false
+          }
+        },
+        {
+          "path": "resources/comment_resources",
+          "style": {
+            "navigationBarTitleText": "评论资源",
+            "enablePullDownRefresh": false
+          }
+        },
+        {
+          "path": "stamina_test/stamina_test",
+          "style": {
+            "navigationBarTitleText": "体测计算",
+            "enablePullDownRefresh": false
+          }
+        },
+        {
+          "path": "id_photo/Cphoto",
+          "style": {
+            "navigationBarTitleText": "计算机证件照",
+            "enablePullDownRefresh": false
+          }
+        }
+      ]
+    }
+  ],
+  "globalStyle": {
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "uni-app",
+    "navigationBarBackgroundColor": "#F8F8F8",
+    "backgroundColor": "#F8F8F8"
+  },
+  "uniIdRouter": {},
+  /* tabbar 样式控制 */
+  "tabBar": {
+    "color": "#000000",
+    "selectedColor": "#2dc1cf",
+    "backgroundColor": "#FFFFFF",
+    "list": [
+      {
+        "pagePath": "pages/edu/edu",
+        "text": "学习",
+        "iconPath": "static/tabBar/unchecked_home.png",
+        "selectedIconPath": "static/tabBar/select_home.png"
+      },
+      {
+        "pagePath": "pages/shop/shop",
+        "text": "商城",
+        "iconPath": "static/tabBar/unchecked_shopping.png",
+        "selectedIconPath": "static/tabBar/select_shopping.png"
+      },
+      {
+        "pagePath": "pages/community/community",
+        "text": "微音",
+        "iconPath": "static/tabBar/unchecked_tinyVoice.png",
+        "selectedIconPath": "static/tabBar/select_tinyVoice.png"
+      },
+      {
+        "pagePath": "pages/appliance/appliance",
+        "text": "工具",
+        "iconPath": "static/tabBar/unchecked_tool.png",
+        "selectedIconPath": "static/tabBar/select_tool.png"
+      },
+      {
+        "pagePath": "pages/user/user",
+        "text": "我的",
+        "iconPath": "static/tabBar/unchecked_my.png",
+        "selectedIconPath": "static/tabBar/select_my.png"
+      }
+    ]
+  }
 }
