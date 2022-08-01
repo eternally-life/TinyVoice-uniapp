@@ -1,17 +1,155 @@
 <template>
+	<view class="wrap">
+		<view class="wrap_input">
+			<view class="input">
+				<u--input placeholder="快输入Ta的名字或你的名字看看吧!" @change="inputChange()" border="bottom" vale="userName"
+					v-model="userName"></u--input>
+			</view>
+			<view class="button">
+				<u-button @click="getMessageContent(userName)">查看留言</u-button>
+			</view>
+		</view>
 
+		<view class="wrap_show" v-if="isShow">
+			这是给Ta的留言
+			<view v-for="(item,index) in messageList" :key="index">
+
+				<view class="item_list">
+					<view class="item_time">
+						{{$u.timeFrom(item.createTime,'yyyy年mm月dd日')}}
+					</view>
+					<u-gap height="1" bg-color="#bbb"></u-gap>
+					<view class="item_content">
+						{{item.content}}
+					</view> 
+
+				</view>
+			</view>
+		</view>
+		
+		<view class="iconfont icon-liuyan">
+			<u-button icon="plus" size="large" shape="circle" iconColor="#31b6c3" @click="toMessaging"></u-button>
+		</view>
+	</view>
 </template>
 
 <script>
-export default {
-	data() {
-		return {
-			
-		};
-	}
-};
+	import { communityTinyservenoteByName_Get } from "@/api/社区模块/留言板.js"
+	export default {
+		data() {
+			return {
+				userName: "",
+				messageList: [],
+				isShow: false
+			};
+		},
+		methods: {
+			toMessaging(){
+				uni.navigateTo({
+					url: "/subpages_tool/messaging/messaging"
+				})
+			},
+			inputChange() {
+				this.isShow = false
+			},
+			getMessageContent() {
+				communityTinyservenoteByName_Get({
+					userName: this.userName
+				}).then(res => {
+					console.log('返回res如下：', res);
+					let dataList = res.data.data
+					if (dataList.length > 0) {
+						this.isShow = true;
+					} else if (this.userName = "") {
+						uni.showModal({
+							content: '还没输入哦',
+							showCancel: false
+						});
+					} else {
+						this.isShow = false
+						uni.showModal({
+							content: '还没有人给Ta留言哦',
+							showCancel: false
+						});
+					}
+					if (res.statusCode === 200) {
+						for (let i = 0; i < dataList.length; i++) {
+							console.log(dataList[i]);
+							this.messageList = dataList
+						}
+					} else {
+						console.log("服务器已经乌拉！");
+					}
+				})
+			}
+		},
+	};
 </script>
 
 <style lang="scss">
-	
+	.wrap {
+		position: relative;
+		background-color: #fff;
+		margin: 20rpx 20rpx;
+		height: var(--window-top);
+		border-radius: 15rpx;
+		// box-shadow: 10rpx 10rpx 10px #ccc;
+
+
+		.wrap_input {
+			position: relative;
+			background-color: #fff;
+			padding: 40rpx;
+			margin: 20rpx 20rpx;
+			border-radius: 30rpx;
+			box-shadow: 5rpx 5rpx 5px #ccc;
+
+			.input {}
+
+			.button {
+				margin: 30rpx 30rpx;
+				width: 80%;
+
+				u-button {
+					background-color: #82ffcf;
+				}
+			}
+		}
+
+		.wrap_show {
+
+			position: relative;
+			background-color: #fff;
+			padding: 40rpx;
+			margin: 20rpx 20rpx;
+			border-radius: 30rpx;
+			box-shadow: 5rpx 5rpx 5px #ccc;
+
+			.feedback_btn {
+				position: absolute;
+				bottom: 60rpx;
+				right: 60rpx;
+				width: 50px;
+			}
+
+			.item_list {
+				display: flex;
+				flex-direction: column;
+				margin: 60rpx 10rpx;
+
+				.item_time {
+					display: flex;
+					justify-content: flex-end;
+					font-size: 25rpx;
+				}
+
+				.item_content {}
+			}
+
+		}
+
+		&.show {
+			animation: showLayer 0.2s linear both;
+		}
+	}
 </style>
