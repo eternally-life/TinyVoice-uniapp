@@ -120,7 +120,7 @@ import computeUtil from './scoreCalculation.js';
 export default {
 	data() {
 		return {
-			key: getApp().globalData.sportKey,
+			key: getApp().globalData.storageKey.sportKey,
 			show: false,
 			gender: true,
 			grade: 0,

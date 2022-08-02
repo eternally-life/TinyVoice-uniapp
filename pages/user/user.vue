@@ -159,7 +159,7 @@ export default {
 		/* 跳转教务首页 */
 		toHome() {
 			/* 初始化教务相关设置 */
-			let key = getApp().globalData.eduSwitchKEY;
+			let key = getApp().globalData.storageKey.eduSwitchKEY;
 			const value = uni.getStorageSync(key);
 			//读取缓存
 			if (value) {

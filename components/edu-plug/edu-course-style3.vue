@@ -108,7 +108,7 @@ export default {
 				//均不匹配   更改周课表缓存
 				console.warn('均不匹配，更改周课表缓存');
 				// 读取所有课表缓存
-				const valueCache = uni.getStorageSync(getApp().globalData.courseKEY);
+				const valueCache = uni.getStorageSync(getApp().globalData.storageKey.courseKEY);
 				// 获取新一周数据
 				this.otherWeekData_cache = manageData.dataDeposit(valueCache, timeArr.weekSeq);
 				//更改最后标记周
