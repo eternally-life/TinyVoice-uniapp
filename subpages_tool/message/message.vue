@@ -21,20 +21,25 @@
 					<u-gap height="1" bg-color="#bbb"></u-gap>
 					<view class="item_content">
 						{{item.content}}
-					</view> 
+					</view>
 
 				</view>
 			</view>
 		</view>
-		
-		<view class="iconfont icon-liuyan">
-			<u-button icon="plus" size="large" shape="circle" iconColor="#31b6c3" @click="toMessaging"></u-button>
+
+		<view class="publish_btn">
+			<view class="publish_content">
+				<view class="iconfont icon-liuyan" fontSize="24px" @click="toMessaging"></view>
+				留言
+			</view>
 		</view>
 	</view>
 </template>
 
 <script>
-	import { communityTinyservenoteByName_Get } from "@/api/社区模块/留言板.js"
+	import {
+		communityTinyservenoteByName_Get
+	} from "@/api/社区模块/留言板.js"
 	export default {
 		data() {
 			return {
@@ -44,7 +49,7 @@
 			};
 		},
 		methods: {
-			toMessaging(){
+			toMessaging() {
 				uni.navigateTo({
 					url: "/subpages_tool/messaging/messaging"
 				})
@@ -141,9 +146,31 @@
 					display: flex;
 					justify-content: flex-end;
 					font-size: 25rpx;
+					color: #ccc;
 				}
 
 				.item_content {}
+			}
+
+		}
+
+		.publish_btn {
+			position: fixed;
+			bottom: 100rpx;
+			right: 60rpx;
+			width: 100rpx;
+
+
+			.publish_content {
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+
+				.icon-liuyan {
+					right: 60rpx;
+					width: 50px;
+					font-size: 66rpx
+				}
 			}
 
 		}

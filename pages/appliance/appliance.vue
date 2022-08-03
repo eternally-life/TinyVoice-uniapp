@@ -9,7 +9,7 @@
 				circular
 				:autoplay="false"
 				radius="5"
-				bgColor="#ffffff"
+				
 			></u-swiper>
 		</view>
 		<!-- 应用列表 -->
@@ -22,7 +22,7 @@
 				<text>{{ item.title }}</text>
 			</view>
 		</view>
-		<view class="center"><view>更多功能开发中，敬请期待!</view></view>
+		<u-divider>更多功能开发中，敬请期待!</u-divider>
 	</view>
 </template>
 
@@ -38,22 +38,22 @@ export default {
 			],
 			navs: [
 				{
-					icon: 'iconfont icon-fabu1',
+					icon:  'iconfont icon-liuyanban',
 					title: '留言板',
 					path: '/subpages_tool/message/message'
 				},
 				{
-					icon: 'iconfont icon-dingdan',
+					icon:  'iconfont icon-weibiaoti-',
 					title: '证件照',
 					path: '/subpages_tool/id_photo/IdPhoto'
 				},
 				{
-					icon: 'iconfont icon-ruzhu1',
+					icon:  'iconfont icon-ziyuan',
 					title: '资源共享',
 					path: '/subpages_tool/resources/resources'
 				},
 				{
-					icon: 'iconfont icon-wodedianpu3',
+					icon:  'iconfont icon-tice',
 					title: '体测计算',
 					path: '/subpages_edu/test_physical/test_physical'
 				}
@@ -122,15 +122,15 @@ export default {
 			width: 100rpx;
 			height: 100rpx;
 			line-height: 100rpx;
-			border-radius: 50%;
+			// border-radius: 15rpx;
 			// // 图片居中
 			margin: 10rpx auto;
-
+			border-bottom: #8a8a8a;
 			// 修改图标颜色大小
-			background-image: linear-gradient(45deg, #3dc0d2, #43e3bd);
+			background-image: linear-gradient(45deg, #ffffff, #ffffff);
 
 			.fix {
-				color: #fff;
+				// color: #fff;
 				font-size: 50rpx;
 			}
 		}
