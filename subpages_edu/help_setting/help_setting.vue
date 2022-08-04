@@ -63,7 +63,7 @@ export default {
 				auto_Refresh: '自动更新课表',
 				auto_Refresh_time: '自动更新间隔时间(天)'
 			},
-			key: getApp().globalData.eduSwitchKEY
+			key: getApp().globalData.storageKey.eduSwitchKEY
 		};
 	},
 	methods: {

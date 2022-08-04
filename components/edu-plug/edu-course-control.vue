@@ -25,7 +25,7 @@ export default {
 			},
 			onecFlag: true,
 			watchDogID: 0, //看门狗ID
-			lastTimeKEY: getApp().globalData.courseFTimeKEY,
+			lastTimeKEY: getApp().globalData.storageKey.courseFTimeKEY,
 			nowTimeNode: new Date().valueOf() / 1000
 		};
 	},
@@ -36,7 +36,7 @@ export default {
 		// 读取本地课表缓存
 		getStroCourse() {
 			try {
-				const value = uni.getStorageSync(getApp().globalData.courseKEY);
+				const value = uni.getStorageSync(getApp().globalData.storageKey.courseKEY);
 				//有缓存 直接获取
 				if (value) {
 					// this.selfMsg('加载成功', 'success');
@@ -141,7 +141,7 @@ export default {
 
 		// 存储课表数据
 		saveCourse(para) {
-			let key = getApp().globalData.courseKEY;
+			let key = getApp().globalData.storageKey.courseKEY;
 			// console.log(this.all_course_data);
 			let saveStatu = manageData.saveData(key, para);
 			if (saveStatu) {

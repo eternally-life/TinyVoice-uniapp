@@ -140,31 +140,31 @@ export default {
       });
     },
 
-    // 获通知列表
-    async getNoticeList() { },
-    /* 跳转教务首页 */
-    toHome() {
-      /* 初始化教务相关设置 */
-      let key = getApp().globalData.eduSwitchKEY;
-      const value = uni.getStorageSync(key);
-      //读取缓存
-      if (value) {
-        //有 将vuex路由数据设置为缓存值
-        this.$store.commit('edu/setEduSwitch', value);
-        // uni.setStorageSync(key, value);
-      } else {
-        //没有 初始化缓存为vuex路由数据
-        let data = this.$store.state.edu.eduSwitch;
-        uni.setStorageSync(key, data);
-      }
-      //根据 状态值进行跳转
-      if (this.eduSwitch.firstOpen) {
-        console.log('跳转触发');
-        uni.switchTab({
-          url: '/pages/home/index'
-        });
-      }
-    },
+		// 获通知列表
+		async getNoticeList() {},
+		/* 跳转教务首页 */
+		toHome() {
+			/* 初始化教务相关设置 */
+			let key = getApp().globalData.storageKey.eduSwitchKEY;
+			const value = uni.getStorageSync(key);
+			//读取缓存
+			if (value) {
+				//有 将vuex路由数据设置为缓存值
+				this.$store.commit('edu/setEduSwitch', value);
+				// uni.setStorageSync(key, value);
+			} else {
+				//没有 初始化缓存为vuex路由数据
+				let data = this.$store.state.edu.eduSwitch;
+				uni.setStorageSync(key, data);
+			}
+			//根据 状态值进行跳转
+			if (this.eduSwitch.firstOpen) {
+				console.log('跳转触发');
+				uni.switchTab({
+					url: '/pages/home/index'
+				});
+			}
+		},
 
     toLogin() {
       if (this.wxUserInfo) {

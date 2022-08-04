@@ -42,7 +42,7 @@ export default {
 				intervalX: 0,
 				intervalY: 0
 			},
-			lastTimeKEY: getApp().globalData.courseFTimeKEY
+			lastTimeKEY: getApp().globalData.storageKey.courseFTimeKEY
 		};
 	},
 	methods: {

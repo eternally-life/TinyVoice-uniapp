@@ -84,7 +84,13 @@ npm install        //安装依赖
 
    
 
-2. 将解压文件中名为 `iconfont.css` 中的图标内容替换 项目中 `/style/icon.css` 文件对应的图标内容
+2. 将解压文件夹中名为 `iconfont.css` 中的图标内容替换 项目中 `/style/icon.css` 文件对应的图标内容
+
+   
+
+3. 将解压文件夹中 `iconfont.ttf`、`iconfont.woff`两个文件替换项目目录写的 `/static/icon/`内两个字体文件
+
+
 
 
 
