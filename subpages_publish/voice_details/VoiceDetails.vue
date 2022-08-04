@@ -20,7 +20,8 @@
         </view>
       </view>
       <view class="voice_content">
-        <text>{{ currentShowVoice.content }}</text>
+        <!-- <text>{{ currentShowVoice.content }}</text> -->
+        <u-parse :content="currentShowVoice.content"></u-parse>
       </view>
       <view class="voice_imgs" v-if="currentShowVoice.images && currentShowVoice.images.length !== 0">
         <u-album :urls="currentShowVoice.images" multipleSize="223rpx"></u-album>
@@ -56,6 +57,7 @@
           <view class="ack_center">
             <text class="name">{{ userinfo.nickName }}</text>
             <text class="content">{{ reply.content }}</text>
+            
             <view class="image" v-if="reply.image !== '' && reply.image !== null && reply.image !== undefined">
               <image :src="reply.image" mode="aspectFill" @click="showFullSceenImage(reply.image)" />
             </view>
