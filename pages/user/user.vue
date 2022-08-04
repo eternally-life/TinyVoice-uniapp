@@ -1,83 +1,69 @@
 <template>
-	<view class="profile_wrap">
-		<view class="bgColor"></view>
+  <view class="profile_wrap">
+    <view class="bgColor"></view>
 
-		<view class="topInfo">
-			<view class="userInfo">
-				<view class="user_avator" @click="toLogin">
-					<image
-						:src="
-							wxUserInfo.avatar
-								? wxUserInfo.avatar
-								: 'https://tiny-voice.oss-cn-guangzhou.aliyuncs.com/logo/QQ%E5%9B%BE%E7%89%8720211101001355.jpg'
-						"
-						class="userAvatar"
-					/>
-				</view>
-				<view class="right" @click="toLogin">
-					<view class="user">
-						<text class="name">{{ wxUserInfo.nickName || '点击登录' }}</text>
-						<text class="desc">{{ wxUserInfo.isAuth ? '已校园认证' : '未校园认证' }}</text>
-					</view>
-				</view>
-				<view class="sign">
-					<u-tag text="已签" size="mini" type="success" v-if="signined"></u-tag>
-					<u-tag text="签到" plain size="mini" type="success" v-else @click="signInNote"></u-tag>
-				</view>
-			</view>
-			<view class="otherInfo">
-				<view
-					class="bot_item"
-					v-for="(item, index) in otherInfo"
-					:key="index"
-					@click="navOtherItemClick(item.path, index)"
-				>
-					<view class="item_number">{{ item.num }}</view>
-					<view class="item_text">{{ item.text }}</view>
-				</view>
-			</view>
-		</view>
+    <view class="topInfo">
+      <view class="userInfo">
+        <view class="user_avator" @click="toLogin">
+          <image :src="
+            wxUserInfo.avatar
+              ? wxUserInfo.avatar
+              : 'https://tiny-voice.oss-cn-guangzhou.aliyuncs.com/logo/QQ%E5%9B%BE%E7%89%8720211101001355.jpg'
+          " class="userAvatar" />
+        </view>
+        <view class="right" @click="toLogin">
+          <view class="user">
+            <text class="name">{{ wxUserInfo.nickName || '点击登录' }}</text>
+            <text class="desc">{{ wxUserInfo.isAuth ? '已校园认证' : '未校园认证' }}</text>
+          </view>
+        </view>
+        <view class="sign">
+          <u-tag text="已签" size="mini" type="success" v-if="signined"></u-tag>
+          <u-tag text="签到" plain size="mini" type="success" v-else @click="signInNote"></u-tag>
+        </view>
+      </view>
+      <view class="otherInfo">
+        <view class="bot_item" v-for="(item, index) in otherInfo" :key="index"
+          @click="navOtherItemClick(item.path, index)">
+          <view class="item_number">{{ item.num }}</view>
+          <view class="item_text">{{ item.text }}</view>
+        </view>
+      </view>
+    </view>
 
-		<!-- #ifndef MP-QQ -->
+    <!-- #ifndef MP-QQ -->
 
-		<view class="centerInfo">
-			<view class="myItem" @click="navItemClick(item.path)" v-for="(item, index) in navs" :key="index">
-				<view class="myIcon">
-					<!-- <image :src="item.img"  mode="widthFix" /> -->
-					<view class="fix" :class="item.icon"></view>
-				</view>
-				<text>{{ item.title }}</text>
-			</view>
-		</view>
+    <view class="centerInfo">
+      <view class="myItem" @click="navItemClick(item.path)" v-for="(item, index) in navs" :key="index">
+        <view class="myIcon">
+          <!-- <image :src="item.img"  mode="widthFix" /> -->
+          <view class="fix" :class="item.icon"></view>
+        </view>
+        <text>{{ item.title }}</text>
+      </view>
+    </view>
 
-		<!-- #endif -->
+    <!-- #endif -->
 
-		<view class="botInfo">
-			<button
-				class="setItem"
-				v-for="(item, index) in setInfo"
-				:open-type="item.open_type"
-				@click="toDetail(item.name)"
-				:key="index"
-			>
-				<view class="setIcon"><view class="t-icon set-t-icon" :class="item.icon"></view></view>
-				<view class="setInfo">
-					<text class="setName">{{ item.name }}</text>
-				</view>
-				<text class="iconfont icon-dayuhao icon2"></text>
-			</button>
-		</view>
-		<u-modal
-			:show="showSignExplain"
-			:title="noticeTitle"
-			@confirm="showSignExplain = false"
-			confirmColor="#2979ff"
-			closeOnClickOverlay
-			@close="showSignExplain = false"
-		>
-			<view class="slot-content"><rich-text :nodes="content"></rich-text></view>
-		</u-modal>
-	</view>
+    <view class="botInfo">
+      <button class="setItem" v-for="(item, index) in setInfo" :open-type="item.open_type" @click="toDetail(item.name)"
+        :key="index">
+        <view class="setIcon">
+          <view class="t-icon set-t-icon" :class="item.icon"></view>
+        </view>
+        <view class="setInfo">
+          <text class="setName">{{ item.name }}</text>
+        </view>
+        <text class="iconfont icon-dayuhao icon2"></text>
+      </button>
+    </view>
+    <u-modal :show="showSignExplain" :title="noticeTitle" @confirm="showSignExplain = false" confirmColor="#2979ff"
+      closeOnClickOverlay @close="showSignExplain = false">
+      <view class="slot-content">
+        <rich-text :nodes="content"></rich-text>
+      </view>
+    </u-modal>
+  </view>
 </template>
 
 <script>
@@ -88,72 +74,73 @@ import { systemSyssignPage_Get, systemSyssignSave_Post } from '@/api/SYSTEM/签�
 import { systemSysmsgPage_Get } from '@/api/SYSTEM/消息提醒.js';
 import { getSetInfo_QQ, getSetInfo_WX, getNaviList, getOtherInfo_WX, getOtherInfo_QQ } from './datalist.js';
 export default {
-	data() {
-		return {
-			showSignExplain: false, // 是否显示音符说明
-			content: '', // 富文本内容
-			noticeTitle: '', // 音符说明标题
-			wxUserInfo: {},
-			signined: false, //是否已签到
-			token: '',
-			// 导航区数据
-			navs: getNaviList(),
 
-			// #ifdef MP-WEIXIN
-			otherInfo: getOtherInfo_WX(),
-			setInfo: getSetInfo_WX(),
-			// #endif
+  data() {
+    return {
+      showSignExplain: false, // 是否显示音符说明
+      content: '', // 富文本内容
+      noticeTitle: '', // 音符说明标题
+      wxUserInfo: {},
+      signined: false, //是否已签到
+      token: '',
+      // 导航区数据
+      navs: getNaviList(),
 
-			// #ifdef MP-QQ
-			otherInfo: getOtherInfo_QQ(),
-			setInfo: getSetInfo_QQ()
-			// #endif
-		};
-	},
-	onLoad() {
-		this.token = getApp().globalData.token;
-		this.getUserInfo();
-		uni.$on('refresh', () => {
-			this.getUserInfo();
-		});
-		/* 根据vuex缓存决定是否跳转教务 */
-		// this.toHome();
-		this.getNewList();
-		uni.$on('refreshNews', () => {
-			this.getNewList();
-		});
-	},
-	onShow() {
-		//更新页面静态数据
-		this.wxUserInfo = getApp().globalData.wxUserInfo;
-		this.getNoticeList();
-	},
-	onShareTimeline() {
-		// 用户点击右上角分享
-	},
-	// 用户点击右上角分享
-	onShareAppMessage(res) {
-		// #ifdef MP-QQ
-		qq.showShareMenu({
-			showShareItems: ['qq', 'qzone', 'wechatFriends', 'wechatMoment']
-		});
-		// #endif
-	},
-	methods: {
-		...mapMutations('edu', ['setEduSwitch']),
-		// 登录就签到
-		async signInNote() {
-			systemSyssignSave_Post().then(res => {
-				// console.log('签到结果', res);
-				if (res.data.code == 200) {
-					this.signined = true;
-					uni.$u.toast('签到成功');
-				} else if (res.data.code == 500 && res.data.msg.indexOf('已经') != -1) {
-					uni.$u.toast('今日已签');
-					this.signined = true;
-				}
-			});
-		},
+      // #ifdef MP-WEIXIN
+      otherInfo: getOtherInfo_WX(),
+      setInfo: getSetInfo_WX(),
+      // #endif
+
+      // #ifdef MP-QQ
+      otherInfo: getOtherInfo_QQ(),
+      setInfo: getSetInfo_QQ()
+      // #endif
+    };
+  },
+  onLoad() {
+    this.token = getApp().globalData.token;
+    this.getUserInfo();
+    uni.$on('refresh', () => {
+      this.getUserInfo();
+    });
+    /* 根据vuex缓存决定是否跳转教务 */
+    // this.toHome();
+    this.getNewList();
+    uni.$on('refreshNews', () => {
+      this.getNewList();
+    });
+    this.getNoticeList();
+  },
+  onShow() {
+    //更新页面静态数据
+    this.wxUserInfo = getApp().globalData.wxUserInfo;
+  },
+  onShareTimeline() {
+    // 用户点击右上角分享
+  },
+  // 用户点击右上角分享
+  onShareAppMessage(res) {
+    // #ifdef MP-QQ
+    qq.showShareMenu({
+      showShareItems: ['qq', 'qzone', 'wechatFriends', 'wechatMoment']
+    });
+    // #endif
+  },
+  methods: {
+    ...mapMutations('edu', ['setEduSwitch']),
+    // 登录就签到
+    async signInNote() {
+      systemSyssignSave_Post().then(res => {
+        // console.log('签到结果', res);
+        if (res.data.code == 200) {
+          this.signined = true;
+          uni.$u.toast('签到成功');
+        } else if (res.data.code == 500 && res.data.msg.indexOf('已经') != -1) {
+          uni.$u.toast('今日已签');
+          this.signined = true;
+        }
+      });
+    },
 
 		// 获通知列表
 		getNoticeList() {
@@ -195,293 +182,294 @@ export default {
 			}
 		},
 
-		toLogin() {
-			if (this.wxUserInfo) {
-				uni.navigateTo({
-					url: '/subpages/userInfo/userInfo'
-				});
-				return;
-			}
-			uni.navigateTo({
-				url: '/subpages/login/login'
-			});
-		},
-		async getNewList() {
-			// 获取消息数目
-			// const res = await systemUsermsgnoticeListunread_Get()
-			// if (res.data.code === 200) {
-			// 	this.otherInfo[3].num = res.data.data.length
-			// }
-		},
-		// 获取自己信息
-		getUserInfo() {
-			systemTinyuserGetInfo_Get().then(res => {
-				console.log('获取个人信息', res);
-				if (res.data.code == 200) {
-					this.wxUserInfo = res.data.user;
-					this.otherInfo[0].num = res.data.user.integral;
-					getApp().globalData.wxUserInfo = res.data.user;
-					uni.setStorageSync('wxUserInfo', res.data.user);
-					this.signInNote();
-				}
-			});
-		},
-		// 导航栏点击跳转
-		navOtherItemClick(path, index) {
-			console.log(index);
-			uni.navigateTo({
-				url: path
-			});
-		},
-		navItemClick(path) {
-			console.log(path);
-			uni.navigateTo({
-				url: path
-			});
-		},
-		toDetail(name) {
-			console.log(name);
-			// #ifdef MP-WEIXIN
-			if (name === '个人信息') {
-				this.toLogin();
-			} else if (name === '联系客服') {
-				console.log('我是1 是客服');
-			} else if (name == '收货地址') {
-				uni.navigateTo({
-					url: '/subpages/receivAddress/receivAddress'
-				});
-			} else if (name === '关于我们') {
-				uni.navigateTo({
-					url: '/subpages/aboutUs/aboutUs'
-				});
-			} else if (name === '分享微音') {
-				console.log('我是3 是分享');
-			} else {
-				this.exitLogin();
-			}
-			// #endif
-			// #ifdef MP-QQ
-			if (name === '个人信息') {
-				this.toLogin();
-			} else if (name === '关于我们') {
-				uni.navigateTo({
-					url: '/subpages/aboutUs/aboutUs'
-				});
-			} else if (name === '分享微音') {
-				console.log('我是2 是分享');
-			} else {
-				this.exitLogin();
-			}
-			// #endif
-		},
-		// 退出登录
-		exitLogin() {
-			uni.showModal({
-				content: '是否要退出？',
-				confirmText: '退出',
-				confirmColor: '#0099ff',
-				cancelColor: '#000000',
-				success: res => {
-					if (res.confirm) {
-						this.wxUserInfo = {};
-						uni.removeStorageSync('token');
-						uni.removeStorageSync('wxUserInfo');
-						uni.removeStorageSync('noticeList');
-						uni.removeStorageSync('pamesList');
-						getApp().globalData.token = null;
-						getApp().globalData.wxUserInfo = {};
-						uni.reLaunch({
-							url: '/subpages/login/login'
-						});
-					}
-				}
-			});
-		}
-	},
-	computed: {
-		...mapState('edu', ['eduSwitch'])
-	}
+    toLogin() {
+      if (this.wxUserInfo) {
+        uni.navigateTo({
+          url: '/subpages/userInfo/userInfo'
+        });
+        return;
+      }
+      uni.navigateTo({
+        url: '/subpages/login/login'
+      });
+    },
+    async getNewList() {
+      // 获取消息数目
+      // const res = await systemUsermsgnoticeListunread_Get()
+      // if (res.data.code === 200) {
+      // 	this.otherInfo[3].num = res.data.data.length
+      // }
+    },
+    // 获取自己信息
+    getUserInfo() {
+      if (Object.keys(this.wxUserInfo).length !== 0) return
+      systemTinyuserGetInfo_Get().then(res => {
+        console.log('获取个人信息', res);
+        if (res.data.code == 200) {
+          this.wxUserInfo = res.data.user;
+          this.otherInfo[0].num = res.data.user.integral;
+          getApp().globalData.wxUserInfo = res.data.user;
+          uni.setStorageSync('wxUserInfo', res.data.user);
+          this.signInNote();
+        }
+      });
+    },
+    // 导航栏点击跳转
+    navOtherItemClick(path, index) {
+      console.log(index);
+      uni.navigateTo({
+        url: path
+      });
+    },
+    navItemClick(path) {
+      console.log(path);
+      uni.navigateTo({
+        url: path
+      });
+    },
+    toDetail(name) {
+      console.log(name);
+      // #ifdef MP-WEIXIN
+      if (name === '个人信息') {
+        this.toLogin();
+      } else if (name === '联系客服') {
+        console.log('我是1 是客服');
+      } else if (name == '收货地址') {
+        uni.navigateTo({
+          url: '/subpages/receivAddress/receivAddress'
+        });
+      } else if (name === '关于我们') {
+        uni.navigateTo({
+          url: '/subpages/aboutUs/aboutUs'
+        });
+      } else if (name === '分享微音') {
+        console.log('我是3 是分享');
+      } else {
+        this.exitLogin();
+      }
+      // #endif
+      // #ifdef MP-QQ
+      if (name === '个人信息') {
+        this.toLogin();
+      } else if (name === '关于我们') {
+        uni.navigateTo({
+          url: '/subpages/aboutUs/aboutUs'
+        });
+      } else if (name === '分享微音') {
+        console.log('我是2 是分享');
+      } else {
+        this.exitLogin();
+      }
+      // #endif
+    },
+    // 退出登录
+    exitLogin() {
+      uni.showModal({
+        content: '是否要退出？',
+        confirmText: '退出',
+        confirmColor: '#0099ff',
+        cancelColor: '#000000',
+        success: res => {
+          if (res.confirm) {
+            this.wxUserInfo = {};
+            uni.removeStorageSync('token');
+            uni.removeStorageSync('wxUserInfo');
+            uni.removeStorageSync('noticeList');
+            uni.removeStorageSync('pamesList');
+            getApp().globalData.token = null;
+            getApp().globalData.wxUserInfo = {};
+            uni.reLaunch({
+              url: '/subpages/login/login'
+            });
+          }
+        }
+      });
+    }
+  },
+  computed: {
+    ...mapState('edu', ['eduSwitch'])
+  }
 };
 </script>
 
 <style lang="scss" scoped>
 .profile_wrap {
-	.bgColor {
-		position: fixed;
-		top: 0;
-		left: 0;
-		right: 0;
-		bottom: 0;
-		background: rgb(245, 245, 245);
-		z-index: -1;
-	}
+  .bgColor {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgb(245, 245, 245);
+    z-index: -1;
+  }
 
-	// 个人信息
-	.topInfo {
-		padding: 20rpx 40rpx 60rpx;
+  // 个人信息
+  .topInfo {
+    padding: 20rpx 40rpx 60rpx;
 
-		.userInfo {
-			display: flex;
-			margin-bottom: 30rpx;
-			align-items: center;
+    .userInfo {
+      display: flex;
+      margin-bottom: 30rpx;
+      align-items: center;
 
-			.user_avator {
-				image {
-					width: 150rpx;
-					height: 150rpx;
-					border: 5rpx solid #fff;
-					border-radius: 50%;
-				}
-			}
+      .user_avator {
+        image {
+          width: 150rpx;
+          height: 150rpx;
+          border: 5rpx solid #fff;
+          border-radius: 50%;
+        }
+      }
 
-			.right {
-				margin-left: 50rpx;
+      .right {
+        margin-left: 50rpx;
 
-				.user {
-					display: flex;
-					flex-direction: column;
+        .user {
+          display: flex;
+          flex-direction: column;
 
-					.name {
-						color: #ff6773;
-						font-weight: bold;
-						font-size: 40rpx;
-						display: block;
-						white-space: nowrap;
-						overflow: hidden;
-						text-overflow: ellipsis;
-						max-width: 40vw;
-					}
+          .name {
+            color: #ff6773;
+            font-weight: bold;
+            font-size: 40rpx;
+            display: block;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 40vw;
+          }
 
-					.desc {
-						padding-top: 10rpx;
-						font-size: 25rpx;
-						color: #707070;
-					}
-				}
-			}
+          .desc {
+            padding-top: 10rpx;
+            font-size: 25rpx;
+            color: #707070;
+          }
+        }
+      }
 
-			.sign {
-				padding: 2vw;
-			}
-		}
+      .sign {
+        padding: 2vw;
+      }
+    }
 
-		.otherInfo {
-			display: flex;
-			justify-content: space-around;
+    .otherInfo {
+      display: flex;
+      justify-content: space-around;
 
-			.bot_item {
-				height: 40rpx;
-				line-height: 40rpx;
-				font-size: 28rpx;
+      .bot_item {
+        height: 40rpx;
+        line-height: 40rpx;
+        font-size: 28rpx;
 
-				.item_text {
-					color: #676767;
-				}
+        .item_text {
+          color: #676767;
+        }
 
-				.item_number {
-					text-align: center;
-					color: #aaa;
-				}
-			}
-		}
-	}
+        .item_number {
+          text-align: center;
+          color: #aaa;
+        }
+      }
+    }
+  }
 
-	.centerInfo {
-		// 横排显示
-		display: flex;
-		justify-content: space-around;
-		background-color: #fff;
-		border-radius: 30rpx;
-		padding: 20rpx 10rpx 40rpx;
-		margin: 0 40rpx 50rpx;
+  .centerInfo {
+    // 横排显示
+    display: flex;
+    justify-content: space-around;
+    background-color: #fff;
+    border-radius: 30rpx;
+    padding: 20rpx 10rpx 40rpx;
+    margin: 0 40rpx 50rpx;
 
-		.myItem {
-			// 5个区域 每个占25%
-			text-align: center;
+    .myItem {
+      // 5个区域 每个占25%
+      text-align: center;
 
-			.myIcon {
-				width: 100rpx;
-				height: 100rpx;
-				line-height: 100rpx;
-				border-radius: 50%;
-				// // 图片居中
-				margin: 10rpx auto;
+      .myIcon {
+        width: 100rpx;
+        height: 100rpx;
+        line-height: 100rpx;
+        border-radius: 50%;
+        // // 图片居中
+        margin: 10rpx auto;
 
-				// 修改图标颜色大小
-				background-image: linear-gradient(45deg, #3dc0d2, #43e3bd);
+        // 修改图标颜色大小
+        background-image: linear-gradient(45deg, #3dc0d2, #43e3bd);
 
-				.fix {
-					color: #fff;
-					font-size: 50rpx;
-				}
-			}
+        .fix {
+          color: #fff;
+          font-size: 50rpx;
+        }
+      }
 
-			// 设置所有图标大小
-			.iconfont {
-				font-size: 55rpx;
-			}
+      // 设置所有图标大小
+      .iconfont {
+        font-size: 55rpx;
+      }
 
-			text {
-				font-size: 26rpx;
-			}
-		}
-	}
+      text {
+        font-size: 26rpx;
+      }
+    }
+  }
 
-	.botInfo {
-		background-color: #fff;
-		border-radius: 30rpx;
-		padding: 30rpx 20rpx;
+  .botInfo {
+    background-color: #fff;
+    border-radius: 30rpx;
+    padding: 30rpx 20rpx;
 
-		button::after {
-			border: none;
-		}
+    button::after {
+      border: none;
+    }
 
-		button {
-			background-color: #fff;
-			border-radius: 0;
-		}
+    button {
+      background-color: #fff;
+      border-radius: 0;
+    }
 
-		.setItem {
-			position: relative;
-			// 纵向排列
-			display: flex;
-			margin-bottom: 50rpx;
-			height: 80rpx;
-			line-height: 60rpx;
-			color: #686868;
+    .setItem {
+      position: relative;
+      // 纵向排列
+      display: flex;
+      margin-bottom: 50rpx;
+      height: 80rpx;
+      line-height: 60rpx;
+      color: #686868;
 
-			.setIcon {
-				display: flex;
-				align-items: center;
-				width: 60rpx;
-				height: 60rpx;
-				// border-radius: 50%;
-				text-align: center;
+      .setIcon {
+        display: flex;
+        align-items: center;
+        width: 60rpx;
+        height: 60rpx;
+        // border-radius: 50%;
+        text-align: center;
 
-				.set-t-icon {
-					width: 45rpx;
-					height: 45rpx;
-				}
-			}
+        .set-t-icon {
+          width: 45rpx;
+          height: 45rpx;
+        }
+      }
 
-			.setInfo {
-				display: flex;
-				// 改变flex布局 纵向排列
-				flex-direction: column;
-				margin-left: 20rpx;
+      .setInfo {
+        display: flex;
+        // 改变flex布局 纵向排列
+        flex-direction: column;
+        margin-left: 20rpx;
 
-				.setName {
-					font-size: 35rpx;
-				}
-			}
+        .setName {
+          font-size: 35rpx;
+        }
+      }
 
-			.icon2 {
-				position: absolute;
-				right: 15rpx;
-				color: #ccc;
-				font-size: 40rpx;
-			}
-		}
-	}
+      .icon2 {
+        position: absolute;
+        right: 15rpx;
+        color: #ccc;
+        font-size: 40rpx;
+      }
+    }
+  }
 }
 </style>

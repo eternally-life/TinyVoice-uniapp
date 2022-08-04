@@ -93,6 +93,9 @@ export default {
       this.show = false
       // console.log('close');
     },
+    onPullDownRefresh(){
+      this.$refs.smallVoice.pullDownRefresh()
+    },
 
 
     // 发表跳转
