@@ -16,7 +16,7 @@
 
 				<view class="item_list">
 					<view class="item_time">
-						{{$u.timeFrom(item.createTime,'yyyy年mm月dd日')}}
+						{{$u.timeFormat(item.createTime,'yyyy-mm-dd')}}
 					</view>
 					<u-gap height="1" bg-color="#bbb"></u-gap>
 					<view class="item_content">
@@ -61,7 +61,7 @@
 				communityTinyservenoteByName_Get({
 					userName: this.userName
 				}).then(res => {
-					console.log('返回res如下：', res);
+					// console.log('返回res如下：', res);
 					let dataList = res.data.data
 					if (dataList.length > 0) {
 						this.isShow = true;
@@ -126,7 +126,7 @@
 			position: relative;
 			background-color: #fff;
 			padding: 40rpx;
-			margin: 20rpx 20rpx;
+			margin: 20rpx 0rpx;
 			border-radius: 30rpx;
 			box-shadow: 5rpx 5rpx 5px #ccc;
 
@@ -138,6 +138,8 @@
 			}
 
 			.item_list {
+				height: 150rpx;
+				box-shadow: #d5d5d5 3rpx ;
 				display: flex;
 				flex-direction: column;
 				margin: 60rpx 10rpx;

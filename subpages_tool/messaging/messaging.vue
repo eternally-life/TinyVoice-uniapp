@@ -2,7 +2,7 @@
 	<view class="wrap">
 		<view class="wrap_message">
 			<view class="message_name">
-				<u--input placeholder="输入Ta的名字或暗号" inputAlign="center" border="bottom" v-model="toName" @change="change"></u--input>
+				<u--input placeholder="输入Ta的名字或暗号" inputAlign="center" border="bottom" v-model="toName"></u--input>
 			</view>
 			<view class="message_content">
 				<u--textarea v-model="messages" placeholder="给Ta的留言" border="none"></u--textarea>
