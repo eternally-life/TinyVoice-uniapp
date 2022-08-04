@@ -233,6 +233,7 @@ export default {
         content: this.replyText,
         // image: '',
       })
+      console.log(res.data);
       //有问题
       if (res.data.code === 200) {
         uni.$emit('refresh')
@@ -272,6 +273,7 @@ export default {
   computed: {
     calculateTime() {
       return (time) => {
+        console.log(new Date().getTime(),time);
         if (new Date().getTime() - time > 1000 * 60 * 60 * 24 * 2) {
           return uni.$u.date(time, 'yyyy-mm-dd')
         } else {

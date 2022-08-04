@@ -163,6 +163,12 @@ export default {
     })
   },
   methods: {
+    pullDownRefresh(){
+      this.smallVoiceData = []
+      this.currentPageNumber = 1
+      this.voiceType = 1
+      this.getSmallVoiceData()
+    },
     async getSmallVoiceData() {
       try {
         if (Object.keys(this.userinfo).length === 0) {

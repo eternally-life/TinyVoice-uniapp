@@ -30,7 +30,7 @@
 			"path": "pages/community/community",
 			"style": {
 				"navigationBarTitleText": "微音",
-				"enablePullDownRefresh": false
+				"enablePullDownRefresh": true
 			}
 		},
 		{
