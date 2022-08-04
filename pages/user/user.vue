@@ -85,6 +85,7 @@ import { mapState, mapMutations } from 'vuex';
 import { systemTinyuserGetInfo_Get } from '@/api/SYSTEM/用户信息.js';
 import { systemParamsNoteList_Get, systemParamsConfList_Get } from '@/api/SYSTEM/参数字典公告.js';
 import { systemSyssignPage_Get, systemSyssignSave_Post } from '@/api/SYSTEM/签到.js';
+import { systemSysmsgPage_Get } from '@/api/SYSTEM/消息提醒.js';
 import { getSetInfo_QQ, getSetInfo_WX, getNaviList, getOtherInfo_WX, getOtherInfo_QQ } from './datalist.js';
 export default {
 	data() {
@@ -121,11 +122,11 @@ export default {
 		uni.$on('refreshNews', () => {
 			this.getNewList();
 		});
-		this.getNoticeList();
 	},
 	onShow() {
 		//更新页面静态数据
 		this.wxUserInfo = getApp().globalData.wxUserInfo;
+		this.getNoticeList();
 	},
 	onShareTimeline() {
 		// 用户点击右上角分享
@@ -155,7 +156,21 @@ export default {
 		},
 
 		// 获通知列表
-		async getNoticeList() {},
+		getNoticeList() {
+			systemSysmsgPage_Get({
+				pageNum: 1 /** 第几页    string required:false */,
+				pageSize: 100 /** 页码大小    string required:false */
+			}).then(res => {
+				if (res.data.data.records.length > 0) {
+					console.log('消息', res.data.data.records);
+					 this.otherInfo.forEach(value=>{
+						if(value.text=='消息'){
+							value.num = res.data.data.records.length;
+						}
+					})
+				}
+			});
+		},
 		/* 跳转教务首页 */
 		toHome() {
 			/* 初始化教务相关设置 */
