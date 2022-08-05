@@ -68,7 +68,7 @@
 			this.skuId = opt.skuId
 			this.getSkuIdPames()
 			this.addrId = opt.addrId
-			this.value = opt.num
+			this.value = opt.num | 1
 			this.invoryMax = this.orderDetail.inventory
 			this.wxUserInfo = getApp().globalData.wxUserInfo
 			this.getAddressIdData()
@@ -97,18 +97,17 @@
 			},
 			async confirmPayOrder() {
 				this.orderParmes.addrId = this.addrId
+				const obj = {}
+				obj[this.orderDetail.skuId] = this.value
+				console.log(this.orderDetail.skuId, this.value);
 				if (!this.orderParmes.addrId) {
 					return this.selfMsg('请先选择收货地址', 'warning')
 				}
 				this.orderParmes.orderData.commodityIds = [this.orderDetail.commodityId]
 				// Object.assign(this.orderParmes.orderData.skuIdAndQuantity, this.orderDetail.skuId, this.orderDetail
 				// 	.inventory)
-				let obj = {}
-				let key = this.orderDetail.skuId
-
-				let value = this.value
-				obj[key] = value
 				this.orderParmes.orderData.skuIdAndQuantity = obj
+
 				const res = await payTinymallCreateOrder_Post(this.orderParmes)
 				if (res.data.code === 200) {
 					this.wxPay(res)
@@ -129,7 +128,7 @@
 						this.selfMsg('支付成功！', 'success')
 					},
 					fail: res => {
-						this.selfMsg('支付失败', 'error')
+						this.selfMsg('可在我的订单重新支付', 'error')
 					}
 				})
 
@@ -156,12 +155,16 @@
 
 			.left {
 				.name {
-					font-size: 48rpx;
-					max-width: 200rpx; // 允许最宽400rpx
-					white-space: nowrap; // 不允许换行
+					max-width: 200rpx;
 					font-weight: bolder;
 					color: #60C5BA;
 					margin-bottom: 10rpx;
+					font-size: 26rpx;
+					overflow: hidden;
+					text-overflow: ellipsis;
+					display: -webkit-box;
+					-webkit-box-orient: vertical;
+					-webkit-line-clamp: 2;
 				}
 
 				.num {

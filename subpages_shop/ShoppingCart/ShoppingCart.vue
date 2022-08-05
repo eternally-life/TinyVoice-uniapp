@@ -215,7 +215,7 @@
 						this.selfMsg('支付成功！', 'success')
 					},
 					fail: res => {
-						this.selfMsg('支付失败', 'error')
+						this.selfMsg('可在我的订单重新支付', 'error')
 					}
 				})
 
