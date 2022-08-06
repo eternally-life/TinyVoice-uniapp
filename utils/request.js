@@ -1,6 +1,7 @@
 // const BASE_URL = 'http://498812h08b.zicp.vip'
 const BASE_URL = 'http://106.52.58.11:12574' // 开发api
 // const BASE_URL = 'https://tinyvoice.glowxq.com:10000' 
+// const BASE_URL = 'http://127.0.0.1:8080' 
 const loginUtil = require('./loginUtil.js')
 
 export function request({

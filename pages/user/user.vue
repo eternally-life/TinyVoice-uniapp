@@ -8,7 +8,7 @@
           <image :src="
             wxUserInfo.avatar
               ? wxUserInfo.avatar
-              : 'https://tiny-voice.oss-cn-guangzhou.aliyuncs.com/logo/QQ%E5%9B%BE%E7%89%8720211101001355.jpg'
+              : 'http://tinyvoice-oss-cdn.glowxq.com/logo/logo.jpg'
           " class="userAvatar" />
         </view>
         <view class="right" @click="toLogin">
