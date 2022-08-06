@@ -171,7 +171,14 @@
 					}
 				},
 				{
-					"path": "voice_details/VoiceDetails",
+					"path": "voice_details/voiceDetails",
+					"style": {
+						"navigationBarTitleText": "微音详情",
+						"enablePullDownRefresh": false
+					}
+				},
+				{
+					"path": "voice_details/oppositeDetails",
 					"style": {
 						"navigationBarTitleText": "微音详情",
 						"enablePullDownRefresh": false

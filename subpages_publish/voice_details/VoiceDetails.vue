@@ -44,7 +44,7 @@
       </view>
       <view class="user_ack_wrap">
         <view class="not_reply" v-if="
-          currentShowVoice.replyList.length === 0 &&
+          (currentShowVoice.replyList.length === 0 || !currentShowVoice.replyList) &&
           currentReply.length === 0
         ">暂无评论</view>
         <!-- 临时发布作为展示的评论 -->
@@ -57,20 +57,28 @@
           <view class="ack_center">
             <text class="name">{{ userinfo.nickName }}</text>
             <text class="content">{{ reply.content }}</text>
-            
+
             <view class="image" v-if="reply.image !== '' && reply.image !== null && reply.image !== undefined">
               <image :src="reply.image" mode="aspectFill" @click="showFullSceenImage(reply.image)" />
             </view>
             <view class="time">
-              <view>{{ reply.createTime ? calculateTime(reply.createTime) : '未知' }}</view>
-              <!-- <view @click="replyLayerFocus(reply)">回复</view> -->
+              <!-- <view>{{ reply.createTime ? calculateTime(reply.createTime) : '未知' }}</view> -->
+              <view>刚刚</view>
+              <view @click="replyLayerFocus(reply)">回复</view>
+            </view>
+            <view class="current_layer_reply" v-if="reply.replyLList && reply.replyLList.length !== 0">
+              <view class="current_layer_reply_item" v-for="(replyLayer, replyLayerIndex) in reply.replyLList"
+                :key="replyLayerIndex">
+                <text class="current_layer_name">{{ replyLayer.nickName }} ：</text>
+                <text class="current_layer_content">{{ replyLayer.content }}</text>
+              </view>
             </view>
           </view>
           <view class="ack_right">
           </view>
         </view>
         <!-- 接口获取的评论 -->
-        <view class="user_ack_item" v-for="reply in currentShowVoice.replyList" :key="reply.replyId">
+        <view class="user_ack_item" v-for="(reply, index) in currentShowVoice.replyList" :key="reply.replyId">
           <view class="ack_left">
             <view class="ack_avatar">
               <image :src="reply.avatar" mode="aspectFill" />
@@ -86,7 +94,8 @@
               <view>{{ reply.createTime ? calculateTime(reply.createTime) : '未知' }}</view>
               <view>回复</view>
             </view>
-            <view class="current_layer_reply" v-if="reply.replyLList && reply.replyLList.length !== 0">
+            <view class="current_layer_reply" v-if="reply.replyLList && reply.replyLList.length !== 0"
+              @click.stop="enterOppositePage(index)">
               <view class="current_layer_reply_item" v-for="(replyLayer, replyLayerIndex) in reply.replyLList"
                 :key="replyLayerIndex">
                 <text class="current_layer_name">{{ replyLayer.nickName }} ：</text>
@@ -114,11 +123,10 @@
     <view class="reply_user_input" v-if="currentReplyLayer.inputFocus">
       <u-input class="input" :placeholder="'回复' + currentReplyLayer.replyedNickname + '：'" border="surround" clearable
         shape="circle" placeholderStyle="color:#60C5BA" color="#60C5BA" maxlength="100" @confirm="handleReplyLayer"
-        focus v-model="currentReplyLayer.content">
+        focus v-model="currentReplyLayer.content" @blur="replyInputBlur">
         <template slot="suffix">
           <view class="input_right">
-            <u-button :customStyle="customStyle" size="small" @click="handleReplyLayer"
-              @blur="currentReplyLayer.inputFocus = false">回复</u-button>
+            <u-button :customStyle="customStyle" size="small" @click="handleReplyLayer">回复</u-button>
           </view>
         </template>
       </u-input>
@@ -181,12 +189,26 @@ export default {
   onLoad() {
     const eventChannel = this.getOpenerEventChannel()
     eventChannel.on('acceptVoiceData', ({ data }) => {
-      console.log(data);
       this.currentShowVoice = data
       this.currentShowVoice.replyList && this.currentShowVoice.replyList.reverse()
     })
   },
   methods: {
+    enterOppositePage(index) {
+      uni.navigateTo({
+        url: '/subpages_publish/voice_details/oppositeDetails',
+        success: (res) => {
+          res.eventChannel.emit('acceptOppositeData', {
+            data: this.currentShowVoice.replyList[index],
+          })
+        },
+      })
+    },
+    replyInputBlur() {
+      setTimeout(() => {
+        this.currentReplyLayer.inputFocus = false
+      }, 500);
+    },
     replyLayerFocus(layerContent) {
       this.currentReplyLayer.inputFocus = false
       this.$nextTick(() => {
@@ -198,16 +220,34 @@ export default {
     },
     //回复一层回复
     async handleReplyLayer() {
+      if (this.currentReplyLayer.content === '') {
+        uni.showToast({
+          title: '消息不能为空',
+          icon: 'none'
+        })
+        return
+      }
       const res = await communityTinybbsReplylsave_Post({
         image: this.currentReplyLayer.image,
         replyId: this.currentReplyLayer.replyedId,
         content: this.currentReplyLayer.content
       })
+      console.log(res.data);
       if (res.data.code === 200) {
         let wxUserInfo = getApp().globalData.wxUserInfo
         this.currentShowVoice.replyList.map(v => {
           if (v.replyId === this.currentReplyLayer.replyedId) {
-            console.log(v);
+            if (!v.replyLList) v.replyLList = []
+            v.replyLList.push({
+              nickName: wxUserInfo.nickName ? wxUserInfo.nickName : '我',
+              content: this.currentReplyLayer.content,
+              avatar: wxUserInfo.avatar
+            })
+          }
+        })
+        //临时
+        this.currentReply.map(v => {
+          if (v.replyId === this.currentReplyLayer.replyedId) {
             if (!v.replyLList) v.replyLList = []
             v.replyLList.push({
               nickName: wxUserInfo.nickName ? wxUserInfo.nickName : '我',
@@ -235,17 +275,11 @@ export default {
         content: this.replyText,
         // image: '',
       })
-      console.log(res.data);
       //有问题
       if (res.data.code === 200) {
         uni.$emit('refresh')
         this.currentReply = [
-          {
-            createTime: new Date(),
-            content: this.replyText,
-            likeNum: 0,
-            image: ''
-          },
+          res.data.data,
           ...this.currentReply,
         ]
         this.replyText = ''
@@ -275,7 +309,6 @@ export default {
   computed: {
     calculateTime() {
       return (time) => {
-        console.log(new Date().getTime(),time);
         if (new Date().getTime() - time > 1000 * 60 * 60 * 24 * 2) {
           return uni.$u.date(time, 'yyyy-mm-dd')
         } else {
@@ -433,6 +466,13 @@ export default {
     }
 
     .user_ack_wrap {
+
+      .not_reply{
+        color: #707070;
+        font-size: 26rpx;
+        padding-bottom: 40rpx;
+        margin-left: 40rpx;
+      }
       .user_ack_item {
         display: flex;
         align-items: flex-start;

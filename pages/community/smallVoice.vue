@@ -214,7 +214,7 @@ export default {
     //查看微音详情
     enterVoiceDetail(index) {
       uni.navigateTo({
-        url: '/subpages_publish/voice_details/VoiceDetails',
+        url: '/subpages_publish/voice_details/voiceDetails',
         success: (res) => {
           res.eventChannel.emit('acceptVoiceData', {
             data: this.smallVoiceData[index],
