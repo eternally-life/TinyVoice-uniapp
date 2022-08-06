@@ -1,26 +1,31 @@
 <template>
 	<view class="contact">
-		<!-- 左侧滚动区域 -->
-		<scroll-view class="left" scroll-y>
-			<view @click="btnColor(index,i.mallId)" :class="active === index ? 'active' : ''"
-				v-for="(i,index) in commodityCate" :key="i.mallId">
-				{{i.name}}
-			</view>
-		</scroll-view>
-		<!-- 右侧滚动区域 -->
-		<scroll-view class="right" scroll-y>
-
-			<view class="rightItem">
-				<view class="listItem" v-for="item in commodityList" :key="item.commodityId">
-					<view class="list" @click="toShopDetails(item)">
-						<image class="cover" :src="item.image"></image>
-						<text class="title">{{item.name}}</text>
-					</view>
+		<u-sticky>
+			<u-notice-bar :text="noticeTitle"></u-notice-bar>
+		</u-sticky>
+		<view class="scroll">
+			<!-- 左侧滚动区域 -->
+			<scroll-view class="left" scroll-y>
+				<view @click="btnColor(index,i.mallId)" :class="active === index ? 'active' : ''"
+					v-for="(i,index) in commodityCate" :key="i.mallId">
+					{{i.name}}
 				</view>
-				<u-empty v-if="!commodityList.length" mode="data" icon="http://cdn.uviewui.com/uview/empty/data.png">
-				</u-empty>
-			</view>
-		</scroll-view>
+			</scroll-view>
+			<!-- 右侧滚动区域 -->
+			<scroll-view class="right" scroll-y>
+				<view class="rightItem">
+					<view class="listItem" v-for="item in commodityList" :key="item.commodityId">
+						<view class="list" @click="toShopDetails(item)">
+							<image class="cover" :src="item.image"></image>
+							<text class="title">{{item.name}}</text>
+						</view>
+					</view>
+					<u-empty v-if="!commodityList.length" mode="data"
+						icon="http://cdn.uviewui.com/uview/empty/data.png">
+					</u-empty>
+				</view>
+			</scroll-view>
+		</view>
 		<u-toast ref="uToast"></u-toast>
 	</view>
 </template>
@@ -30,6 +35,10 @@
 		payTinymallPageMallType_Get,
 		payTinymallPageMallCommodity_Get
 	} from '@/api/商城模块/商品信息下单.js'
+	import {
+		systemParamsNoteList_Get,
+		systemParamsNotenoticeId_Get
+	} from '@/api/SYSTEM/参数字典公告.js'
 	export default {
 		data() {
 			return {
@@ -40,11 +49,13 @@
 				// 右侧数据
 				commodityList: [],
 				img_url: 'http://www.itcast.cn/2018czydz/images/gywmban.jpg',
-				isLoading: true
+				isLoading: true,
+				noticeTitle: ''
 			}
 		},
 		onLoad() {
 			this.getcommodityCate()
+			this.getNoticeByNoticeID()
 			// uni.$emit('refresh')
 		},
 		onPullDownRefresh() {
@@ -103,6 +114,12 @@
 				// 	// indicator:"number"
 				// })
 			},
+			async getNoticeByNoticeID() {
+				const res = await systemParamsNotenoticeId_Get({
+					noticeId: 13
+				})
+				this.noticeTitle = res.data.data.noticeTitle
+			},
 			selfMsg(msg, mod) {
 				this.$refs.uToast.show({
 					type: mod,
@@ -120,75 +137,79 @@
 
 	.contact {
 		height: 100%;
-		display: flex;
 
-		.left {
-			width: 200rpx;
+		.scroll {
 			height: 100%;
-			border-right: 2rpx solid #ffffff;
-			background-color: #f0f0f0;
+			display: flex;
 
-			view {
-				height: 120rpx;
-				line-height: 120rpx;
-				color: #333;
-				text-align: center;
-				font-size: 30rpx;
-				border-top: 2rpx solid #eee;
-			}
+			// position: absolute;
+			.left {
+				width: 200rpx;
+				height: 100%;
+				border-right: 2rpx solid #ffffff;
+				background-color: #f0f0f0;
 
-			.active {
-				background: #ffffff;
-				color: rgb(42, 183, 149);
-			}
-		}
-
-		.right {
-			flex: 1;
-			padding: 20rpx 40rpx;
-			background-color: #eeeeee;
-
-			.rightItem {
-				display: flex;
-				flex-wrap: wrap;
-				justify-content: space-between;
-
-				.listItem {
-					width: 46%;
+				view {
+					height: 120rpx;
+					line-height: 120rpx;
+					color: #333;
 					text-align: center;
-					background-color: #ffffff;
-					margin-bottom: 25rpx;
-					border-radius: 20rpx;
-
-					.list {
-						padding: 20rpx 10rpx;
-
-						.cover {
-							width: 150rpx;
-							height: 150rpx;
-						}
-
-						.title {
-							font-size: 26rpx;
-							margin-top: 10rpx;
-							color: rgb(56, 56, 56);
-							word-break: break-all;
-							text-overflow: ellipsis;
-							display: -webkit-box;
-							/** 对象作为伸缩盒子模型显示 **/
-							-webkit-box-orient: vertical;
-							/** 设置或检索伸缩盒对象的子元素的排列方式 **/
-							-webkit-line-clamp: 2;
-							/** 显示的行数 **/
-							overflow: hidden;
-							/** 隐藏超出的内容 **/
-						}
-					}
+					font-size: 30rpx;
+					border-top: 2rpx solid #eee;
 				}
 
-
+				.active {
+					background: #ffffff;
+					color: rgb(42, 183, 149);
+				}
 			}
 
+			.right {
+				flex: 1;
+				padding: 20rpx 40rpx;
+				background-color: #eeeeee;
+
+				.rightItem {
+					display: flex;
+					flex-wrap: wrap;
+					justify-content: space-between;
+
+					.listItem {
+						width: 46%;
+						text-align: center;
+						background-color: #ffffff;
+						margin-bottom: 25rpx;
+						border-radius: 10rpx;
+
+						.list {
+							padding: 20rpx 10rpx;
+
+							.cover {
+								width: 180rpx;
+								height: 180rpx;
+							}
+
+							.title {
+								font-size: 26rpx;
+								color: rgb(56, 56, 56);
+								word-break: break-all;
+								text-overflow: ellipsis;
+								display: -webkit-box;
+								/** 对象作为伸缩盒子模型显示 **/
+								-webkit-box-orient: vertical;
+								/** 设置或检索伸缩盒对象的子元素的排列方式 **/
+								-webkit-line-clamp: 2;
+								/** 显示的行数 **/
+								overflow: hidden;
+								/** 隐藏超出的内容 **/
+							}
+						}
+					}
+
+
+				}
+
+			}
 		}
 	}
 </style>
