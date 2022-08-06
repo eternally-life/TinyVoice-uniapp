@@ -285,7 +285,16 @@
 					}
 
 				}
-			]
+			    ,{
+                    "path" : "resourcesDetail/resourcesDetail",
+                    "style" :                                                                                    
+                {
+                    "navigationBarTitleText": "资源详情",
+                    "enablePullDownRefresh": false
+                }
+                
+                }
+            ]
 		}
 	],
 	"globalStyle": {

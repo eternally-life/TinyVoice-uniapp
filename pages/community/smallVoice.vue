@@ -84,7 +84,10 @@
 </template>
 
 <script>
-import { communityTinybbsPage_Get, communityTinybbsLike_Get } from '@/api/社区模块/微音论坛.js'
+import {
+  communityTinybbsPage_Get,
+  communityTinybbsLike_Get
+} from '@/api/社区模块/微音论坛.js'
 export default {
   data() {
     return {
@@ -95,16 +98,15 @@ export default {
       userinfo: {},
       currentPageNumber: 1,
       voiceType: 1,
-      menuList: [
-        {
-          name: '微音',
-        },
-        {
-          name: '失误招领',
-          badge: {
-            isDot: false
-          }
-        },
+      menuList: [{
+        name: '微音',
+      },
+      {
+        name: '失误招领',
+        badge: {
+          isDot: false
+        }
+      },
       ],
       isNoMore: false
     }
@@ -163,12 +165,14 @@ export default {
     })
   },
   methods: {
-    pullDownRefresh(){
+    //下拉刷新
+    pullDownRefresh() {
       this.smallVoiceData = []
       this.currentPageNumber = 1
       this.voiceType = 1
       this.getSmallVoiceData()
     },
+    //发送请求
     async getSmallVoiceData() {
       try {
         if (Object.keys(this.userinfo).length === 0) {
@@ -226,12 +230,13 @@ export default {
     getUserinfo() {
       this.userinfo = getApp().globalData.wxUserInfo
     },
-    //触底加载更多
+    //发布跳转
     publishVoice() {
       uni.navigateTo({
         url: '/subpages_publish/publishVoice/publishVoice',
       })
     },
+    //标签更换
     async tabsChange(payload) {
       if (payload.index === 1) {
         this.voiceType = 2
@@ -246,6 +251,7 @@ export default {
       this.currentPageNumber = 1
       await this.getSmallVoiceData()
     },
+    //显示全屏图像
     showFullSceenImage(url) {
       uni.previewImage({
         urls: [url],
