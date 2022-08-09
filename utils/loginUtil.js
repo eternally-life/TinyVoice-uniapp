@@ -112,6 +112,15 @@ export function wxLogin() {
 					return
 				}
 				if (res.data.code === 5555) {
+					uni.navigateTo({
+						url: '/subpages/login/login?num=1',
+						success: () => {
+							uni.showToast({
+								title: '手机号未绑定，绑定即可微信登录',
+								icon: 'none'
+							})
+						}
+					})
 					return
 				}
 				uni.navigateTo({
