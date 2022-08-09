@@ -18,7 +18,7 @@
 					<view class="right-icon">
 						<view class="" v-if="disabled"
 							style="font-size: 24rpx;width: 140rpx;padding: 20rpx 0;color: #60c5ba;"
-							@tap="GetVerificationCode">获取验证码</view>
+							@tap="GetVerificationCode(phonenumber)">获取验证码</view>
 						<view class="" v-else style="font-size: 24rpx;width: 140rpx;padding: 20rpx 0;">重新获取{{timer}}s
 						</view>
 					</view>
@@ -68,6 +68,40 @@
 			@close="showMsg = false"></u-modal>
 		<u-modal :show="showTips" title="温馨提示" :content='contentTips' :closeOnClickOverlay="true"
 			@confirm="showTips = false" @close="showTips = false"></u-modal>
+		<u-popup :show="showBindPhone" @close="showBindPhone = false" mode="center" :round="10">
+			<view class="sales">
+				<view class="salesItem">
+					<view class="name">未绑定手机号，绑定即可微信登录</view>
+					<!-- <view class="content">
+						<u--input placeholder="请输入绑定的手机号" border="surround" clearable v-model="bindPhoneNumber">
+						</u--input>
+					</view> -->
+					<view class="content ">
+						<view class="title">
+							<view class="iconfont icon-shouji"></view>
+						</view>
+						<input type="text" style="width: 100%;" placeholder="请输入手机号" v-model="bindPhoneNumber" />
+					</view>
+					<view class="content ">
+						<view class="title">
+							<view class="iconfont icon-yanzhengma1"></view>
+						</view>
+						<input style="width: 100%;" placeholder="请输入验证码" v-model="bindCode" />
+						<view class="right-icon">
+							<view class="" v-if="disabled"
+								style="font-size: 24rpx;width: 140rpx;padding: 20rpx 0;color: #60c5ba;"
+								@tap="GetVerificationCode(bindPhoneNumber)">获取验证码</view>
+							<view class="" v-else style="font-size: 24rpx;width: 140rpx;padding: 20rpx 0;">
+								重新获取{{timer}}s
+							</view>
+						</view>
+					</view>
+				</view>
+				<view class="nextStep">
+					<button class="btn" @click="cancelBindPhone">确定绑定</button>
+				</view>
+			</view>
+		</u-popup>
 	</view>
 </template>
 
@@ -82,7 +116,9 @@
 		systemParamsNoteList_Get,
 		systemParamsConfList_Get
 	} from '@/api/SYSTEM/参数字典公告.js'
-
+	import {
+		systemTinyuserUpdatePhonenumber_Post
+	} from '@/api/SYSTEM/用户信息.js'
 	let timer = null
 	export default {
 		data() {
@@ -95,7 +131,10 @@
 				content: '很抱歉我们无法提供密码修改服务。\r\n\n修改密码请登录学校内网 192.168.5.26 进行修改。\r\n\n若是忘记密码，请咨询 [辅导员] 或联系 [教秘] 进行修改',
 				showTips: false, // 用于提示QQ的登录问题
 				contentTips: '暂不支持qq注册，敬请谅解。\r\n\n如想使用qq小程序，请先在微信小程序<<校园微音>>注册登录！',
-				showJugdesButton: null
+				showJugdesButton: null,
+				showBindPhone: false,
+				bindPhoneNumber: "",
+				bindCode: ""
 			}
 		},
 		onLoad() {
@@ -175,12 +214,12 @@
 				// #endif
 
 			},
-			async GetVerificationCode() {
-				if (!uni.$u.test.mobile(this.phonenumber)) {
+			async GetVerificationCode(phone) {
+				if (!uni.$u.test.mobile(phone)) {
 					return this.selfMsg('请填写正确手机号码', 'warning');
 				}
 				const res = await authLoginregisterVerificationCode_Get({
-					phonenumber: this.phonenumber
+					phonenumber: phone
 				})
 				this.selfMsg(res.data.data, 'success');
 				if (res.data.code === 200) {
@@ -372,6 +411,10 @@
 										}
 									})
 									return
+								} else if (reslut.data.code === 5555) {
+									this.showBindPhone = true
+
+									getApp().globalData.loginNum = 1
 								} else {
 									return this.selfMsg(reslut.data.msg, 'warning')
 								}
@@ -384,6 +427,19 @@
 						}
 					})
 				}, 300)
+			},
+
+			async cancelBindPhone() {
+				const res = await systemTinyuserUpdatePhonenumber_Post({
+					code: this.bindCode,
+					phonenumber: this.bindPhoneNumber
+				})
+				console.log(res);
+				if (res.data.code === 200) {
+					this.selfMsg("绑定成功", 'success')
+					this.wxLogin()
+					this.showBindPhone = false
+				}
 			},
 			// 游客模式
 			visit() {
@@ -417,6 +473,52 @@
 
 <style lang="scss" scoped>
 	.content {
+		.sales {
+			// padding: 20rpx 30rpx 0rpx;
+			margin: 40rpx;
+
+			.salesItem {
+
+				.name {
+					padding-bottom: 50rpx;
+					font-weight: bold;
+					text-align: center;
+				}
+
+				.content {
+					border-radius: 50rpx;
+					// background-color: #efefef;
+					border: 1rpx solid #ccc;
+					padding: 1rpx 30rpx;
+					display: flex;
+					align-items: center;
+					min-height: 100rpx;
+					margin: 30rpx 0;
+
+					.title {
+						.iconfont {
+							padding: 0 15rpx;
+							font-size: 38rpx;
+						}
+
+					}
+
+					input {
+						font-size: 30rpx;
+					}
+				}
+			}
+
+			.nextStep {
+				padding-top: 20rpx;
+
+				.btn {
+					background-color: #60C5BA;
+					color: #fff;
+					font-weight: bold;
+				}
+			}
+		}
 
 		.login {
 			background-color: #fff;
