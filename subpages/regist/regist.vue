@@ -38,7 +38,7 @@
 				</view>
 			</view>
 			<view class="loginBtn">
-				<view class="notice" @click="showExplain">点击阅读代表同意《用户隐私协议》</view>
+				<view class="notice" @click="showExplain">{{noticeData.noticeTitle}}</view>
 				<button class="btn" @click="submitRegist">验证注册</button>
 			</view>
 		</view>
@@ -47,7 +47,7 @@
 		<u-modal :show="showAgreement" title="隐私说明" :closeOnClickOverlay="true" @confirm="showAgreement = false"
 			@close="showAgreement = false">
 			<view class="slot-content">
-				<rich-text :nodes="showContent"></rich-text>
+				<rich-text :nodes="noticeData.noticeContent"></rich-text>
 			</view>
 		</u-modal>
 	</view>
@@ -56,10 +56,13 @@
 <script>
 	import {
 		authLoginregisterWxRegister_Post,
-		authLoginregisterVerificationCode_Get
+		authLoginregisterVerificationCode_Get,
+		authLoginregisterWxLogin_Post,
 	} from '@/api/SYSTEM/登录注册.js'
+
 	import {
-		systemParamsNoteList_Get
+		systemParamsNoteList_Get,
+		systemParamsNotenoticeId_Get
 	} from '@/api/SYSTEM/参数字典公告.js'
 	let timer = null;
 	export default {
@@ -90,42 +93,25 @@
 				},
 				showAgreement: false, // 显示隐私协议
 				agreementNum: false, // 判断用户是否点了协议
-				onlineContent: null,
-				content: '1、本小程序致力于为指定学校在校师生提供更加便捷的校园服务\r\n \r\n2、登录/注册 所用账号仅用于识别是否为该校师生，并与该学校系统进行数据对接，为在校师生提供更准确、更个性化的服务。\r\n\n3、所有数据信息来源于该校内网系统，我们仅是将该校内网数据对外网进行映射，所以无法提供忘改密码的功能！！！若忘记密码，可以尝试默认密码、咨询辅导员或联系教秘进行修改\r\n\n4、我们绝不会将用户信息用于其他用途（包括但不限于非法出售用户隐私数据等行为）'
+				noticeData: {}
 			};
 		},
-		computed: {
-			showContent() {
-				return this.onlineContent == null ? this.content : this.onlineContent;
-			}
-		},
+
 		onLoad(options) {
 			this.wxuserInfo = JSON.parse(options.userInfo); // 字符串转对象
 			this.registInfo.nickName = this.wxuserInfo.nickName;
 			this.registInfo.avatar = this.wxuserInfo.avatarUrl;
 			this.registInfo.sex = this.wxuserInfo.gender;
+			this.getNoticeByNoticeID()
 		},
-		onReady() {
-			systemParamsNoteList_Get({
-				noticeId: null /** 公告ID    string required:false */ ,
-				noticeTitle: '隐私说明' /** 公告标题    string required:false */ ,
-				noticeType: null /** 公告类型（1通知 2公告）    string required:false */ ,
-				noticeContent: null /** 公告内容    string required:false */ ,
-				status: null /** 公告状态（0正常 1关闭）    string required:false */ ,
-				searchValue: null /** 搜索值    string required:false */ ,
-				createBy: null /** 创建者    string required:false */ ,
-				createTime: null /** 创建时间    string required:false */ ,
-				updateBy: null /** 更新者    string required:false */ ,
-				updateTime: null /** 更新时间    string required:false */ ,
-				remark: null /** 备注    string required:false */
-			}).then(res => {
-				console.log(res, '44');
-				if (res.data.code == 200) {
-					this.onlineContent = res.data.data[3].noticeContent;
-				}
-			});
-		},
+
 		methods: {
+			async getNoticeByNoticeID() {
+				const res = await systemParamsNotenoticeId_Get({
+					noticeId: 11
+				})
+				this.noticeData = res.data.data
+			},
 			showExplain() {
 				// 点击协议的回调
 				this.showAgreement = true;
@@ -181,12 +167,14 @@
 							authLoginregisterWxRegister_Post(this.registInfo).then(result => {
 								console.log(result);
 								if (result.data.code === 200) {
-									uni.reLaunch({
-										url: '/subpages/login/login',
-										success() {
-											this.$ShowToastNone('注册成功，请重新登录');
-										}
-									});
+									// uni.reLaunch({
+									// 	url: '/subpages/login/login',
+									// 	success() {
+									// 		this.$ShowToastNone('注册成功，请重新登录');
+									// 	}
+									// });
+									this.selfMsg("注册成功", 'success');
+									this.wxLogin()
 									return;
 								} else {
 									return this.selfMsg(result.data.msg, 'warning');
@@ -201,6 +189,45 @@
 					});
 				}, 300);
 				// this.$refs.uUpload.upload()
+			},
+			wxLogin() {
+				uni.showLoading({
+					title: '正在登录',
+					mask: true
+				})
+				if (timer !== null) {
+					clearTimeout(timer)
+				}
+				timer = setTimeout(() => {
+					uni.login({
+						success: (res) => {
+							authLoginregisterWxLogin_Post({
+								wxCode: res.code
+							}).then(reslut => {
+								console.log(reslut);
+								if (reslut.data.code === 200) {
+									// 存储全局 token
+									getApp().globalData.token = reslut.data.data.access_token
+									uni.setStorageSync("token", reslut.data.data.access_token)
+									uni.reLaunch({
+										url: '/pages/user/user',
+										success: res => {
+											this.$ShowToastNone('微信登录成功')
+										}
+									})
+									return
+								} else {
+									return this.selfMsg(reslut.data.msg, 'warning')
+								}
+							})
+							uni.hideLoading()
+						},
+						fail: (err) => {
+							uni.hideLoading()
+							console.log(err, "登录失败");
+						}
+					})
+				}, 300)
 			},
 			//消息提示
 			selfMsg(msg, mod) {

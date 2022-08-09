@@ -111,6 +111,9 @@ export function wxLogin() {
 					setNoticeList()
 					return
 				}
+				if (res.data.code === 5555) {
+					return
+				}
 				uni.navigateTo({
 					url: '/subpages/login/login',
 					success: () => {

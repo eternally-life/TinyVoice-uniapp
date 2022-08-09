@@ -30,7 +30,10 @@
 							<view class="center">
 								<text class="name">{{i.commodityName}}
 								</text>
-								<text class="desc">{{i.content}}</text>
+								<!-- <text class="desc">
+									{{i.content}}
+								</text> -->
+								<u-parse :content="i.content ? i.content : '无'" class="desc"></u-parse>
 							</view>
 							<view class="right">
 								<text class="price">￥{{i.totalPrice/100}}</text>
