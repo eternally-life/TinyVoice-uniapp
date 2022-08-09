@@ -102,6 +102,7 @@
 				</view>
 			</view>
 		</u-popup>
+		<u-notify ref="uNotify"></u-notify>
 	</view>
 </template>
 
@@ -137,7 +138,10 @@
 				bindCode: ""
 			}
 		},
-		onLoad() {
+		onLoad(opt) {
+			if (opt.num) {
+				this.showBindPhone = true
+			}
 			this.getPamesList()
 		},
 		methods: {
@@ -413,8 +417,6 @@
 									return
 								} else if (reslut.data.code === 5555) {
 									this.showBindPhone = true
-
-									getApp().globalData.loginNum = 1
 								} else {
 									return this.selfMsg(reslut.data.msg, 'warning')
 								}
@@ -430,15 +432,27 @@
 			},
 
 			async cancelBindPhone() {
+				if (!this.bindPhoneNumber) {
+					return this.selfNotify('手机号不能为空', 'warning')
+				}
+				if (!uni.$u.test.mobile(this.bindPhoneNumber)) {
+					return this.selfNotify('请填写正确手机号码', 'warning')
+				}
+				if (!this.bindCode) {
+					return this.selfNotify('验证码不能为空', 'warning')
+				}
+				getApp().globalData.loginNum = 1
 				const res = await systemTinyuserUpdatePhonenumber_Post({
 					code: this.bindCode,
 					phonenumber: this.bindPhoneNumber
 				})
 				console.log(res);
 				if (res.data.code === 200) {
-					this.selfMsg("绑定成功", 'success')
-					this.wxLogin()
 					this.showBindPhone = false
+					this.selfNotify('绑定成功', 'success')
+					this.wxLogin()
+				} else {
+					this.selfNotify(res.data.msg, 'warning')
 				}
 			},
 			// 游客模式
@@ -465,6 +479,13 @@
 				this.$refs.uToast.show({
 					type: mod,
 					message: msg
+				})
+			},
+			selfNotify(msg, mod) {
+				this.$refs.uNotify.show({
+					type: mod,
+					message: msg,
+					duration: 1000 * 2,
 				})
 			}
 		}
