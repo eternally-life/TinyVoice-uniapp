@@ -86,3 +86,16 @@ export function systemSyscarouselPage_Get( systemSyscarouselPage_Param    ) {
     })
 }
 /**  =========================================================================== ***/
+
+/***  ===========================================================================
+ * path: /community/tinyserve/page
+  * summary: 获取工具服务
+ */
+   
+export function toolsList_Get() {
+   return request({
+        url:'/community/tinyserve/page',
+        method:'get'
+   })
+}
+/**  =========================================================================== ***/
