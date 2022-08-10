@@ -135,7 +135,7 @@
 				showJugdesButton: null,
 				showBindPhone: false,
 				bindPhoneNumber: "",
-				bindCode: ""
+				bindCode: "",
 			}
 		},
 		onLoad(opt) {
@@ -431,7 +431,7 @@
 				}, 300)
 			},
 
-			async cancelBindPhone() {
+			cancelBindPhone() {
 				if (!this.bindPhoneNumber) {
 					return this.selfNotify('手机号不能为空', 'warning')
 				}
@@ -442,18 +442,26 @@
 					return this.selfNotify('验证码不能为空', 'warning')
 				}
 				getApp().globalData.loginNum = 1
-				const res = await systemTinyuserUpdatePhonenumber_Post({
-					code: this.bindCode,
-					phonenumber: this.bindPhoneNumber
+				uni.login({
+					success: async (reslut) => {
+						const res = await systemTinyuserUpdatePhonenumber_Post({
+							phonenumber: this.bindPhoneNumber,
+							code: this.bindCode,
+							wxCode: reslut.code
+						})
+						if (res.data.code === 200) {
+							this.showBindPhone = false
+							this.selfNotify('绑定成功', 'success')
+							this.wxLogin()
+						} else {
+							this.selfNotify(res.data.msg, 'warning')
+						}
+					},
+					fail: (err) => {
+						console.log(err, "登录失败");
+					}
 				})
-				console.log(res);
-				if (res.data.code === 200) {
-					this.showBindPhone = false
-					this.selfNotify('绑定成功', 'success')
-					this.wxLogin()
-				} else {
-					this.selfNotify(res.data.msg, 'warning')
-				}
+
 			},
 			// 游客模式
 			visit() {
