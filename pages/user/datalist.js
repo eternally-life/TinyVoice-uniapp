@@ -25,9 +25,6 @@ module.exports = {
 		return [{
 				icon: prf + 'icon-gerenxinxi1',
 				name: '个人信息'
-			}, {
-				icon: prf + 'icon-wodefabu1',
-				name: '收货地址'
 			},
 			{
 				icon: prf + 'icon-lianxikefu1',
@@ -62,13 +59,13 @@ module.exports = {
 			},
 			{
 				icon: 'iconfont icon-ruzhu1',
-				title: '我的购物车',
+				title: '购物车',
 				path: '/subpages_shop/ShoppingCart/ShoppingCart'
 			},
 			{
 				icon: 'iconfont icon-wodedianpu3',
-				title: '我的店铺',
-				path: '/pages/supermarket/mall/myShop'
+				title: '收货地址',
+				path: '/subpages/receivAddress/receivAddress'
 			}
 		]
 	},

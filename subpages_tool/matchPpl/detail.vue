@@ -4,13 +4,13 @@
 		<view class="head flex">
 			<view class="show-head">
 				<image class="image-show" :src="xzList[indexNan].image"></image>
-				<image class="shadow" src="../../static/match/shadow.png"></image>
+				<image class="shadow" :src="myImg + '/match/shadow.png'"></image>
 				<view class="name-show">{{ replaceTest('男') }}</view>
 			</view>
-			<view class="middle"><image class="love" src="../../static/match/match.png"></image></view>
+			<view class="middle"><image class="love" :src="myImg + '/match/match.png'"></image></view>
 			<view class="show-head">
 				<image class="image-show" :src="xzList[indexNv].image"></image>
-				<image class="shadow" src="../../static/match/shadow.png"></image>
+				<image class="shadow" :src="myImg + '/match/shadow.png'"></image>
 				<view class="name-show">{{ replaceTest('女') }}</view>
 			</view>
 		</view>
@@ -20,7 +20,7 @@
 		</view>
 		<view class="detail-container">
 			<view class="title">
-				<image class="image-point" src="../../static/match/point.png"></image>
+				<image class="image-point" :src="myImg + '/match/point.png'"></image>
 				配对指数
 			</view>
 			<view class="flex font-size-14">
@@ -46,19 +46,19 @@
 				</view>
 			</view>
 			<view class="title">
-				<image class="image-point" src="../../static/match/point.png"></image>
+				<image class="image-point" :src="myImg + '/match/point.png'"></image>
 				恋爱建议
 			</view>
 			<view class="advice">{{ peidui.advice }}</view>
 			<view class="title">
-				<image class="image-point" src="../../static/match/point.png"></image>
+				<image class="image-point" :src="myImg + '/match/point.png'"></image>
 				注意事项
 			</view>
 			<view class="note">{{ peidui.note }}</view>
 		</view>
 		<view class="ad-box" v-if="version == 3 && showAdd && peidui != null">
 			<view class="title">
-				<image class="image-point" src="../../static/match/point.png"></image>
+				<image class="image-point" :src="myImg + '/match/point.png'"></image>
 				相关推荐测
 			</view>
 			<view
@@ -81,11 +81,11 @@
 			version="develop"
 			v-if="version == 3 && peidui != null"
 		>
-			<image src="../../static/match/test.png"></image>
+			<image :src="myImg + '/match/test.png'"></image>
 			<view>专业测</view>
 		</navigator>
 		<!-- <navigator appId="wx3e971a14238dc8d3 " class="ad-right" target="miniProgram" version="develop" v-if="peidui != null">
-            <image src="../../static/match/play.png"></image>
+            <image src="/match/play.png"></image>
             <view>继续玩</view>
         </navigator> -->
 		<view class="modal-container" v-if="!auth">
@@ -102,7 +102,7 @@
 		<!-- <view :class="'modal-container ' + (showShare ? '' : 'hide')">
             <view class="modal-overlay"></view>
             <view @tap="hideShare" class="modal-close">
-                <image class="img-block" mode="widthFix" src="../../static/match/wrong.png"></image>
+                <image class="img-block" mode="widthFix" src="/match/wrong.png"></image>
             </view>
             <view class="modal-modal">
                 <canvas @tap="viewImage" canvasId="canvas-result"></canvas>
@@ -123,10 +123,12 @@ var i = t.promisify(uni.getImageInfo);
 var n = t.promisify(uni.canvasToTempFilePath);
 var s = uni.createCanvasContext('canvas-result');
 var app = getApp();
+const imgBserUrl = 'https://tiny-voice-prod.oss-cn-shenzhen.aliyuncs.com/';
 import { getXZList } from './detail_data.js';
 export default {
 	data() {
 		return {
+			myImg: imgBserUrl,
 			xzData: e.data,
 
 			xzList: getXZList(),
@@ -138,9 +140,9 @@ export default {
 			showBtn: true,
 			showShare: false,
 			ratio: app.globalData.ratio,
-			backImage: '../../static/match/back.png',
-			loveImage: '../../static/match/match.png',
-			border: '../../static/match/border.png',
+			backImage: imgBserUrl + '/match/back.png',
+			loveImage: imgBserUrl + '/match/match.png',
+			border: imgBserUrl + '/match/border.png',
 			showAdd: false,
 			adList: '',
 
