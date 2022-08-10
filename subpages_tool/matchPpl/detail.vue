@@ -5,7 +5,7 @@
             <view class="show-head">
                 <image class="image-show" :src="xzList[indexNan].image"></image>
                 <image class="shadow" src="../../static/match/shadow.png"></image>
-                <view class="name-show">{{ util.replace(xzList[indexNan].name, '座', '男') }}</view>
+                <view class="name-show">{{ replaceTest('男') }}</view>
             </view>
             <view class="middle">
                 <image class="love" src="../../static/match/match.png"></image>
@@ -13,7 +13,7 @@
             <view class="show-head">
                 <image class="image-show" :src="xzList[indexNv].image"></image>
                 <image class="shadow" src="../../static/match/shadow.png"></image>
-                <view class="name-show">{{ util.replace(xzList[indexNv].name, '座', '女') }}</view>
+                <view class="name-show">{{ replaceTest('女') }}</view>
             </view>
         </view>
         <view class="comment-box">
@@ -67,7 +67,8 @@
                 <image class="image-point" src="../../static/match/point.png"></image>
                 相关推荐测
             </view>
-            <view @tap="gotoFun" class="ad-item flex flex-center" :data-id="item.AppId" :data-path="item.Path" v-for="(item, index) in adList" :key="index">
+            <view @tap="gotoFun" class="ad-item flex flex-center" :data-id="item.AppId" :data-path="item.Path"
+                v-for="(item, index) in adList" :key="index">
                 <view class="ad-image">
                     <image :src="item.ImageUrl"></image>
                 </view>
@@ -75,7 +76,8 @@
                 <view class="ad-title">{{ item.Title }}</view>
             </view>
         </view>
-        <navigator appId="wx2543189951584897" class="ad-left" target="miniProgram" version="develop" v-if="version == 3 && peidui != null">
+        <navigator appId="wx2543189951584897" class="ad-left" target="miniProgram" version="develop"
+            v-if="version == 3 && peidui != null">
             <image src="../../static/match/test.png"></image>
             <view>专业测</view>
         </navigator>
@@ -88,7 +90,8 @@
             <view class="modal-modal-auth">
                 <view class="modal-title">提示</view>
                 <view class="modal-des">需要获取您的头像昵称</view>
-                <button @getuserinfo="bindGetUserInfo" @tap="hideAuth" class="btn-confirm" openType="getUserInfo">确定</button>
+                <button @getuserinfo="bindGetUserInfo" @tap="hideAuth" class="btn-confirm"
+                    openType="getUserInfo">确定</button>
             </view>
         </view>
         <view @tap="showShareFun" class="shareButton" v-if="showBtn">分享配对</view>
@@ -105,7 +108,6 @@
         </view> -->
     </view>
 </template>
-<script module="util" lang="wxs" src="../../utils/util.wxs"></script>
 <script>
 var e = require('./data.js');
 
@@ -276,6 +278,11 @@ export default {
                 path: t
             });
         },
+        replaceTest: function(sex) {
+				console.log(this.indexNan,'this.indexNan');
+				if (sex == '男') return this.xzList[this.indexNan].name.substr(0, this.xzList[this.indexNan].name.length - 1) + sex
+				else return this.xzList[this.indexNv].name.substr(0, this.xzList[this.indexNv].name.length - 1) + sex
+		},
 
         showShareFun: function () {
             var that = this;

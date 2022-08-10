@@ -50,6 +50,11 @@
 						icon: 'iconfont icon-tice',
 						title: '体测计算',
 						path: '/subpages_edu/test_physical/test_physical'
+					},
+					{
+						icon: 'iconfont icon-tice',
+						title: '星座',
+						path: '/subpages_tool/matchPpl/index'
 					}
 				]
 			};
