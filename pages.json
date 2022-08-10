@@ -180,7 +180,7 @@
 					}
 				},
 				{
-					"path": "voice_details/VoiceDetails",
+					"path": "voice_details/voiceDetails",
 					"style": {
 						"navigationBarTitleText": "微音详情",
 						"enablePullDownRefresh": false

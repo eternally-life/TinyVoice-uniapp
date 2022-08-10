@@ -69,8 +69,14 @@
             <view class="current_layer_reply" v-if="reply.replyLList && reply.replyLList.length !== 0">
               <view class="current_layer_reply_item" v-for="(replyLayer, replyLayerIndex) in reply.replyLList"
                 :key="replyLayerIndex">
-                <text class="current_layer_name">{{ replyLayer.nickName }} ：</text>
-                <text class="current_layer_content">{{ replyLayer.content }}</text>
+                <view class="current_layer_avatar">
+                  <image :src="replyLayer.avatar" />
+                </view>
+                <view class="current_layer_right">
+                  <text class="current_layer_name">{{ replyLayer.nickName }} </text>
+                  <text class="current_layer_content">{{ replyLayer.content }}</text>
+                  <text class="current_layer_time">刚刚</text>
+                </view>
               </view>
             </view>
           </view>
@@ -94,12 +100,21 @@
               <view>{{ reply.createTime ? calculateTime(reply.createTime) : '未知' }}</view>
               <view>回复</view>
             </view>
-            <view class="current_layer_reply" v-if="reply.replyLList && reply.replyLList.length !== 0"
-              @click.stop="enterOppositePage(index)">
+            <view class="current_layer_reply" v-if="reply.replyLList && reply.replyLList.length !== 0">
               <view class="current_layer_reply_item" v-for="(replyLayer, replyLayerIndex) in reply.replyLList"
-                :key="replyLayerIndex">
-                <text class="current_layer_name">{{ replyLayer.nickName }} ：</text>
-                <text class="current_layer_content">{{ replyLayer.content }}</text>
+                :key="replyLayerIndex" @click.stop="enterOppositePage(index, replyLayerIndex)">
+                <view class="current_layer_avatar">
+                  <image :src="replyLayer.avatar" />
+                </view>
+                <view class="current_layer_right">
+                  <text class="current_layer_name">{{ replyLayer.oppositeNickName ? replyLayer.nickName ===
+                      replyLayer.oppositeNickName ?
+                      replyLayer.nickName : replyLayer.nickName + ' > ' + replyLayer.oppositeNickName :
+                      replyLayer.nickName
+                  }} </text>
+                  <text class="current_layer_content">{{ replyLayer.content }}</text>
+                  <text class="current_layer_time">{{ calculateTime(replyLayer.createTime) }}</text>
+                </view>
               </view>
             </view>
           </view>
@@ -131,11 +146,25 @@
         </template>
       </u-input>
     </view>
+
+    <view class="reply_layer_input" v-if="currentReplyLayerInner.inputFocus">
+      <u-input class="input"
+        :placeholder="'回复' + currentReplyLayerInner.nickName + currentReplyLayerInner.content + '：'" border="surround"
+        clearable shape="circle" placeholderStyle="color:#60C5BA" color="#60C5BA" maxlength="100"
+        @confirm="handleReplyLayerInner" focus v-model="currentReplyLayerInner.replyContent"
+        @blur="replyInputBlurInner">
+        <template slot="suffix">
+          <view class="input_right">
+            <u-button :customStyle="customStyle" size="small" @click="handleReplyLayerInner">回复</u-button>
+          </view>
+        </template>
+      </u-input>
+    </view>
   </view>
 </template>
 
 <script>
-import { communityTinybbsReplysave_Post, communityTinybbsLike_Get, communityTinybbsReplylsave_Post } from '@/api/社区模块/微音论坛.js'
+import { communityTinybbsReplysave_Post, communityTinybbsLike_Get, communityTinybbsReplylsave_Post, communityTinybbsReplyllsave_Post } from '@/api/社区模块/微音论坛.js'
 export default {
   data() {
     return {
@@ -163,7 +192,14 @@ export default {
         content: '',
         image: '',
         replyedNickname: ''
-      }
+      },
+      currentReplyLayerInner: {
+        inputFocus: false,
+        replyContent: '',
+        index: 0,
+        replyLayerIndex: 0,
+      },
+      innerTimer: null
     }
   },
   mounted() {
@@ -189,25 +225,35 @@ export default {
   onLoad() {
     const eventChannel = this.getOpenerEventChannel()
     eventChannel.on('acceptVoiceData', ({ data }) => {
+      console.log(data);
       this.currentShowVoice = data
       this.currentShowVoice.replyList && this.currentShowVoice.replyList.reverse()
     })
   },
   methods: {
-    enterOppositePage(index) {
-      uni.navigateTo({
-        url: '/subpages_publish/voice_details/oppositeDetails',
-        success: (res) => {
-          res.eventChannel.emit('acceptOppositeData', {
-            data: this.currentShowVoice.replyList[index],
-          })
-        },
-      })
+    enterOppositePage(index, replyLayerIndex) {
+      // uni.navigateTo({
+      //   url: '/subpages_publish/voice_details/oppositeDetails',
+      //   success: (res) => {
+      //     res.eventChannel.emit('acceptOppositeData', {
+      //       data: this.currentShowVoice.replyList[index],
+      //     })
+      //   },
+      // })
+      this.currentReplyLayerInner.inputFocus = true
+      this.currentReplyLayerInner.index = index
+      this.currentReplyLayerInner.replyLayerIndex = replyLayerIndex
+      this.currentReplyLayerInner = { ...this.currentReplyLayerInner, ...this.currentShowVoice.replyList[index].replyLList[replyLayerIndex] }
     },
     replyInputBlur() {
       setTimeout(() => {
         this.currentReplyLayer.inputFocus = false
-      }, 500);
+      }, 300);
+    },
+    replyInputBlurInner() {
+      this.innerTimer = setTimeout(() => {
+        this.currentReplyLayerInner.inputFocus = false
+      }, 300);
     },
     replyLayerFocus(layerContent) {
       this.currentReplyLayer.inputFocus = false
@@ -235,6 +281,7 @@ export default {
       console.log(res.data);
       if (res.data.code === 200) {
         let wxUserInfo = getApp().globalData.wxUserInfo
+        if (this.currentShowVoice.replyList === null) this.currentShowVoice.replyList = []
         this.currentShowVoice.replyList.map(v => {
           if (v.replyId === this.currentReplyLayer.replyedId) {
             if (!v.replyLList) v.replyLList = []
@@ -249,16 +296,31 @@ export default {
         this.currentReply.map(v => {
           if (v.replyId === this.currentReplyLayer.replyedId) {
             if (!v.replyLList) v.replyLList = []
-            v.replyLList.push({
-              nickName: wxUserInfo.nickName ? wxUserInfo.nickName : '我',
-              content: this.currentReplyLayer.content,
-              avatar: wxUserInfo.avatar
-            })
+            v.replyLList.push(res.data.data)
           }
         })
         this.currentReplyLayer.inputFocus = false
         this.currentReplyLayer.content = ''
         uni.$emit('refresh')
+      }
+    },
+    async handleReplyLayerInner() {
+      if (this.currentReplyLayerInner.content === '') {
+        uni.showToast({
+          title: '消息不能为空',
+          icon: 'none'
+        })
+        return
+      }
+      const res = await communityTinybbsReplyllsave_Post({
+        image: null,
+        replyId: this.currentReplyLayerInner.replyId,
+        replyLId: this.currentReplyLayerInner.replyLId,
+        content: this.currentReplyLayerInner.replyContent,
+      })
+      if (res.data.code === 200) {
+        this.currentShowVoice.replyList[this.currentReplyLayerInner.index].replyLList
+          .push(res.data.data)
       }
     },
     async sendVoiceReply() {
@@ -339,6 +401,13 @@ export default {
     position: fixed;
     bottom: 0;
     z-index: 100;
+  }
+
+  .reply_layer_input {
+    width: 750rpx;
+    position: fixed;
+    bottom: 0;
+    z-index: 101;
   }
 
   .voice_item {
@@ -467,12 +536,13 @@ export default {
 
     .user_ack_wrap {
 
-      .not_reply{
+      .not_reply {
         color: #707070;
         font-size: 26rpx;
         padding-bottom: 40rpx;
         margin-left: 40rpx;
       }
+
       .user_ack_item {
         display: flex;
         align-items: flex-start;
@@ -515,18 +585,48 @@ export default {
             margin-top: 30rpx;
 
             .current_layer_reply_item {
-              .current_layer_content {
-                font-size: 26rpx;
-                color: #707070;
+              display: flex;
+
+              &:nth-child(n+2) {
+                margin-top: 20rpx;
               }
 
-              .current_layer_name {
-                max-width: 200rpx;
-                white-space: nowrap;
-                text-overflow: ellipsis;
-                font-weight: normal;
-                font-size: 26rpx;
+              .current_layer_right {
+                display: flex;
+                flex-direction: column;
+                margin-left: 10rpx;
+
+                .current_layer_time {
+                  font-size: 24rpx;
+                  color: #aaaaaa;
+                }
+
+                .current_layer_name {
+                  max-width: 200rpx;
+                  white-space: nowrap;
+                  text-overflow: ellipsis;
+                  font-weight: normal;
+                  font-size: 26rpx;
+                }
+
+                .current_layer_content {
+                  font-size: 26rpx;
+                  color: #707070;
+                  padding: 10rpx 0;
+                }
               }
+
+              .current_layer_avatar {
+                display: flex;
+
+                image {
+                  width: 60rpx;
+                  height: 60rpx;
+                  border-radius: 50%;
+                }
+
+              }
+
             }
 
           }
@@ -553,7 +653,7 @@ export default {
           }
 
           .time {
-            color: #4a4a4a;
+            color: #aaaaaa;
             font-size: 26rpx;
             display: flex;
             justify-content: space-between;
