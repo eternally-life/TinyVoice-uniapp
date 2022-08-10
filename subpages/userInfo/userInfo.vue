@@ -155,6 +155,8 @@ export default {
 				return;
 			}
 			if (e.name == 'phone') {
+				
+				return
 				uni.navigateTo({ url: '/subpages/phoneChange/phoneChange' });
 				return;
 			}
