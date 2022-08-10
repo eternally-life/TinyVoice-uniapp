@@ -65,6 +65,10 @@ export default {
 				{
 					title: '邮箱',
 					name: 'email'
+				},
+				{
+					title: '手机号',
+					name: 'phone'
 				}
 				// {
 				// 	title: '身份',
@@ -150,6 +154,10 @@ export default {
 				this.isShowPicke = true;
 				return;
 			}
+			if (e.name == 'phone') {
+				uni.navigateTo({ url: '/subpages/phoneChange/phoneChange' });
+				return;
+			}
 			this.inputValue = this.userInfo[e.name];
 			this.inpuType = e.name;
 			this.isShowPop = true;
@@ -188,6 +196,8 @@ export default {
 					return this.userInfo.email;
 				case 'add':
 					return '学校';
+				case 'phone':
+					return this.userInfo.phonenumber;
 				default:
 					return '暂无';
 			}

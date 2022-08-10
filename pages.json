@@ -96,6 +96,15 @@
                 }
                 
                 }
+                ,{
+                    "path" : "phoneChange/phoneChange",
+                    "style" :                                                                                    
+                {
+                    "navigationBarTitleText": "修改绑定手机",
+                    "enablePullDownRefresh": false
+                }
+                
+                }
             ]
 		},
 		/* 商城相关分包 */
