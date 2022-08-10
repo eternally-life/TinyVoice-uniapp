@@ -114,12 +114,11 @@ export default {
 		uni.$on('refresh', () => {
 			this.getUserInfo();
 		});
+		uni.$on('changeNoticCount', num => {
+			this.changeNoticCount(num);
+		});
 		/* 根据vuex缓存决定是否跳转教务 */
 		// this.toHome();
-		this.getNewList();
-		uni.$on('refreshNews', () => {
-			this.getNewList();
-		});
 	},
 	onShow() {
 		//更新页面静态数据
@@ -152,22 +151,6 @@ export default {
 			});
 		},
 
-		// 获通知列表
-		getNoticeList() {
-			systemSysmsgPage_Get({
-				pageNum: 1 /** 第几页    string required:false */,
-				pageSize: 100 /** 页码大小    string required:false */
-			}).then(res => {
-				if (res.data.data.records.length > 0) {
-					console.log('消息', res.data.data.records);
-					this.otherInfo.forEach(value => {
-						if (value.text == '消息') {
-							value.num = res.data.data.records.length;
-						}
-					});
-				}
-			});
-		},
 		/* 跳转教务首页 */
 		toHome() {
 			/* 初始化教务相关设置 */
@@ -203,12 +186,26 @@ export default {
 				url: '/subpages/login/login'
 			});
 		},
-		async getNewList() {
-			// 获取消息数目
-			// const res = await systemUsermsgnoticeListunread_Get()
-			// if (res.data.code === 200) {
-			// 	this.otherInfo[3].num = res.data.data.length
-			// }
+
+		// 获通知列表
+		getNoticeList() {
+			systemSysmsgPage_Get({
+				pageNum: 1 /** 第几页    string required:false */,
+				pageSize: 100 /** 页码大小    string required:false */
+			}).then(res => {
+				if (res.data.data.records.length > 0) {
+					console.log('消息', res.data.data.records);
+					this.changeNoticCount(res.data.data.records.length);
+				}
+			});
+		},
+		//修改消息数量
+		changeNoticCount(num) {
+			this.otherInfo.forEach(value => {
+				if (value.text == '消息') {
+					value.num = num;
+				}
+			});
 		},
 		// 获取自己信息
 		getUserInfo() {

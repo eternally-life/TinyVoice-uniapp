@@ -27,7 +27,7 @@
 			</u-swipe-action>
 		</view>
 		<view class="empty" v-if="msgList.length == 0"><u-empty mode="list"></u-empty></view>
-		<view class="bottom_box" v-show="nowCrrent == 0 && msgList.length != 0">
+		<view class="bottom_box" v-if="nowCrrent == 0 && msgList.length > 0">
 			<view class="btn">
 				<u-button type="primary" icon="file-text" text="全部消息设置为已读" @click="allin()"></u-button>
 			</view>
@@ -69,7 +69,17 @@ export default {
 			// console.log('index', index);
 		},
 		swipeClick(e) {
-			console.log('点击', e);
+			console.log('点击已读', e);
+			systemSysmsgUpdateById_Post({ msgId: e.name }).then(res => {
+				console.log('已读结果', res);
+				if (res.data.code == 200) {
+					this.msgList = this.msgList.filter(value => {
+						return value.msgId != e.name;
+					});
+					// 更新user数据
+					uni.$emit('changeNoticCount', this.msgList.length);
+				}
+			});
 		},
 		getNoticeList() {
 			systemSysmsgPage_Get({
@@ -101,6 +111,8 @@ export default {
 						if (res.data.code == 200) {
 							this.msgList = [];
 						}
+						// 更新user数据
+						uni.$emit('changeNoticCount', this.msgList.length);
 					});
 				})
 				.catch(err => {
