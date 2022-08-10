@@ -9,15 +9,16 @@
 					<view class="name">
 						<view class="one">
 							<view class="left">
-								<u-tag text="物品名"></u-tag>
+								<u-tag text="商品名"></u-tag>
 							</view>{{shopDetail.name ? shopDetail.name : '无'}}
 						</view>
 					</view>
 					<view class="name">
 						<view class="one">
 							<view class="left">
-								<u-tag text="物品介绍"></u-tag>
-							</view>{{shopDetail.content ? shopDetail.content : '无'}}
+								<u-tag text="商品介绍"></u-tag>
+							</view>
+							<u-parse :content="shopDetail.content ? shopDetail.content : '无'"></u-parse>
 						</view>
 					</view>
 				</view>
@@ -55,7 +56,7 @@
 				</view>
 			</view>
 			<view class="bot">
-				<view class="notice"></view>
+				<view class="notice" @click="showAgreement">{{noticeData.noticeTitle}}</view>
 				<view class="pay">
 					<view class="bg">
 						<view class="price">
@@ -68,6 +69,13 @@
 			</view>
 
 		</block>
+		<u-modal :show="isAgreement" :title="noticeData.noticeTitle" @confirm="confirmAgreement" confirmText="不再显示"
+			cancelText="确定" @cancel="cancelAgreement" showCancelButton cancelColor="#2979ff" confirmColor="#000000"
+			buttonReverse>
+			<view class="slot-content">
+				<rich-text :nodes="noticeData.noticeContent"></rich-text>
+			</view>
+		</u-modal>
 	</view>
 </template>
 
@@ -75,11 +83,14 @@
 	import {
 		payTinymallGetSku_Get,
 		payTinymallCreateOrder_Post,
-
 	} from '@/api/商城模块/商品信息下单.js'
 	import {
 		payTinymallshoppingSave_Post
 	} from '@/api/商城模块/购物车测通.js'
+	import {
+		systemParamsNoteList_Get,
+		systemParamsNotenoticeId_Get
+	} from '@/api/SYSTEM/参数字典公告.js'
 	export default {
 		data() {
 			return {
@@ -90,10 +101,14 @@
 				current: 0,
 				parmesList: {},
 				isLoading: true,
-				value: 1
+				isAgreement: false, // 展示协议
+				isTrue: false, // 判断用户是否点了协议
+				value: 1,
+				noticeData: {}
 			}
 		},
 		onLoad(opt) {
+			this.getNoticeByNoticeID()
 			this.shopDetail = JSON.parse(opt.shopDetail)
 			this.getSku()
 			uni.showLoading({
@@ -101,6 +116,18 @@
 			})
 		},
 		methods: {
+			showAgreement() {
+				this.isAgreement = true
+			},
+			confirmAgreement() { // 不再显示协议的回调
+				this.isAgreement = false
+				this.isTrue = true
+				uni.setStorageSync('isTrue', true)
+			},
+			cancelAgreement() {
+				this.isTrue = true
+				this.isAgreement = false
+			},
 			valChange(e) {
 				this.value = e.value
 				this.price = e.value * (this.parmesList.price / 100)
@@ -116,6 +143,10 @@
 					this.selfMsg('库存一点都不剩了', 'warning')
 					return
 				}
+				let istrue = uni.getStorageSync('isTrue')
+				if (!istrue && !this.isTrue) {
+					return this.selfMsg('请阅读下单购买协议', 'warning')
+				}
 				uni.navigateTo({
 					url: '/subpages_shop/orderDetail/orderDetail?skuId=' + this.parmesList.skuId +
 						'&num=' + this.value
@@ -125,6 +156,10 @@
 				if (this.parmesList.inventory === 0) {
 					this.selfMsg('库存一点都不剩了', 'warning')
 					return
+				}
+				let istrue = uni.getStorageSync('isTrue')
+				if (!istrue && !this.isTrue) {
+					return this.selfMsg('请阅读下单购买协议', 'warning')
 				}
 				const res = await payTinymallshoppingSave_Post({
 					quantity: this.value,
@@ -165,6 +200,12 @@
 					this.selfMsg(res.data.msg, 'warning')
 				}
 				console.log(res);
+			},
+			async getNoticeByNoticeID() {
+				const res = await systemParamsNotenoticeId_Get({
+					noticeId: 14
+				})
+				this.noticeData = res.data.data
 			},
 			selfMsg(msg, mod) {
 				this.$refs.uToast.show({
@@ -244,8 +285,9 @@
 
 		.bot {
 			// position: absolute;
-			bottom: 0rpx;
-			left: 0;
+			// bottom: 0rpx;
+			// left: 0;
+			padding-top: 20rpx;
 			width: 100%;
 			background-color: #fff;
 

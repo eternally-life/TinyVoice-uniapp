@@ -30,7 +30,7 @@
 			"path": "pages/community/community",
 			"style": {
 				"navigationBarTitleText": "微音",
-				"enablePullDownRefresh": false
+				"enablePullDownRefresh": true
 			}
 		},
 		{
@@ -87,7 +87,25 @@
 						"enablePullDownRefresh": false
 					}
 				}
-			]
+			    ,{
+                    "path" : "myMessage/myMessage",
+                    "style" :                                                                                    
+                {
+                    "navigationBarTitleText": "我的消息",
+                    "enablePullDownRefresh": false
+                }
+                
+                }
+                ,{
+                    "path" : "phoneChange/phoneChange",
+                    "style" :                                                                                    
+                {
+                    "navigationBarTitleText": "修改绑定手机",
+                    "enablePullDownRefresh": false
+                }
+                
+                }
+            ]
 		},
 		/* 商城相关分包 */
 		{
@@ -163,6 +181,13 @@
 				},
 				{
 					"path": "voice_details/VoiceDetails",
+					"style": {
+						"navigationBarTitleText": "微音详情",
+						"enablePullDownRefresh": false
+					}
+				},
+				{
+					"path": "voice_details/oppositeDetails",
 					"style": {
 						"navigationBarTitleText": "微音详情",
 						"enablePullDownRefresh": false
@@ -256,49 +281,29 @@
 					}
 				},
 				{
-					"path": "resources/upload_resources",
-					"style": {
-						"navigationBarTitleText": "上传资源",
-						"enablePullDownRefresh": false
-					}
-				},
-				{
-					"path": "resources/download_resources",
-					"style": {
-						"navigationBarTitleText": "下载资源",
-						"enablePullDownRefresh": false
-					}
-				},
-				{
-					"path": "resources/resources_information",
-					"style": {
-						"navigationBarTitleText": "资源共享",
-						"enablePullDownRefresh": false
-					}
-				},
-				{
-					"path": "resources/comment_resources",
-					"style": {
-						"navigationBarTitleText": "评论资源",
-						"enablePullDownRefresh": false
-					}
-				},
-				{
-					"path": "stamina_test/stamina_test",
-					"style": {
-						"navigationBarTitleText": "体测计算",
-						"enablePullDownRefresh": false
-					}
-				},
-				{
 					"path": "id_photo/Cphoto",
 					"style": {
 						"navigationBarTitleText": "计算机证件照",
 						"enablePullDownRefresh": false
 					}
-				}
+				}, {
+					"path": "resources/resources",
+					"style": {
+						"navigationBarTitleText": "资源共享",
+						"enablePullDownRefresh": false
+					}
 
-			]
+				}
+			    ,{
+                    "path" : "resourcesDetail/resourcesDetail",
+                    "style" :                                                                                    
+                {
+                    "navigationBarTitleText": "资源详情",
+                    "enablePullDownRefresh": false
+                }
+                
+                }
+            ]
 		}
 	],
 	"globalStyle": {

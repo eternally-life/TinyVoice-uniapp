@@ -20,9 +20,10 @@
         </view>
       </view>
       <view class="voice_content">
-        <text>{{ currentShowVoice.content }}</text>
+        <!-- <text>{{ currentShowVoice.content }}</text> -->
+        <u-parse :content="currentShowVoice.content"></u-parse>
       </view>
-      <view class="voice_imgs" v-if="currentShowVoice.images.length !== 0">
+      <view class="voice_imgs" v-if="currentShowVoice.images && currentShowVoice.images.length !== 0">
         <u-album :urls="currentShowVoice.images" multipleSize="223rpx"></u-album>
       </view>
       <view class="function_btns">
@@ -43,7 +44,7 @@
       </view>
       <view class="user_ack_wrap">
         <view class="not_reply" v-if="
-          currentShowVoice.replyList.length === 0 &&
+          (currentShowVoice.replyList.length === 0 || !currentShowVoice.replyList) &&
           currentReply.length === 0
         ">暂无评论</view>
         <!-- 临时发布作为展示的评论 -->
@@ -56,25 +57,34 @@
           <view class="ack_center">
             <text class="name">{{ userinfo.nickName }}</text>
             <text class="content">{{ reply.content }}</text>
+
             <view class="image" v-if="reply.image !== '' && reply.image !== null && reply.image !== undefined">
               <image :src="reply.image" mode="aspectFill" @click="showFullSceenImage(reply.image)" />
             </view>
             <view class="time">
-              <view>{{ reply.createTime ? calculateTime(reply.createTime) : '未知' }}</view>
-              <view>回复</view>
+              <!-- <view>{{ reply.createTime ? calculateTime(reply.createTime) : '未知' }}</view> -->
+              <view>刚刚</view>
+              <view @click="replyLayerFocus(reply)">回复</view>
+            </view>
+            <view class="current_layer_reply" v-if="reply.replyLList && reply.replyLList.length !== 0">
+              <view class="current_layer_reply_item" v-for="(replyLayer, replyLayerIndex) in reply.replyLList"
+                :key="replyLayerIndex">
+                <text class="current_layer_name">{{ replyLayer.nickName }} ：</text>
+                <text class="current_layer_content">{{ replyLayer.content }}</text>
+              </view>
             </view>
           </view>
           <view class="ack_right">
           </view>
         </view>
         <!-- 接口获取的评论 -->
-        <view class="user_ack_item" v-for="reply in currentShowVoice.replyList" :key="reply.replyId">
+        <view class="user_ack_item" v-for="(reply, index) in currentShowVoice.replyList" :key="reply.replyId">
           <view class="ack_left">
             <view class="ack_avatar">
               <image :src="reply.avatar" mode="aspectFill" />
             </view>
           </view>
-          <view class="ack_center">
+          <view class="ack_center" @click="replyLayerFocus(reply)">
             <text class="name">{{ reply.nickName }}</text>
             <text class="content">{{ reply.content }}</text>
             <view class="image" v-if="reply.image !== '' && reply.image !== null">
@@ -83,6 +93,14 @@
             <view class="time">
               <view>{{ reply.createTime ? calculateTime(reply.createTime) : '未知' }}</view>
               <view>回复</view>
+            </view>
+            <view class="current_layer_reply" v-if="reply.replyLList && reply.replyLList.length !== 0"
+              @click.stop="enterOppositePage(index)">
+              <view class="current_layer_reply_item" v-for="(replyLayer, replyLayerIndex) in reply.replyLList"
+                :key="replyLayerIndex">
+                <text class="current_layer_name">{{ replyLayer.nickName }} ：</text>
+                <text class="current_layer_content">{{ replyLayer.content }}</text>
+              </view>
             </view>
           </view>
           <view class="ack_right">
@@ -101,11 +119,23 @@
         </template>
       </u-input>
     </view>
+
+    <view class="reply_user_input" v-if="currentReplyLayer.inputFocus">
+      <u-input class="input" :placeholder="'回复' + currentReplyLayer.replyedNickname + '：'" border="surround" clearable
+        shape="circle" placeholderStyle="color:#60C5BA" color="#60C5BA" maxlength="100" @confirm="handleReplyLayer"
+        focus v-model="currentReplyLayer.content" @blur="replyInputBlur">
+        <template slot="suffix">
+          <view class="input_right">
+            <u-button :customStyle="customStyle" size="small" @click="handleReplyLayer">回复</u-button>
+          </view>
+        </template>
+      </u-input>
+    </view>
   </view>
 </template>
 
 <script>
-import { communityTinybbsReplysave_Post, communityTinybbsLike_Get } from '@/api/社区模块/微音论坛.js'
+import { communityTinybbsReplysave_Post, communityTinybbsLike_Get, communityTinybbsReplylsave_Post } from '@/api/社区模块/微音论坛.js'
 export default {
   data() {
     return {
@@ -127,6 +157,13 @@ export default {
         nickName: '',
       },
       currentReply: [],
+      currentReplyLayer: {
+        inputFocus: false,
+        replyedId: -1,
+        content: '',
+        image: '',
+        replyedNickname: ''
+      }
     }
   },
   mounted() {
@@ -152,12 +189,78 @@ export default {
   onLoad() {
     const eventChannel = this.getOpenerEventChannel()
     eventChannel.on('acceptVoiceData', ({ data }) => {
-      console.log(data);
       this.currentShowVoice = data
       this.currentShowVoice.replyList && this.currentShowVoice.replyList.reverse()
     })
   },
   methods: {
+    enterOppositePage(index) {
+      uni.navigateTo({
+        url: '/subpages_publish/voice_details/oppositeDetails',
+        success: (res) => {
+          res.eventChannel.emit('acceptOppositeData', {
+            data: this.currentShowVoice.replyList[index],
+          })
+        },
+      })
+    },
+    replyInputBlur() {
+      setTimeout(() => {
+        this.currentReplyLayer.inputFocus = false
+      }, 500);
+    },
+    replyLayerFocus(layerContent) {
+      this.currentReplyLayer.inputFocus = false
+      this.$nextTick(() => {
+        this.currentReplyLayer.content = ''
+        this.currentReplyLayer.inputFocus = true
+        this.currentReplyLayer.replyedId = layerContent.replyId
+        this.currentReplyLayer.replyedNickname = layerContent.nickName
+      })
+    },
+    //回复一层回复
+    async handleReplyLayer() {
+      if (this.currentReplyLayer.content === '') {
+        uni.showToast({
+          title: '消息不能为空',
+          icon: 'none'
+        })
+        return
+      }
+      const res = await communityTinybbsReplylsave_Post({
+        image: this.currentReplyLayer.image,
+        replyId: this.currentReplyLayer.replyedId,
+        content: this.currentReplyLayer.content
+      })
+      console.log(res.data);
+      if (res.data.code === 200) {
+        let wxUserInfo = getApp().globalData.wxUserInfo
+        this.currentShowVoice.replyList.map(v => {
+          if (v.replyId === this.currentReplyLayer.replyedId) {
+            if (!v.replyLList) v.replyLList = []
+            v.replyLList.push({
+              nickName: wxUserInfo.nickName ? wxUserInfo.nickName : '我',
+              content: this.currentReplyLayer.content,
+              avatar: wxUserInfo.avatar
+            })
+          }
+        })
+        //临时
+        this.currentReply.map(v => {
+          if (v.replyId === this.currentReplyLayer.replyedId) {
+            if (!v.replyLList) v.replyLList = []
+            v.replyLList.push({
+              nickName: wxUserInfo.nickName ? wxUserInfo.nickName : '我',
+              content: this.currentReplyLayer.content,
+              avatar: wxUserInfo.avatar
+            })
+          }
+        })
+        this.currentReplyLayer.inputFocus = false
+        this.currentReplyLayer.content = ''
+        uni.$emit('refresh')
+      }
+    },
     async sendVoiceReply() {
       if (this.replyText === '') {
         uni.showToast({
@@ -172,17 +275,11 @@ export default {
         content: this.replyText,
         // image: '',
       })
-      console.log(res);
       //有问题
       if (res.data.code === 200) {
         uni.$emit('refresh')
         this.currentReply = [
-          {
-            createTime: new Date(),
-            content: this.replyText,
-            likeNum: 0,
-            image: ''
-          },
+          res.data.data,
           ...this.currentReply,
         ]
         this.replyText = ''
@@ -236,6 +333,13 @@ export default {
 <style lang="scss" scoped>
 .small_voice_wrap {
   background: #f5f5f5;
+
+  .reply_user_input {
+    width: 750rpx;
+    position: fixed;
+    bottom: 0;
+    z-index: 100;
+  }
 
   .voice_item {
     padding: 30rpx 30rpx;
@@ -335,7 +439,6 @@ export default {
   }
 
   .comments_wrap {
-    padding: 30rpx;
     margin-bottom: 70rpx;
     margin-top: 30rpx;
     background: #fff;
@@ -344,6 +447,7 @@ export default {
     .comments_title {
       display: flex;
       align-items: center;
+      padding: 30rpx;
 
       .comments_border {
         width: 8rpx;
@@ -362,12 +466,24 @@ export default {
     }
 
     .user_ack_wrap {
+
+      .not_reply{
+        color: #707070;
+        font-size: 26rpx;
+        padding-bottom: 40rpx;
+        margin-left: 40rpx;
+      }
       .user_ack_item {
         display: flex;
         align-items: flex-start;
         min-height: 140rpx;
+        padding: 20rpx;
 
-        &:nth-child(n + 1) {
+        &:hover {
+          background: #9b9b9b11;
+        }
+
+        &:nth-child(n + 2) {
           margin-top: 30rpx;
         }
 
@@ -392,6 +508,29 @@ export default {
           justify-content: space-around;
           margin-left: 30rpx;
 
+          .current_layer_reply {
+            background: #c5c5c533;
+            border-radius: 5px;
+            padding: 10px;
+            margin-top: 30rpx;
+
+            .current_layer_reply_item {
+              .current_layer_content {
+                font-size: 26rpx;
+                color: #707070;
+              }
+
+              .current_layer_name {
+                max-width: 200rpx;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+                font-weight: normal;
+                font-size: 26rpx;
+              }
+            }
+
+          }
+
           .image {
             padding: 10rpx 0 20rpx 0;
 
@@ -403,13 +542,13 @@ export default {
 
           .name {
             color: #707070;
-            font-size: 30rpx;
+            font-size: 28rpx;
             min-height: 40rpx;
           }
 
           .content {
             color: #4a4a4a;
-            font-size: 30rpx;
+            font-size: 28rpx;
             margin: 10rpx 0;
           }
 
@@ -443,7 +582,7 @@ export default {
     bottom: 0rpx;
     left: 0;
     right: 0rpx;
-    z-index: 9999;
+    z-index: 99;
     background: #EFF9F8;
 
     i {

@@ -2,7 +2,7 @@
 	<view class="wrap">
 		<view class="wrap_message">
 			<view class="message_name">
-				<u--input placeholder="输入Ta的名字或暗号" border="bottom" v-model="toName" @change="change"></u--input>
+				<u--input placeholder="输入Ta的名字或暗号" inputAlign="center" border="bottom" v-model="toName"></u--input>
 			</view>
 			<view class="message_content">
 				<u--textarea v-model="messages" placeholder="给Ta的留言" border="none"></u--textarea>
@@ -39,16 +39,27 @@
 		},
 		methods: {
 			pushMessage() {
-				if ( this.toName != null || this.message != null) {
+				if ( this.toName == "" ) {
+					uni.showModal({
+						content: '请输入完整信息',
+						showCancel: false
+					});
+				} else if ( this.messages == ""){
+					uni.showModal({
+						content: '请输入完整信息',
+						showCancel: false
+					});
+				} else{
 					communityTinyservenoteSave_Post({
 						name: this.toName,
 						content: this.messages
 					}).then(res =>{
-						console.log(res);
-						if(res.code === 200){
+						console.log(this.toName);
+						console.log(this.messages.length);
+						if(res.statusCode === 200){
 							uni.showModal({
 								content: '发送成功',
-								showCancel: false
+								showCancel: false,
 							});
 						}else{
 							uni.showModal({
@@ -57,11 +68,6 @@
 							});
 						}
 					})
-				} else{
-					uni.showModal({
-						content: '请输入完整信息',
-						showCancel: false
-					});
 				}
 				
 			}
@@ -80,7 +86,7 @@
 
 		.wrap_message {
 			.message_name {
-				width: 500rpx;
+				width: 300rpx;
 				margin: 0 auto;
 				background-color: #ffffff;
 			}

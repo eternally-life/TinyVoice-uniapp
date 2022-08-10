@@ -29,7 +29,8 @@
         </view>
       </view>
       <view class="voice_content" @click="enterVoiceDetail(index)">
-        <text>{{ item.content }}</text>
+        <!-- <text>{{ item.content }}</text> -->
+        <u-parse :content="item.content"></u-parse>
       </view>
       <view class="voice_imgs" v-if="item.images && item.images.length !== 0">
         <u-album :urls="item.images" multipleSize="220rpx" singleMode="aspectFill"></u-album>
@@ -71,7 +72,8 @@
       </view>
     </view>
 
-    <view class="loadmore_wrap" v-if="smallVoiceData.length !== 0" @click="() => { isNoMore ? '' : getSmallVoiceData() }">
+    <view class="loadmore_wrap" v-if="smallVoiceData.length !== 0"
+      @click="() => { isNoMore ? '' : getSmallVoiceData() }">
       <text>{{ isNoMore ? '到底啦' : '加载更多' }}</text>
     </view>
 
@@ -82,7 +84,10 @@
 </template>
 
 <script>
-import { communityTinybbsPage_Get, communityTinybbsLike_Get } from '@/api/社区模块/微音论坛.js'
+import {
+  communityTinybbsPage_Get,
+  communityTinybbsLike_Get
+} from '@/api/社区模块/微音论坛.js'
 export default {
   data() {
     return {
@@ -93,16 +98,15 @@ export default {
       userinfo: {},
       currentPageNumber: 1,
       voiceType: 1,
-      menuList: [
-        {
-          name: '微音',
-        },
-        {
-          name: '失误招领',
-          badge: {
-            isDot: false
-          }
-        },
+      menuList: [{
+        name: '微音',
+      },
+      {
+        name: '失误招领',
+        badge: {
+          isDot: false
+        }
+      },
       ],
       isNoMore: false
     }
@@ -161,6 +165,14 @@ export default {
     })
   },
   methods: {
+    //下拉刷新
+    pullDownRefresh() {
+      this.smallVoiceData = []
+      this.currentPageNumber = 1
+      this.voiceType = 1
+      this.getSmallVoiceData()
+    },
+    //发送请求
     async getSmallVoiceData() {
       try {
         if (Object.keys(this.userinfo).length === 0) {
@@ -169,7 +181,7 @@ export default {
         const res = await communityTinybbsPage_Get({
           pageNum: this.currentPageNumber,
           pageSize: 10,
-          type: this.voiceType
+          type: this.voiceType === 1 ? null : this.voiceType
         })
         if (res.data.data.records.length === 0) {
           this.isNoMore = true
@@ -218,12 +230,13 @@ export default {
     getUserinfo() {
       this.userinfo = getApp().globalData.wxUserInfo
     },
-    //触底加载更多
+    //发布跳转
     publishVoice() {
       uni.navigateTo({
         url: '/subpages_publish/publishVoice/publishVoice',
       })
     },
+    //标签更换
     async tabsChange(payload) {
       if (payload.index === 1) {
         this.voiceType = 2
@@ -238,6 +251,7 @@ export default {
       this.currentPageNumber = 1
       await this.getSmallVoiceData()
     },
+    //显示全屏图像
     showFullSceenImage(url) {
       uni.previewImage({
         urls: [url],
@@ -409,7 +423,7 @@ export default {
         }
 
         .content {
-          font-size: 30rpx;
+          font-size: 26rpx;
           display: flex;
           font-weight: 100;
 
@@ -418,6 +432,7 @@ export default {
             white-space: nowrap;
             text-overflow: ellipsis;
             font-weight: normal;
+            font-size: 26rpx;
           }
 
           .content_right {

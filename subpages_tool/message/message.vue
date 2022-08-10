@@ -16,25 +16,30 @@
 
 				<view class="item_list">
 					<view class="item_time">
-						{{$u.timeFrom(item.createTime,'yyyy年mm月dd日')}}
+						{{$u.timeFormat(item.createTime,'yyyy-mm-dd')}}
 					</view>
 					<u-gap height="1" bg-color="#bbb"></u-gap>
 					<view class="item_content">
 						{{item.content}}
-					</view> 
+					</view>
 
 				</view>
 			</view>
 		</view>
-		
-		<view class="iconfont icon-liuyan">
-			<u-button icon="plus" size="large" shape="circle" iconColor="#31b6c3" @click="toMessaging"></u-button>
+
+		<view class="publish_btn">
+			<view class="publish_content">
+				<view class="iconfont icon-liuyan" fontSize="24px" @click="toMessaging"></view>
+				留言
+			</view>
 		</view>
 	</view>
 </template>
 
 <script>
-	import { communityTinyservenoteByName_Get } from "@/api/社区模块/留言板.js"
+	import {
+		communityTinyservenoteByName_Get
+	} from "@/api/社区模块/留言板.js"
 	export default {
 		data() {
 			return {
@@ -44,7 +49,7 @@
 			};
 		},
 		methods: {
-			toMessaging(){
+			toMessaging() {
 				uni.navigateTo({
 					url: "/subpages_tool/messaging/messaging"
 				})
@@ -56,7 +61,7 @@
 				communityTinyservenoteByName_Get({
 					userName: this.userName
 				}).then(res => {
-					console.log('返回res如下：', res);
+					// console.log('返回res如下：', res);
 					let dataList = res.data.data
 					if (dataList.length > 0) {
 						this.isShow = true;
@@ -121,7 +126,7 @@
 			position: relative;
 			background-color: #fff;
 			padding: 40rpx;
-			margin: 20rpx 20rpx;
+			margin: 20rpx 0rpx;
 			border-radius: 30rpx;
 			box-shadow: 5rpx 5rpx 5px #ccc;
 
@@ -133,6 +138,8 @@
 			}
 
 			.item_list {
+				height: 150rpx;
+				box-shadow: #d5d5d5 3rpx ;
 				display: flex;
 				flex-direction: column;
 				margin: 60rpx 10rpx;
@@ -141,9 +148,31 @@
 					display: flex;
 					justify-content: flex-end;
 					font-size: 25rpx;
+					color: #ccc;
 				}
 
 				.item_content {}
+			}
+
+		}
+
+		.publish_btn {
+			position: fixed;
+			bottom: 100rpx;
+			right: 60rpx;
+			width: 100rpx;
+
+
+			.publish_content {
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+
+				.icon-liuyan {
+					right: 60rpx;
+					width: 50px;
+					font-size: 66rpx
+				}
 			}
 
 		}

@@ -95,7 +95,7 @@ module.exports = {
 			{
 				num: '0',
 				text: '消息',
-				path: '/pages/profile/news'
+				path: '/subpages/myMessage/myMessage'
 			}
 		]
 	}
