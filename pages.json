@@ -293,15 +293,24 @@
 						"enablePullDownRefresh": false
 					}
 
-				}
-			    ,{
+				}, {
                     "path" : "resourcesDetail/resourcesDetail",
-                    "style" :                                                                                    
-                {
+                    "style" :{
                     "navigationBarTitleText": "资源详情",
                     "enablePullDownRefresh": false
-                }
-                
+                	}
+                }, {
+                    "path" : "matchPpl/index",
+                    "style" :{
+                    "navigationBarTitleText": "星座匹配首页",
+                    "enablePullDownRefresh": false
+                	}
+                }, {
+                    "path" : "matchPpl/detail",
+                    "style" :{
+                    "navigationBarTitleText": "星座匹配详情",
+                    "enablePullDownRefresh": false
+                	}
                 }
             ]
 		}
