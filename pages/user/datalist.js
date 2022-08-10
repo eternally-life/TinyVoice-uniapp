@@ -84,14 +84,14 @@ module.exports = {
 				num: '0',
 				text: '音符'
 			},
-			{
-				num: '0',
-				text: '关注'
-			},
-			{
-				num: '0',
-				text: '粉丝'
-			},
+			// {
+			// 	num: '0',
+			// 	text: '关注'
+			// },
+			// {
+			// 	num: '0',
+			// 	text: '粉丝'
+			// },
 			{
 				num: '0',
 				text: '消息',
