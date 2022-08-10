@@ -37,7 +37,7 @@
 			"path": "pages/appliance/appliance",
 			"style": {
 				"navigationBarTitleText": "工具",
-				"enablePullDownRefresh": false
+				"enablePullDownRefresh": true
 			}
 		}
 	],

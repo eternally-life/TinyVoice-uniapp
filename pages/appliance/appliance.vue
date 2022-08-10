@@ -10,13 +10,13 @@
 			<view class="comments_border"></view>
 			<view class="comments_content">是工具呀</view>
 		</view>
-		<view class="centerInfo">
-			<view class="myItem" @click="navItemClick(item.path)" v-for="(item, index) in navs" :key="index">
+		<view class="centerInfo" v-if="navs.length > 0">
+			<view class="myItem" @click="navItemClick(item.jumpUrl)" v-for="(item, index) in navs" :key="index">
 				<view class="myIcon">
 					<!-- <image :src="item.img"  mode="widthFix" /> -->
 					<view class="fix" :class="item.icon"></view>
 				</view>
-				<text>{{ item.title }}</text>
+				<text>{{ item.name }}</text>
 			</view>
 		</view>
 		<u-divider>更多功能开发中，敬请期待!</u-divider>
@@ -25,38 +25,14 @@
 
 <script>
 	import {
-		systemSyscarouselPage_Get
+		systemSyscarouselPage_Get,
+		toolsList_Get
 	} from '@/api/SYSTEM/轮播图.js';
 	export default {
 		data() {
 			return {
 				list: [],
-				navs: [{
-						icon: 'iconfont icon-liuyanban',
-						title: '留言板',
-						path: '/subpages_tool/message/message'
-					},
-					{
-						icon: 'iconfont icon-weibiaoti-',
-						title: '证件照',
-						path: '/subpages_tool/id_photo/IdPhoto'
-					},
-					{
-						icon: 'iconfont icon-ziyuan',
-						title: '资源共享',
-						path: '/subpages_tool/resources/resources'
-					},
-					{
-						icon: 'iconfont icon-tice',
-						title: '体测计算',
-						path: '/subpages_edu/test_physical/test_physical'
-					},
-					{
-						icon: 'iconfont icon-tice',
-						title: '星座',
-						path: '/subpages_tool/matchPpl/index'
-					}
-				]
+				navs: []
 			};
 		},
 		methods: {
@@ -80,11 +56,27 @@
 				uni.navigateTo({
 					url: path
 				});
+			},
+			async getTool () {
+				const res = await toolsList_Get()
+				// this.$ShowToastNone('刷新成功~')
+				if (res.data.code === 200 && res.data.data.length > 0){
+					setTimeout(() => {
+						uni.stopPullDownRefresh()
+					}, 1000)
+					this.navs = res.data.data
+					this.isLoading = false
+				}
 			}
 		},
 		onReady() {
 			this.getBanner();
-		}
+			this.getTool();
+		},
+		onPullDownRefresh() {
+			//重新发起请求：请求发送成功以后传入一个回调函数，回调函数停止下拉刷新
+			this.getTool()
+		},
 	};
 </script>
 
@@ -128,7 +120,8 @@
 		.centerInfo {
 			// 横排显示
 			display: flex;
-			justify-content: space-around;
+			flex-wrap: wrap; 
+    		justify-content: flex-start;
 			background-color: #fff;
 			border-radius: 30rpx;
 			padding: 20rpx 10rpx 40rpx;
@@ -137,6 +130,7 @@
 			.myItem {
 				// 5个区域 每个占25%
 				text-align: center;
+				margin: 0 20rpx;
 
 				.myIcon {
 					width: 100rpx;
