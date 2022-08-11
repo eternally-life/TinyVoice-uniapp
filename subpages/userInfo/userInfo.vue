@@ -155,8 +155,6 @@ export default {
 				return;
 			}
 			if (e.name == 'phone') {
-				
-				return
 				uni.navigateTo({ url: '/subpages/phoneChange/phoneChange' });
 				return;
 			}
@@ -205,7 +203,7 @@ export default {
 			}
 		}
 	},
-	onLoad() {
+	onShow() {
 		this.userInfo = getApp().globalData.wxUserInfo;
 	},
 	filters: {
