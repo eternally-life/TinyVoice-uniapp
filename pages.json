@@ -40,7 +40,8 @@
 				"enablePullDownRefresh": true
 			}
 		}
-	],
+	   
+    ],
 	"subPackages": [
 		/* 基础分包 */
 		{
@@ -286,7 +287,15 @@
 						"navigationBarTitleText": "计算机证件照",
 						"enablePullDownRefresh": false
 					}
-				}, {
+				},
+				{
+					"path": "id_photo/photo_handle",
+					"style": {
+						"navigationBarTitleText": "选择照片",
+						"enablePullDownRefresh": false
+					}
+				}
+				, {
 					"path": "resources/resources",
 					"style": {
 						"navigationBarTitleText": "资源共享",

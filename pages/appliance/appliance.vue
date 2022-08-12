@@ -11,7 +11,7 @@
 			<view class="comments_content">是工具呀</view>
 		</view>
 		<view class="centerInfo" v-if="navs.length > 0">
-			<view class="myItem" @click="navItemClick(item.jumpUrl)" v-for="(item, index) in navs" :key="index">
+			<view class="myItem" @click="navItemClick(item.jumpUrl,item.jumpType)" v-for="(item, index) in navs" :key="index">
 				<view class="myIcon">
 					<!-- <image :src="item.img"  mode="widthFix" /> -->
 					<view class="fix" :class="item.icon"></view>
@@ -51,11 +51,31 @@
 					}
 				});
 			},
-			navItemClick(path) {
-				console.log(path);
-				uni.navigateTo({
-					url: path
-				});
+			navItemClick(path,jumpType) {
+				// jumpType跳转类型：1.普通页面,2.tabbar页面,3.网页,4.小程序
+				// console.log(path);
+				switch(jumpType){
+					case 1: 
+					uni.navigateTo({
+							url: path
+					});break;
+					case 2:
+					uni.switchTab({
+						url: path
+					});break;
+					case 3:
+					uni.navigateTo({
+						url: path
+					});break;
+					case 4:
+					uni.navigateToMiniProgram({
+						appId: path,
+					});break;
+					default:
+					uni.navigateTo({
+							url: path
+					});break;
+				}
 			},
 			async getTool () {
 				const res = await toolsList_Get()
@@ -66,6 +86,7 @@
 					}, 1000)
 					this.navs = res.data.data
 					this.isLoading = false
+					console.log(res.data.data)
 				}
 			}
 		},

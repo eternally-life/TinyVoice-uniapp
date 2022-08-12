@@ -52,46 +52,39 @@
 			data() {
 				return {}
 			},
-			// methods:{
-			// 	click(name) {
-			// 	    this.$refs.uToast.success(`点击了第${name}个`)
-			// 	},
-			// 	Tphoto() {
-			// 		uni.navigateTo({
-			// 			url: 'subpages_tool/id_photo/Tphoto_upload'
-			// 		})
-			// 	},
-			// 	Cphoto() {
-			// 		uni.navigateTo({
-			// 			url: '/subpages_tool/id_photo/IdPhoto'
-			// 		})
-			// 	},
-			// 	PTHphoto() {
-			// 		uni.navigateTo({
-			// 			url: '/subpages_tool/id_photo/IdPhoto'
-			// 		})
-			// 	},
-			// 	ENphoto() {
-			// 		uni.navigateTo({
-			// 			url: '/subpages_tool/id_photo/IdPhoto'
-			// 		})
-			// 	},
-			// 	KYphoto() {
-			// 		uni.navigateTo({
-			// 			url: '/subpages_tool/id_photo/IdPhoto'
-			// 		})
-			// 	},
-			// 	YCphoto() {
-			// 		uni.navigateTo({
-			// 			url: '/subpages_tool/id_photo/IdPhoto'
-			// 		})
-			// 	},
-			// 	ERphoto() {
-			// 		uni.navigateTo({
-			// 			url: '/subpages_tool/id_photo/IdPhoto'
-			// 		})
-			// 	},
-			// }
+			
+			methods:{
+				click(name) {
+				    this.$refs.uToast.success(`点击了第${name}个`)
+				},
+				Tphoto() {
+					uni.navigateTo({
+							url: '/subpages_tool/id_photo/photo_handle?type=1'
+					});
+					 
+					console.log('ok')
+				},
+				Cphoto() {
+					uni.navigateTo({
+						url: '/subpages_tool/id_photo/Cphoto'
+					})
+				},
+				PTHphoto() {
+					
+				},
+				ENphoto() {
+					
+				},
+				KYphoto() {
+					
+				},
+				YCphoto() {
+					
+				},
+				ERphoto() {
+					
+				},
+			}
 		};
 </script>
 
