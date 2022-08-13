@@ -1,19 +1,23 @@
 <template>
 	<view class="content">
 		<!-- 图片区 -->
-		<view class="preview">
-			<u-upload :fileList="fileList1" @afterRead="afterRead" @delete="deletePic" name="1" multiple :maxCount="1"
-				width="320rpx" height="320rpx"></u-upload>
+		<view class="preview" @click="choosePhoto">
+			<!-- <u-upload :fileList="fileList1" @afterRead="afterRead" @delete="deletePic" name="1" multiple :maxCount="1"
+				width="320rpx" height="320rpx"></u-upload> -->
+			<view v-if="!imgUrl">
+				<u-icon name="camera" color="#e0dee4" size="100"></u-icon>
+			</view>
+			<image class="img" :src="imgUrl" v-else></image>
 		</view>
 		<!-- 选择底色 -->
 		<view class="button">
-			<button @click="backColor(1)" :style="baseColor===1? 'background-color:#fd0101;' : ''">红底</button>
-			<button @click="backColor(2)" :style="baseColor===2? 'background-color:#026afd;' : ''">蓝底</button>
+			<button @click="backColor(1)" :style="baseColor===1? 'background-color:#fd0101;color:#ffffff;' : ''">红底</button>
+			<button @click="backColor(2)" :style="baseColor===2? 'background-color:#026afd;color:#ffffff;' : ''">蓝底</button>
 			<button @click="backColor(3)" :style="baseColor===3? 'background-color:#fefefe;' : ''">白底</button>
-		</view>   
+		</view>
 		<!-- 提交 -->
 		<view class="submit_photo">
-			<u-button type="primary" @click="submit_btn">确定</u-button>
+			<u-button type="primary" @click="submit_btn(handleType,baseColor,imgUrl)">确定</u-button>
 		</view>
 	</view>
 
@@ -22,54 +26,61 @@
 
 <script>
 	import {
-		photo_post
-	} from '@/api/工具模块/photo.js'
+		submitIdPhoto_post
+	} from '@/api/工具模块/证件照.js'
 	export default {
 		data() {
 			return {
-				handleType: null,
-				fileList1: [],
-				baseColor: 1,
-				
+				imgUrl: '',	// 图片地址
+				handleType: 1, // 处理类型
+				baseColor: 1, // 底色
 			}
 		},
-		onLoad(options){
-			console.log(options);
-			this.handleType = options.type
+		onLoad(options) {
+			this.handleType = parseInt(options.type)
+			console.log(this.handleType);
 		},
 		methods: {
-			// 删除图片
-			deletePic(event) {
-				this[`fileList${event.name}`].splice(event.index, 1)
+			choosePhoto() {
+				let _this = this
+				uni.chooseImage({
+					count: 1,
+					sizeType: ['original', 'compressed'],
+					sourceType: ['album'],
+					success: function(res) {
+						_this.imgUrl = res.tempFilePaths[0]
+					}
+				});
 			},
-			// 新增图片
-			async afterRead(event) {
-				// 当设置 mutiple 为 true 时, file 为数组格式，否则为对象格式
-				let lists = [].concat(event.file)
-				let fileListLen = this[`fileList${event.name}`].length
-				lists.map((item) => {
-					this[`fileList${event.name}`].push({
-						...item,
-						status: 'uploading',
-						message: '上传中'
-					})
-				})
-				for (let i = 0; i < lists.length; i++) {
-					const result = await this.uploadFilePromise(lists[i].url)
-					let item = this[`fileList${event.name}`][fileListLen]
-					this[`fileList${event.name}`].splice(fileListLen, 1, Object.assign(item, {
-						status: 'success',
-						message: '',
-						url: result
-					}))
-					fileListLen++
+			async submit_btn(type,color,file){
+				if(file == '') {
+					uni.showModal({
+							title: '提示',
+							content: '照片别忘了选',
+							success: function(res) {
+							if (res.confirm) {
+							    // 执行确认后的操作
+							} 
+							else {
+								// 执行取消后的操作
+							}
+						}
+					})		
+					return 
 				}
+				uni.showLoading({
+					title: '正在加载'
+				})
+				
+				
+				console.log({type,color,file});
+				// uni.uploadFile()
+				const res = await submitIdPhoto_post({type,color,file})
+				console.log(res)
 			},
-			// 上传文件
-			
 			// 选择底色
 			backColor(i) {
-				this.baseColor = i
+				this.baseColor = parseInt(i)
 				console.log(this.baseColor)
 			},
 		}
@@ -80,27 +91,31 @@
 	.content {
 		width: 100%;
 		height: auto;
+
 		.preview {
 			margin: 0rpx auto;
 			width: 322rpx;
 			height: 322rpx;
-			padding: 20rpx 0;
 			border: 1rpx gray solid;
-			
+			display: flex;
+			align-items: center;
+			justify-content: center;
+
+			.img {
+				width: 320rpx;
+				height: 320rpx;
+			}
 		}
+
 		.button {
 			display: flex;
 			align-items: center;
-			
 			padding: 20rpx 0;
-			button{
+
+			button {
 				background-color: #bbb;
-				border:1rpx solid #ccc;
+				border: 1rpx solid #ccc;
 			}
-			}
+		}
 	}
-
-	
-
-	
 </style>
