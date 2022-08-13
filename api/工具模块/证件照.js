@@ -1,6 +1,6 @@
 /*** glowxq glowxq@163.com  2022-07-23 22:39:03  生成模板  */
 import {
-	request
+	requestFile
 } from "@/utils/request"
 /***  ===========================================================================
  * path: /community/tinyserve/page
@@ -15,24 +15,14 @@ let submitIdPhoto_params = {
 }
 
 
-export function submitIdPhoto_post(submitIdPhoto_params) {
-	uni.uploadFile({
-		url:`http://106.52.58.11:12574/community/tinyservephotos/save?color=1&type=1`,
-		filePath:submitIdPhoto_params.file,
-		name:'file',
-		formData:{
-			color:submitIdPhoto_params.color,
-			type:submitIdPhoto_params.type
-		},
-		success:(res)=>{
-			console.log(res);
-		}
-		// color:submitIdPhoto_params.color
+export function submitIdPhoto_post(submitIdPhoto_params, file) {
+	console.log(submitIdPhoto_params,file);
+	console.log("==============");
+	return requestFile({
+		url: `/community/tinyservephotos/save`,
+		// url: `/community/tinyservephotos/save?type=${type}&color=${color}&file=${file}`,
+		method: 'post',
+		params: submitIdPhoto_params,
+		file: file
 	})
-	// return request({
-	// 	url: `/community/tinyservephotos/save`,
-	// 	// url: `/community/tinyservephotos/save?type=${type}&color=${color}&file=${file}`,
-	// 	method: 'post',
-	// 	params: submitIdPhoto_params
-	// })
 }

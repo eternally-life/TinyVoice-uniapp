@@ -74,8 +74,8 @@
 				
 				
 				console.log({type,color,file});
-				// uni.uploadFile()
-				const res = await submitIdPhoto_post({type,color,file})
+				console.log("hahahahahahah");
+				const res = await submitIdPhoto_post({type,color},file)
 				console.log(res)
 			},
 			// 选择底色

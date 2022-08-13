@@ -40,6 +40,40 @@ export function request({
 	})
 }
 
+export function requestFile({
+	url,
+	method,
+	params,
+	file,
+	data,
+	token,
+	flag = true
+}) {
+	uni.showLoading({
+		title: '加载中'
+	})
+	console.log(file);
+	console.log("++++++++++++++++++++++++++");
+	return new Promise(function(resolve, reject) {
+		uni.uploadFile({
+			url: BASE_URL + url + urlencode(params),
+			filePath: file,
+			name: 'file',
+			header: getFileHeader(),
+			success: (res) => {
+				if (res.statusCode === 200) {
+					flag && loginUtil.loginStatus(res.data.code)
+					resolve(res)
+				}
+			},
+			complete: () => {
+				uni.hideLoading()
+			}
+		})
+	})
+}
+
+
 export function getHeader() {
 	// 从全局变量拿token
 	var token = getApp().globalData.token
@@ -51,6 +85,19 @@ export function getHeader() {
 		Authorization: token
 	}
 	return Authorization;
+}
+
+export function getFileHeader() {
+	// 从全局变量拿token
+	var token = getApp().globalData.token
+	// 全局变量没有token,则去缓存拿
+	if (token === null || token === '' || token === undefined) {
+		token = uni.getStorageSync("token")
+	}
+	let header = {
+		Authorization: token
+	}
+	return header;
 }
 
 function urlencode(data, isPrefix = true) {
