@@ -282,9 +282,9 @@
 					}
 				},
 				{
-					"path": "id_photo/Cphoto",
+					"path": "id_photo/previewPhoto",
 					"style": {
-						"navigationBarTitleText": "计算机证件照",
+						"navigationBarTitleText": "图片预览",
 						"enablePullDownRefresh": false
 					}
 				},

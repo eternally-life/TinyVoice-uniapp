@@ -13,11 +13,12 @@ let submitIdPhoto_params = {
 	type: null, //证件照处理类型
 	color: null, //底色
 }
+// let filePames = {
+// 	file: null, //图片OSS路径
+// }
 
 
 export function submitIdPhoto_post(submitIdPhoto_params, file) {
-	console.log(submitIdPhoto_params,file);
-	console.log("==============");
 	return requestFile({
 		url: `/community/tinyservephotos/save`,
 		// url: `/community/tinyservephotos/save?type=${type}&color=${color}&file=${file}`,
