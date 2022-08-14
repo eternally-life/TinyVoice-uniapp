@@ -39,7 +39,7 @@
 <script>
 	import {
 		communityTinyservenoteByName_Get
-	} from "@/api/社区模块/留言板.js"
+	} from "@/api/工具模块/留言板.js"
 	export default {
 		data() {
 			return {

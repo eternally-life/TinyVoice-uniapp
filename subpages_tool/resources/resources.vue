@@ -2,7 +2,8 @@
 	<view class="wrap">
 		<view class="wrap_background">
 			<view class="bac_logo">
-				Logo <i class="iconfont "></i>
+				<u--image :showLoading="true" :src="logo" width="80rpx" height="80rpx">
+				</u--image>
 			</view>
 		</view>
 		<view class="searchBox">
@@ -17,7 +18,7 @@
 			</view>
 		</view>
 
-		<view class="wrap_block" v-for="(item,index) in resourceData" :key="index" @click="enterResourcesUrl(item.id)">
+		<view class="wrap_block" v-for="(item,index) in resourceData" :key="index">
 			<view class="block_content">
 				<view class="res_name">
 					{{item.name}}
@@ -31,7 +32,8 @@
 					文件大小{{item.size}}m
 				</view>
 				<view class="download_btn">
-					<u-button color="linear-gradient(to right, rgb(66, 83, 216), rgb(213, 51, 186))" @click="filedownload">下载</u-button>
+					<u-button color="linear-gradient(to right,rgb(12,235,235), rgb(32,227,178), rgb(41,255,198))"
+						@click="filedownload(item)">下载</u-button>
 				</view>
 			</view>
 		</view>
@@ -47,10 +49,15 @@
 		communityTinyserveresourceByResourceId_Get,
 		communityTinyserveresourceDown_Get,
 		communityTinyserveresourcePage_Get
-	} from "@/api/社区模块/资源共享.js"
+	} from "@/api/工具模块/资源共享.js"
+	import {
+		systemParamsNoteList_Get,
+		systemParamsNotenoticeId_Get
+	} from '@/api/SYSTEM/参数字典公告.js'
 	export default {
 		data() {
 			return {
+				logo: getApp().globalData.logo,
 				windowHeight: null,
 				searchMsg: "",
 				resourceData: [],
@@ -59,7 +66,7 @@
 				isNoMore: false,
 				keyword: '',
 				id: '',
-				fileUlr: ''
+				datas: {}
 			};
 		},
 		onLoad(options) {
@@ -85,15 +92,19 @@
 						pageSize: 10,
 						//tatol 服务器内总共资源数
 					})
-					let datas = res.data.data
+					var datas = res.data.data
+					// console.log(typeof(datas));
+					this.datas = datas
 					if (res.data.msg === "还没有资源快来第一个上传吧~") {
 						this.isNoMore = true
 					}
 					// console.log(res.data.msg);
 					this.currentPageNumber++
 					this.resourceData = [...this.resourceData, ...datas.records]
+					// this.fileUlrList = [...this.fileUlrList, ...datas.url]
+					// console.log(this.fileUlrList);
 					this.isLoading = false
-					
+
 				} catch (error) {
 					//处理异常
 					console.log(error);
@@ -111,9 +122,54 @@
 				})
 			},
 			//	资源下载
-			filedownload() {
-				console.log("asad");
+			filedownload(item) {
 				
+				// var dtask = plus.downloader.createDownload(item.url,{
+				// 		filename:"_downloads/"+item.name    //利用保存路径，实现下载文件的重命名
+				// 	},function(item,status){
+				// 		//d为下载的文件对象
+				// 		if(status==200){
+				// 			//下载成功,d.filename是文件在保存在本地的相对路径，使用下面的API可转为平台绝对路径
+				// 			var fileSaveUrl = plus.io.convertLocalFileSystemURL(item.name);
+				// 			 console.log(fileSaveUrl)
+				// 			 //进行DOM操作
+				// 			  $("#downloadImg").attr('src',fileSaveUrl);
+				// 			plus.runtime.openFile(d.filename);	   //选择软件打开文件
+				// 	    }else{	
+				// 	    	//下载失败
+				// 	    	plus.downloader.clear();        //清除下载任务
+				// 	    }
+				// 	})
+				// 	 dtask.start();//执行下载
+
+
+				console.log(item);
+				const downloadTask = uni.downloadFile({
+					url: item.url,
+					success: (res) => {
+						if (res.statusCode === 200) {
+							console.log(res);
+							item.downNum++
+							
+						} else {
+							console.log("false");
+						}
+					}
+				});
+				downloadTask.onProgressUpdate((res) => {
+					console.log(res);
+					console.log("下载进度" + res.progress);
+					uni.showModal({
+						title:"下载成功",
+						// content: '下载进度：' + res.progress,
+						showCancel: false
+					});
+					// 满足测试条件，取消下载任务。
+					if (res.progress > 50) {
+						// downloadTask.abort();
+					}
+				})
+
 			},
 			//	资源搜索
 			search(keyword) {
@@ -124,11 +180,15 @@
 			},
 			//	触底加载新页面
 			onReachBottom() {
-				uni.showLoading()
-				setTimeout(() => {
-					this.getResourcesMessage()
-					uni.hideLoading()
-				}, 500);
+				if (this.isNoMore) {
+					return
+				} else {
+					uni.showLoading()
+					setTimeout(() => {
+						this.getResourcesMessage()
+						uni.hideLoading()
+					}, 500);
+				}
 			},
 
 		}
@@ -144,6 +204,12 @@
 			height: 200rpx;
 			width: 100%;
 			background-color: #60C5BA;
+			border-radius: 5rpx;
+
+			.bac_logo {
+				padding-left: 30rpx;
+				padding-top: 30rpx;
+			}
 		}
 
 		.searchBox {
