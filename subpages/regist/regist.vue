@@ -34,7 +34,8 @@
 					<view class="" v-if="disabled"
 						style="font-size: 24rpx;width: 140rpx;padding: 20rpx 0;color: #60c5ba;"
 						@tap="GetVerificationCode">获取验证码</view>
-					<view class="" v-else style="font-size: 24rpx;width: 140rpx;padding: 20rpx 0;">重新获取{{timer}}s</view>
+					<view class="" v-else style="font-size: 24rpx;width: 140rpx;padding: 20rpx 0;color: #aaaaaa;">
+						重新获取{{timer}}s</view>
 				</view>
 			</view>
 			<view class="loginBtn">
@@ -124,8 +125,8 @@
 				const res = await authLoginregisterVerificationCode_Get({
 					phonenumber: this.registInfo.phonenumber
 				})
-				this.selfMsg(res.data.data, 'success');
 				if (res.data.code === 200) {
+					this.selfMsg(res.data.data, 'success');
 					this.disabled = false
 					const authTimer = setInterval(() => {
 						this.timer--
@@ -135,6 +136,8 @@
 							clearInterval(authTimer)
 						}
 					}, 1000)
+				} else {
+					return this.selfMsg(res.data.data, 'warning');
 				}
 				console.log(res);
 
@@ -162,25 +165,18 @@
 				}
 				timer = setTimeout(() => {
 					uni.login({
-						success: res => {
+						success: async res => {
 							this.registInfo.wxCode = res.code;
-							authLoginregisterWxRegister_Post(this.registInfo).then(result => {
-								console.log(result);
-								if (result.data.code === 200) {
-									// uni.reLaunch({
-									// 	url: '/subpages/login/login',
-									// 	success() {
-									// 		this.$ShowToastNone('注册成功，请重新登录');
-									// 	}
-									// });
-									this.selfMsg("注册成功", 'success');
-									this.wxLogin()
-									return;
-								} else {
-									return this.selfMsg(result.data.msg, 'warning');
-								}
-								uni.hideLoading();
-							});
+							const result = await authLoginregisterWxRegister_Post(this.registInfo)
+							console.log(result);
+							if (result.data.code === 200) {
+								this.selfMsg("注册成功", 'success');
+								this.wxLogin()
+								return;
+							} else {
+								return this.selfMsg(result.data.msg, 'warning');
+							}
+							uni.hideLoading();
 						},
 						fail(err) {
 							console.log(err, '登录失败');
@@ -200,26 +196,25 @@
 				}
 				timer = setTimeout(() => {
 					uni.login({
-						success: (res) => {
-							authLoginregisterWxLogin_Post({
+						success: async (res) => {
+							const reslut = await authLoginregisterWxLogin_Post({
 								wxCode: res.code
-							}).then(reslut => {
-								console.log(reslut);
-								if (reslut.data.code === 200) {
-									// 存储全局 token
-									getApp().globalData.token = reslut.data.data.access_token
-									uni.setStorageSync("token", reslut.data.data.access_token)
-									uni.reLaunch({
-										url: '/pages/user/user',
-										success: res => {
-											this.$ShowToastNone('微信登录成功')
-										}
-									})
-									return
-								} else {
-									return this.selfMsg(reslut.data.msg, 'warning')
-								}
 							})
+							console.log(reslut);
+							if (reslut.data.code === 200) {
+								// 存储全局 token
+								getApp().globalData.token = reslut.data.data.access_token
+								uni.setStorageSync("token", reslut.data.data.access_token)
+								uni.reLaunch({
+									url: '/pages/user/user',
+									success: res => {
+										this.$ShowToastNone('微信登录成功')
+									}
+								})
+								return
+							} else {
+								return this.selfMsg("请30S后重试", 'warning')
+							}
 							uni.hideLoading()
 						},
 						fail: (err) => {

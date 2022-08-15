@@ -18,7 +18,9 @@
 							<view class="left">
 								<u-tag text="商品介绍"></u-tag>
 							</view>
-							<u-parse :content="shopDetail.content ? shopDetail.content : '无'"></u-parse>
+							<view style="flex: 1;">
+								<u-parse :content="shopDetail.content ? shopDetail.content : '无'"></u-parse>
+							</view>
 						</view>
 					</view>
 				</view>
@@ -109,7 +111,7 @@
 		},
 		onLoad(opt) {
 			this.getNoticeByNoticeID()
-			this.shopDetail = JSON.parse(opt.shopDetail)
+			this.shopDetail = JSON.parse(decodeURIComponent(opt.shopDetail))
 			this.getSku()
 			uni.showLoading({
 				title: '正在加载'

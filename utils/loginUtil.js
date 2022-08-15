@@ -50,38 +50,37 @@ export function loginStatus(code) {
 export function qqLogin() {
 	setGloalDataLoginNum()
 	uni.login({
-		success: (res) => {
+		success: async (res) => {
 			console.log(res);
-			authTokenauthCommonLogin_Post({
+			const reslut = await authTokenauthCommonLogin_Post({
 				loginType: 3,
 				qqCode: res.code
-			}).then(reslut => {
-				console.log(reslut);
-				if (reslut.data.code === 8081) {
-					uni.navigateTo({
-						url: '/subpages/login/login',
-						success: () => {
-							uni.showToast({
-								title: '请先账号登录qq绑定',
-								icon: 'none'
-							})
-						}
-					})
-					return
-				}
-				if (reslut.data.code === 200) {
-					setGloalDataUserInfo()
-					setGloalDataToken(reslut.data.data.access_token)
-					showToastLogin('登录成功')
-					uni.$emit('refresh')
-					setPamesList()
-					setNoticeList()
-					return
-				}
-				if (reslut.data.code === 500) {
-					return this.selfMsg('账号不存在，请先注册', 'warning')
-				}
 			})
+			console.log(reslut);
+			if (reslut.data.code === 8081) {
+				uni.navigateTo({
+					url: '/subpages/login/login',
+					success: () => {
+						uni.showToast({
+							title: '请先账号登录qq绑定',
+							icon: 'none'
+						})
+					}
+				})
+				return
+			}
+			if (reslut.data.code === 200) {
+				setGloalDataUserInfo()
+				setGloalDataToken(reslut.data.data.access_token)
+				showToastLogin('登录成功')
+				uni.$emit('refresh')
+				setPamesList()
+				setNoticeList()
+				return
+			}
+			if (reslut.data.code === 500) {
+				return this.selfMsg('账号不存在，请先注册', 'warning')
+			}
 			uni.hideLoading()
 		},
 		fail: (err) => {
@@ -95,45 +94,44 @@ export function qqLogin() {
 export function wxLogin() {
 	setGloalDataLoginNum()
 	uni.login({
-		success: (res) => {
+		success: async (res) => {
 			provider: 'weixin'
 			// TODO 登录逻辑 - 更新token
-			authLoginregisterWxLogin_Post({
+			const reslut = await authLoginregisterWxLogin_Post({
 				wxCode: res.code
-			}).then(res => {
-				// 存储全局 token
-				if (res.data.code === 200) {
-					setGloalDataUserInfo()
-					setGloalDataToken(res.data.data.access_token)
-					showToastLogin('登录成功')
-					uni.$emit('refresh')
-					setPamesList()
-					setNoticeList()
-					return
-				}
-				if (res.data.code === 5555) {
-					uni.navigateTo({
-						url: '/subpages/login/login?num=1',
-						success: () => {
-							uni.showToast({
-								title: '手机号未绑定，绑定即可微信登录',
-								icon: 'none'
-							})
-						}
-					})
-					return
-				}
+			})
+			// 存储全局 token
+			if (reslut.data.code === 200) {
+				setGloalDataUserInfo()
+				setGloalDataToken(reslut.data.data.access_token)
+				showToastLogin('登录成功')
+				uni.$emit('refresh')
+				setPamesList()
+				setNoticeList()
+				return
+			}
+			if (reslut.data.code === 5555) {
 				uni.navigateTo({
-					url: '/subpages/login/login',
+					url: '/subpages/login/login?num=1',
 					success: () => {
 						uni.showToast({
-							title: '还未注册，请先注册',
+							title: '手机号未绑定，绑定即可微信登录',
 							icon: 'none'
 						})
 					}
 				})
 				return
+			}
+			uni.navigateTo({
+				url: '/subpages/login/login',
+				success: () => {
+					uni.showToast({
+						title: '还未注册，请先注册',
+						icon: 'none'
+					})
+				}
 			})
+			return
 		},
 		fail: (err) => {
 			showToastLogin('登录失败')
