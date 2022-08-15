@@ -121,104 +121,102 @@
 			},
 			//	资源下载
 			filedownload(id, url) {
-				
-				// 11111111
-				if(true){
-				communityTinyserveresourceDown_Get({
-					id: id,
+
+				if (true) {
+					communityTinyserveresourceDown_Get({
+						id: id,
+					})
+					uni.downloadFile({
+						url,
+						success: (res) => {
+							if (res.statusCode === 200) {
+								this.handleFile(res.tempFilePath)
+								console.log(222, 'down1', res)
+							}
+						}
+					})
+
+				} else {
+					uni.showModal({
+						content: '您的积分还不够哦！',
+						showCancel: false
+					});
+				}
+
+
+			},
+
+			// 对不同文件的处理
+			handleFile(filePath) {
+				const filetype = filePath.split('.')[1],
+					typeObj = {
+						gif: 'img',
+						GIF: 'img',
+						png: 'img',
+						PNG: 'img',
+						jpg: 'img',
+						JPG: 'img',
+						jpeg: 'img',
+						mp4: 'video',
+						doc: 'doc',
+						docx: 'doc',
+						xls: 'doc',
+						xlsx: 'doc',
+						ppt: 'doc',
+						pptx: 'doc',
+			  	pdf: 'doc'
+					},
+					result = (ok = '成功保存到相册', no = '保存失败') => {
+						return {
+							filePath,
+							success: res => {
+								uni.showToast({
+									title: ok
+								})
+							},
+							fail: err => {
+								uni.showToast({
+									title: no
+								})
+							}
+						}
+					}
+
+				if (typeObj[filetype] === 'video') {
+					// 保存视频到系统相册:mp4
+					uni.saveVideoToPhotosAlbum(result())
+				} else if (typeObj[filetype] === 'img') {
+					// 保存图片到系统相册:gif,jpg,jpeg,png,GIF,JPG,PNG
+					uni.saveImageToPhotosAlbum(result())
+				} else {
+					// 打开文件:doc,docx,xls,xlsx,ppt,pptx,pdf
+					uni.openDocument({
+						...result('打开文档成功', '打开文档失败'),
+						showMenu: true //showMenu是否显示右上角菜单
+					});
+				}
+			},
+			//	资源搜索
+			search(keyword) {
+				uni.showToast({
+					title: '搜索：' + keyword,
+					icon: 'none'
 				})
-				console.log(url);
+			},
+			//	触底加载新页面
+			onReachBottom() {
+				if (this.isNoMore) {
+					return
+				} else {
+					uni.showLoading()
+					setTimeout(() => {
+						this.getResourcesMessage()
+						uni.hideLoading()
+					}, 500);
+				}
+			},
 
-				//#ifdef H5 || MP-WEIXIN
-				//判断平台 支持非移动端片头平台
-				window.location.href = this.weburl + '?userId=' + userId + '&userToken=' + userToken + '&username=' +
-					username; //问号后面传参
-				//#endif
-
-				//#ifdef APP-PLUS   
-				//支持移动端app 平台　　
-				if (plus.os.name == 'Android') { //判断平台为Android
-					plus.runtime.openURL(url);
-				} else if (plus.os.name == 'iOS') { //判断平台为IOS
-					plus.runtime.openURL(url);
-				} else {}
-				//#endif
-			} else {
-				uni.showModal({
-					content: '您的积分还不够哦！',
-					showCancel: false
-				});
-			}
-			
-			
-			// 22222222222
-			// var dtask = plus.downloader.createDownload(item.url,{
-			// 		filename:"_downloads/"+item.name    //利用保存路径，实现下载文件的重命名
-			// 	},function(item,status){
-			// 		//d为下载的文件对象
-			// 		if(status==200){
-			// 			//下载成功,d.filename是文件在保存在本地的相对路径，使用下面的API可转为平台绝对路径
-			// 			var fileSaveUrl = plus.io.convertLocalFileSystemURL(item.name);
-			// 			 console.log(fileSaveUrl)
-			// 			 //进行DOM操作
-			// 			  $("#downloadImg").attr('src',fileSaveUrl);
-			// 			plus.runtime.openFile(d.filename);	   //选择软件打开文件
-			// 	    }else{	
-			// 	    	//下载失败
-			// 	    	plus.downloader.clear();        //清除下载任务
-			// 	    }
-			// 	})
-			// 	 dtask.start();//执行下载
-
-
-			// 3333333
-			// const downloadTask = uni.downloadFile({
-			// 	url: url,
-			// 	success: (res) => {
-			// 		if (res.statusCode === 200) {
-			// 			console.log(res);
-			// 		} else {
-			// 			console.log("false");
-			// 		}
-			// 	}
-			// });
-			// 下载提示
-			// downloadTask.onProgressUpdate((res) => {
-			// 	console.log(res);
-			// 	console.log("下载进度" + res.progress);
-			// 	uni.showModal({
-			// 		title: "下载成功",
-			// 		// content: '下载进度：' + res.progress,
-			// 		showCancel: false
-			// 	});
-			// 	// 满足测试条件，取消下载任务。
-			// 	if (res.progress > 50) {
-			// 		// downloadTask.abort();
-			// 	}
-			// })
-
-		},
-		//	资源搜索
-		search(keyword) {
-			uni.showToast({
-				title: '搜索：' + keyword,
-				icon: 'none'
-			})
-		},
-		//	触底加载新页面
-		onReachBottom() {
-			if (this.isNoMore) {
-				return
-			} else {
-				uni.showLoading()
-				setTimeout(() => {
-					this.getResourcesMessage()
-					uni.hideLoading()
-				}, 500);
-			}
-		},
-
-	}
+		}
 	}
 </script>
 
