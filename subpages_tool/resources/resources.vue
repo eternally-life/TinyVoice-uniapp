@@ -19,7 +19,7 @@
 		</view>
 
 		<view class="wrap_block" v-for="(item,index) in resourceData" :key="index">
-			<view class="block_content">
+			<view class="block_content" @click="enterResourcesUrl(index)">
 				<view class="res_name">
 					{{item.name}}
 				</view>
@@ -33,7 +33,7 @@
 				</view>
 				<view class="download_btn">
 					<u-button color="linear-gradient(to right,rgb(12,235,235), rgb(32,227,178), rgb(41,255,198))"
-						@click="filedownload(item)">下载</u-button>
+						@click="filedownload(item.resourceId,item.url)">下载</u-button>
 				</view>
 			</view>
 		</view>
@@ -57,16 +57,14 @@
 	export default {
 		data() {
 			return {
-				logo: getApp().globalData.logo,
+				logo: getApp().globalData.logo, //全局logo
 				windowHeight: null,
-				searchMsg: "",
-				resourceData: [],
+				searchMsg: "", //搜索关键字
+				resourceData: [], //数据列表
 				currentPageNumber: 1, //页号
 				isloading: false,
 				isNoMore: false,
-				keyword: '',
 				id: '',
-				datas: {}
 			};
 		},
 		onLoad(options) {
@@ -110,7 +108,7 @@
 					console.log(error);
 				}
 			},
-			//	文件内容跳转  后期可改模态框
+			//	文件内容跳转  可改模态框
 			enterResourcesUrl(index) {
 				uni.navigateTo({
 					url: '/subpages_tool/resourcesDetail/resourcesDetail',
@@ -122,54 +120,81 @@
 				})
 			},
 			//	资源下载
-			filedownload(item) {
-				
-				// var dtask = plus.downloader.createDownload(item.url,{
-				// 		filename:"_downloads/"+item.name    //利用保存路径，实现下载文件的重命名
-				// 	},function(item,status){
-				// 		//d为下载的文件对象
-				// 		if(status==200){
-				// 			//下载成功,d.filename是文件在保存在本地的相对路径，使用下面的API可转为平台绝对路径
-				// 			var fileSaveUrl = plus.io.convertLocalFileSystemURL(item.name);
-				// 			 console.log(fileSaveUrl)
-				// 			 //进行DOM操作
-				// 			  $("#downloadImg").attr('src',fileSaveUrl);
-				// 			plus.runtime.openFile(d.filename);	   //选择软件打开文件
-				// 	    }else{	
-				// 	    	//下载失败
-				// 	    	plus.downloader.clear();        //清除下载任务
-				// 	    }
-				// 	})
-				// 	 dtask.start();//执行下载
+			filedownload(id, url) {
 
-
-				console.log(item);
-				const downloadTask = uni.downloadFile({
-					url: item.url,
-					success: (res) => {
-						if (res.statusCode === 200) {
-							console.log(res);
-							item.downNum++
-							
-						} else {
-							console.log("false");
+				if (true) {
+					communityTinyserveresourceDown_Get({
+						id: id,
+					})
+					uni.downloadFile({
+						url,
+						success: (res) => {
+							if (res.statusCode === 200) {
+								this.handleFile(res.tempFilePath)
+								console.log(222, 'down1', res)
+							}
 						}
-					}
-				});
-				downloadTask.onProgressUpdate((res) => {
-					console.log(res);
-					console.log("下载进度" + res.progress);
+					})
+
+				} else {
 					uni.showModal({
-						title:"下载成功",
-						// content: '下载进度：' + res.progress,
+						content: '您的积分还不够哦！',
 						showCancel: false
 					});
-					// 满足测试条件，取消下载任务。
-					if (res.progress > 50) {
-						// downloadTask.abort();
-					}
-				})
+				}
 
+
+			},
+
+			// 对不同文件的处理
+			handleFile(filePath) {
+				const filetype = filePath.split('.')[1],
+					typeObj = {
+						gif: 'img',
+						GIF: 'img',
+						png: 'img',
+						PNG: 'img',
+						jpg: 'img',
+						JPG: 'img',
+						jpeg: 'img',
+						mp4: 'video',
+						doc: 'doc',
+						docx: 'doc',
+						xls: 'doc',
+						xlsx: 'doc',
+						ppt: 'doc',
+						pptx: 'doc',
+			  	pdf: 'doc'
+					},
+					result = (ok = '成功保存到相册', no = '保存失败') => {
+						return {
+							filePath,
+							success: res => {
+								uni.showToast({
+									title: ok
+								})
+							},
+							fail: err => {
+								uni.showToast({
+									title: no
+								})
+							}
+						}
+					}
+
+				if (typeObj[filetype] === 'video') {
+					// 保存视频到系统相册:mp4
+					uni.saveVideoToPhotosAlbum(result())
+				} else if (typeObj[filetype] === 'img') {
+					// 保存图片到系统相册:gif,jpg,jpeg,png,GIF,JPG,PNG
+					uni.saveImageToPhotosAlbum(result())
+				} else {
+					// 打开文件:doc,docx,xls,xlsx,ppt,pptx,pdf
+					uni.openDocument({
+						...result('打开文档成功', '打开文档失败'),
+						showMenu: true //showMenu是否显示右上角菜单
+					});
+				}
 			},
 			//	资源搜索
 			search(keyword) {

@@ -15,7 +15,7 @@
 			<scroll-view class="right" scroll-y>
 				<view class="rightItem">
 					<view class="listItem" v-for="item in commodityList" :key="item.commodityId">
-						<view class="list" @click="toShopDetails(item)">
+						<view class="list" @click="toShopDetails(item.commodityId)">
 							<image class="cover" :src="item.image"></image>
 							<text class="title">{{item.name}}</text>
 						</view>
@@ -94,10 +94,11 @@
 					this.selfMsg(res.data.msg, 'warning')
 				}
 			},
-			toShopDetails(item) {
-				console.log(item);
+			toShopDetails(id) {
+				console.log(id);
 				uni.navigateTo({
-					url: `/subpages_shop/shopDetail/shopDetail?shopDetail=${encodeURIComponent(JSON.stringify(item))}`
+					// url: `/subpages_shop/shopDetail/shopDetail?shopDetail=${encodeURIComponent(JSON.stringify(item))}`
+					url: '/subpages_shop/shopDetail/shopDetail?commodityId=' + id
 				})
 			},
 			// 预览图片

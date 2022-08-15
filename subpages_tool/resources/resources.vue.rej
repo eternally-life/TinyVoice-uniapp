@@ -1,0 +1,10 @@
+diff a/subpages_tool/resources/resources.vue b/subpages_tool/resources/resources.vue	(rejected hunks)
+@@ -20,7 +20,7 @@
+ 
+ 		<view class="wrap_block" v-for="(item,index) in resourceData" :key="index">
+ 			<view class="block_content">
+-				<view class="res_name">
++				<view class="res_name" @click="enterResourcesUrl(index)">
+ 					{{item.name}}
+ 				</view>
+ 				<view class="res_msg">
