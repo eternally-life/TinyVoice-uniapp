@@ -19,7 +19,7 @@
 		</view>
 
 		<view class="wrap_block" v-for="(item,index) in resourceData" :key="index">
-			<view class="block_content">
+			<view class="block_content" @click="enterResourcesUrl(index)">
 				<view class="res_name">
 					{{item.name}}
 				</view>
@@ -33,7 +33,7 @@
 				</view>
 				<view class="download_btn">
 					<u-button color="linear-gradient(to right,rgb(12,235,235), rgb(32,227,178), rgb(41,255,198))"
-						@click="filedownload(item)">下载</u-button>
+						@click="filedownload(item.resourceId,item.url)">下载</u-button>
 				</view>
 			</view>
 		</view>
@@ -57,16 +57,14 @@
 	export default {
 		data() {
 			return {
-				logo: getApp().globalData.logo,
+				logo: getApp().globalData.logo, //全局logo
 				windowHeight: null,
-				searchMsg: "",
-				resourceData: [],
+				searchMsg: "", //搜索关键字
+				resourceData: [], //数据列表
 				currentPageNumber: 1, //页号
 				isloading: false,
 				isNoMore: false,
-				keyword: '',
 				id: '',
-				datas: {}
 			};
 		},
 		onLoad(options) {
@@ -110,7 +108,7 @@
 					console.log(error);
 				}
 			},
-			//	文件内容跳转  后期可改模态框
+			//	文件内容跳转  可改模态框
 			enterResourcesUrl(index) {
 				uni.navigateTo({
 					url: '/subpages_tool/resourcesDetail/resourcesDetail',
@@ -122,76 +120,105 @@
 				})
 			},
 			//	资源下载
-			filedownload(item) {
+			filedownload(id, url) {
 				
-				// var dtask = plus.downloader.createDownload(item.url,{
-				// 		filename:"_downloads/"+item.name    //利用保存路径，实现下载文件的重命名
-				// 	},function(item,status){
-				// 		//d为下载的文件对象
-				// 		if(status==200){
-				// 			//下载成功,d.filename是文件在保存在本地的相对路径，使用下面的API可转为平台绝对路径
-				// 			var fileSaveUrl = plus.io.convertLocalFileSystemURL(item.name);
-				// 			 console.log(fileSaveUrl)
-				// 			 //进行DOM操作
-				// 			  $("#downloadImg").attr('src',fileSaveUrl);
-				// 			plus.runtime.openFile(d.filename);	   //选择软件打开文件
-				// 	    }else{	
-				// 	    	//下载失败
-				// 	    	plus.downloader.clear();        //清除下载任务
-				// 	    }
-				// 	})
-				// 	 dtask.start();//执行下载
+				// 11111111
+				if(true){
+				communityTinyserveresourceDown_Get({
+					id: id,
+				})
+				console.log(url);
 
+				//#ifdef H5 || MP-WEIXIN
+				//判断平台 支持非移动端片头平台
+				window.location.href = this.weburl + '?userId=' + userId + '&userToken=' + userToken + '&username=' +
+					username; //问号后面传参
+				//#endif
 
-				console.log(item);
-				const downloadTask = uni.downloadFile({
-					url: item.url,
-					success: (res) => {
-						if (res.statusCode === 200) {
-							console.log(res);
-							item.downNum++
-							
-						} else {
-							console.log("false");
-						}
-					}
+				//#ifdef APP-PLUS   
+				//支持移动端app 平台　　
+				if (plus.os.name == 'Android') { //判断平台为Android
+					plus.runtime.openURL(url);
+				} else if (plus.os.name == 'iOS') { //判断平台为IOS
+					plus.runtime.openURL(url);
+				} else {}
+				//#endif
+			} else {
+				uni.showModal({
+					content: '您的积分还不够哦！',
+					showCancel: false
 				});
-				downloadTask.onProgressUpdate((res) => {
-					console.log(res);
-					console.log("下载进度" + res.progress);
-					uni.showModal({
-						title:"下载成功",
-						// content: '下载进度：' + res.progress,
-						showCancel: false
-					});
-					// 满足测试条件，取消下载任务。
-					if (res.progress > 50) {
-						// downloadTask.abort();
-					}
-				})
+			}
+			
+			
+			// 22222222222
+			// var dtask = plus.downloader.createDownload(item.url,{
+			// 		filename:"_downloads/"+item.name    //利用保存路径，实现下载文件的重命名
+			// 	},function(item,status){
+			// 		//d为下载的文件对象
+			// 		if(status==200){
+			// 			//下载成功,d.filename是文件在保存在本地的相对路径，使用下面的API可转为平台绝对路径
+			// 			var fileSaveUrl = plus.io.convertLocalFileSystemURL(item.name);
+			// 			 console.log(fileSaveUrl)
+			// 			 //进行DOM操作
+			// 			  $("#downloadImg").attr('src',fileSaveUrl);
+			// 			plus.runtime.openFile(d.filename);	   //选择软件打开文件
+			// 	    }else{	
+			// 	    	//下载失败
+			// 	    	plus.downloader.clear();        //清除下载任务
+			// 	    }
+			// 	})
+			// 	 dtask.start();//执行下载
 
-			},
-			//	资源搜索
-			search(keyword) {
-				uni.showToast({
-					title: '搜索：' + keyword,
-					icon: 'none'
-				})
-			},
-			//	触底加载新页面
-			onReachBottom() {
-				if (this.isNoMore) {
-					return
-				} else {
-					uni.showLoading()
-					setTimeout(() => {
-						this.getResourcesMessage()
-						uni.hideLoading()
-					}, 500);
-				}
-			},
 
-		}
+			// 3333333
+			// const downloadTask = uni.downloadFile({
+			// 	url: url,
+			// 	success: (res) => {
+			// 		if (res.statusCode === 200) {
+			// 			console.log(res);
+			// 		} else {
+			// 			console.log("false");
+			// 		}
+			// 	}
+			// });
+			// 下载提示
+			// downloadTask.onProgressUpdate((res) => {
+			// 	console.log(res);
+			// 	console.log("下载进度" + res.progress);
+			// 	uni.showModal({
+			// 		title: "下载成功",
+			// 		// content: '下载进度：' + res.progress,
+			// 		showCancel: false
+			// 	});
+			// 	// 满足测试条件，取消下载任务。
+			// 	if (res.progress > 50) {
+			// 		// downloadTask.abort();
+			// 	}
+			// })
+
+		},
+		//	资源搜索
+		search(keyword) {
+			uni.showToast({
+				title: '搜索：' + keyword,
+				icon: 'none'
+			})
+		},
+		//	触底加载新页面
+		onReachBottom() {
+			if (this.isNoMore) {
+				return
+			} else {
+				uni.showLoading()
+				setTimeout(() => {
+					this.getResourcesMessage()
+					uni.hideLoading()
+				}, 500);
+			}
+		},
+
+	}
 	}
 </script>
 
