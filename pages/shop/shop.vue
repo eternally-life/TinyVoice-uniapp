@@ -97,7 +97,7 @@
 			toShopDetails(item) {
 				console.log(item);
 				uni.navigateTo({
-					url: '/subpages_shop/shopDetail/shopDetail?shopDetail=' + JSON.stringify(item)
+					url: `/subpages_shop/shopDetail/shopDetail?shopDetail=${encodeURIComponent(JSON.stringify(item))}`
 				})
 			},
 			// 预览图片
