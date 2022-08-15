@@ -4,7 +4,15 @@
 		<view class="tip" v-if="!shopList.length">商品详情加载中...</view>
 		<block v-else>
 			<view class="header">
-				<image class="background" :src="shopDetail.image" mode="aspectFill"></image>
+				<!-- <image class="background" :src="shopDetail.image" mode="aspectFill"></image> -->
+				<view class="swp">
+					<u-swiper :list="shhopPicList" @change="e => currentNum = e.current" :autoplay="false"
+						indicatorStyle="right: 20px">
+						<view slot="indicator" class="indicator-num">
+							<text class="indicator-num__text">{{ currentNum + 1 }}/{{ shhopPicList.length }}</text>
+						</view>
+					</u-swiper>
+				</view>
 				<view class="top">
 					<view class="name">
 						<view class="one">
@@ -18,8 +26,11 @@
 							<view class="left">
 								<u-tag text="商品介绍"></u-tag>
 							</view>
-							<view style="flex: 1;">
-								<u-parse :content="shopDetail.content ? shopDetail.content : '无'"></u-parse>
+							<view class="parse_detail">
+								<!-- <rich-text :nodes="shopDetail.content"></rich-text> -->
+								<!-- <u-parse :content="shopDetail.content ? shopDetail.content : '无'" :tagStyle="style">
+								</u-parse> -->
+								<u-parse :content="content" :tagStyle="style"></u-parse>
 							</view>
 						</view>
 					</view>
@@ -85,6 +96,7 @@
 	import {
 		payTinymallGetSku_Get,
 		payTinymallCreateOrder_Post,
+		shopDetailById_Get
 	} from '@/api/商城模块/商品信息下单.js'
 	import {
 		payTinymallshoppingSave_Post
@@ -93,6 +105,7 @@
 		systemParamsNoteList_Get,
 		systemParamsNotenoticeId_Get
 	} from '@/api/SYSTEM/参数字典公告.js'
+	const graceRichText = require('../../utils/richtext.js');
 	export default {
 		data() {
 			return {
@@ -102,22 +115,60 @@
 				price: 0,
 				current: 0,
 				parmesList: {},
-				isLoading: true,
 				isAgreement: false, // 展示协议
 				isTrue: false, // 判断用户是否点了协议
 				value: 1,
-				noticeData: {}
+				noticeData: {},
+				commodityId: null,
+				content: ``,
+				style: {
+					// 字符串的形式
+					// p: 'font-size:32rpx',
+					// img: 'width:200rpx;height200rpx;'
+				},
+				shhopPicList: [
+					'https://cdn.uviewui.com/uview/swiper/swiper2.png',
+					'https://cdn.uviewui.com/uview/swiper/swiper3.png',
+					'https://cdn.uviewui.com/uview/swiper/swiper1.png',
+				],
+				currentNum: 0
 			}
 		},
 		onLoad(opt) {
+			this.commodityId = opt.commodityId
+			this.getShopDetailById()
 			this.getNoticeByNoticeID()
-			this.shopDetail = JSON.parse(decodeURIComponent(opt.shopDetail))
-			this.getSku()
-			uni.showLoading({
-				title: '正在加载'
-			})
+			// this.shopDetail = JSON.parse(decodeURIComponent(opt.shopDetail))
+			// this.getSku()
 		},
 		methods: {
+			async getShopDetailById() {
+				const res = await shopDetailById_Get({
+					commodityId: this.commodityId
+				})
+				if (res.data.code === 200) {
+					this.shopDetail = res.data.commodity
+					// 调用richtext.js的处理方法
+					this.content = graceRichText.format(res.data.commodity.content);
+
+
+					this.shopList = res.data.sku
+					// let newarr = [];
+					let newarr1 = [];
+					for (let i = 0; i < this.shopList.length; i++) {
+						// let temp = {
+						// 	"name": this.shopList[i]["specification"]
+						// };
+						// newarr.push(temp);
+						let temp1 = this.shopList[i]["specification"]
+						newarr1.push(temp1);
+					}
+					this.parmes = newarr1
+					this.parmesList = this.shopList[0]
+					this.price = this.parmesList.price / 100
+				}
+				console.log(res);
+			},
 			showAgreement() {
 				this.isAgreement = true
 			},
@@ -177,32 +228,24 @@
 				}
 
 			},
-			async getSku() {
-				const res = await payTinymallGetSku_Get({
-					commodityId: this.shopDetail.commodityId
-				})
-				if (res.data.code === 200) {
-					this.shopList = res.data.data
-					// let newarr = [];
-					let newarr1 = [];
-					for (let i = 0; i < this.shopList.length; i++) {
-						// let temp = {
-						// 	"name": this.shopList[i]["specification"]
-						// };
-						// newarr.push(temp);
-						let temp1 = this.shopList[i]["specification"]
-						newarr1.push(temp1);
-					}
-					this.parmes = newarr1
-					this.parmesList = this.shopList[0]
-					this.isLoading = false
-					this.price = this.parmesList.price / 100
-					uni.hideLoading()
-				} else {
-					this.selfMsg(res.data.msg, 'warning')
-				}
-				console.log(res);
-			},
+			// async getSku() {
+			// 	const res = await payTinymallGetSku_Get({
+			// 		commodityId: this.commodityId
+			// 	})
+			// 	if (res.data.code === 200) {
+			// 		this.shopList = res.data.data
+			// 		let newarr1 = [];
+			// 		for (let i = 0; i < this.shopList.length; i++) {
+			// 			let temp1 = this.shopList[i]["specification"]
+			// 			newarr1.push(temp1);
+			// 		}
+			// 		this.parmes = newarr1
+			// 		this.parmesList = this.shopList[0]
+			// 		this.price = this.parmesList.price / 100
+			// 	} else {
+			// 		this.selfMsg(res.data.msg, 'warning')
+			// 	}
+			// },
 			async getNoticeByNoticeID() {
 				const res = await systemParamsNotenoticeId_Get({
 					noticeId: 14
@@ -220,6 +263,13 @@
 </script>
 
 <style scoped lang="scss">
+	.data-v-451425b3 {
+		image {
+			width: 300rpx;
+			height: 200rpx;
+		}
+	}
+
 	.container {
 		position: relative;
 
@@ -234,6 +284,22 @@
 		.header {
 			background-color: #ffffff;
 
+			.swp {
+				.indicator-num {
+					padding: 2px 0;
+					background-color: rgba(0, 0, 0, 0.35);
+					border-radius: 100px;
+					width: 35px;
+					@include flex;
+					justify-content: center;
+
+					&__text {
+						color: #FFFFFF;
+						font-size: 12px;
+					}
+				}
+			}
+
 			.background {
 				width: 100%;
 				height: 350rpx;
@@ -247,9 +313,19 @@
 
 					.one {
 						display: flex;
+						align-items: baseline;
 
 						.left {
 							padding: 0 20rpx 20rpx 0;
+						}
+
+						.parse_detail {
+							padding: 20rpx 0rpx;
+							color: #4a4a4a;
+
+							text {
+								display: inline-block;
+							}
 						}
 					}
 				}
@@ -260,7 +336,7 @@
 			position: relative;
 			background-color: #fff;
 			padding: 40rpx;
-			margin: 50rpx 30rpx;
+			margin: 50rpx 30rpx 260rpx;
 			border-radius: 30rpx;
 			box-shadow: 10rpx 10rpx 10px #ccc;
 
@@ -275,9 +351,10 @@
 				.type {
 					.one {
 						display: flex;
+						align-items: baseline;
 
 						.left {
-							padding: 0 20rpx 20rpx 0;
+							padding: 20rpx 20rpx 20rpx 0;
 						}
 					}
 
@@ -286,9 +363,9 @@
 		}
 
 		.bot {
-			// position: absolute;
-			// bottom: 0rpx;
-			// left: 0;
+			position: fixed;
+			bottom: 0rpx;
+			z-index: 99;
 			padding-top: 20rpx;
 			width: 100%;
 			background-color: #fff;
