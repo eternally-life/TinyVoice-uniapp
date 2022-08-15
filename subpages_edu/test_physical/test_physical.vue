@@ -1,9 +1,9 @@
 <!-- 体测计算 -->
 <template>
 	<view>
-		<u-toast ref="uToast"></u-toast>
-		<u-modal :show="show" title="单 项 得 分" @confirm="showModleChange()">
-			<view class="slot-content"><rich-text :nodes="content"></rich-text></view>
+		<u-notify ref="uNotify" message="Hi uView"></u-notify>
+		<u-modal :show="show" title="单 项 得 分 详 情" @confirm="show = false">
+			<u-parse :content="content"></u-parse>
 		</u-modal>
 		<!-- 顶部成绩区块 -->
 		<view class="result_container">
@@ -18,9 +18,18 @@
 		</view>
 		<!-- 中间表单域 -->
 		<view class="from">
+			<view class="input_list" style="display: block !important;">
+				<u-subsection
+					:list="gradeList"
+					:current="grade"
+					@change="sectionChange"
+					activeColor="#60c5ba"
+					mode="subsection"
+				></u-subsection>
+			</view>
 			<u-form labelPosition="left" :labelWidth="90">
-				<u-form-item label="性别" @click="gender = !gender">
-					<view class="inputStyle">
+				<u-form-item label="性别">
+					<view class="inputStyle" @click="genderChange">
 						<u-input
 							:placeholder="getStr_Gender + ' 生 '"
 							placeholderStyle="color:#000"
@@ -151,7 +160,7 @@
 				<u-button type="error" text="清空所有" shape="circle" @click="restart()"></u-button>
 			</view>
 			<view class="btn_list">
-				<u-button type="primary" text="查看分数详情" shape="circle" @click="showModleChange()"></u-button>
+				<u-button type="primary" text="查看分数详情" shape="circle" @click="showModleChange"></u-button>
 			</view>
 		</view>
 	</view>
@@ -168,7 +177,6 @@ export default {
 			grade: 0,
 			gradeList: ['大 一 / 大 二', '大 三 / 大 四'],
 			oldValue: '', //旧的值
-			inputTimeLockID: -1, //输入框延检测时锁ID
 			val_obj: {
 				weight: '', //体重
 				height: '', //身高
@@ -183,30 +191,25 @@ export default {
 		};
 	},
 	methods: {
-		inputChangeCheck(e) {
-			console.log('值', e);
-		},
 		/* 聚焦 设置临时输入值 */
 		focus(value) {
 			this.oldValue = value;
-			clearTimeout(this.inputTimeLockID);
 		},
 		/* 输入框失去焦点	 比较差异、存储  */
 		blur(value) {
 			if (this.oldValue == value) return;
-
-			console.log('值变化');
-			/* 2秒内没有input聚焦 则保存 */
-			this.inputTimeLockID = setTimeout(() => {
-				console.log('失去聚焦');
-				this.saveStorageInput();
-			}, 1000);
+			this.saveStorageInput();
 		},
 
 		/* 组件方法 切换年级*/
 		sectionChange(index) {
 			this.grade = index;
-			// this.saveStorageInput();
+			this.saveStorageInput();
+		},
+		/* 点击修改性别 */
+		genderChange() {
+			this.gender = !this.gender;
+			this.saveStorageInput();
 		},
 
 		/* 切换 显示/隐藏 模态框 */
@@ -214,13 +217,13 @@ export default {
 			this.show = !this.show;
 		},
 
-		/* 存储当前输入 */
+		/* 存储当前输入  并提示*/
 		saveStorageInput() {
 			try {
 				uni.setStorageSync(this.key, this.getPageInput());
-				this.$refs.uToast.show({ type: 'success', message: '成绩存储成功', duration: 1000 });
+				this.$refs.uNotify.show({ type: 'success', message: '成绩数据存储成功', duration: 1000 });
 			} catch (e) {
-				this.$refs.uToast.show({ type: 'error', message: '数据存储失败', duration: 1000 });
+				this.$refs.uNotify.show({ type: 'error', message: '成绩数据存储成功', duration: 1000 });
 			}
 		},
 
@@ -229,15 +232,8 @@ export default {
 			try {
 				const value = uni.getStorageSync(this.key);
 				if (value) {
-					this.$refs.uToast.show({
-						type: 'success',
-						message: '记录读取成功',
-						duration: 1000,
-						position: 'bottom'
-					});
 					this.setPageInput(value);
-				} else {
-					// this.$refs.uToast.show({ type: 'error', message: '没有输入记录', duration: 1000, position: 'bottom' });
+					this.$refs.uNotify.show({ type: 'primary', message: '记录读取成功', duration: 3000 });
 				}
 			} catch (e) {
 				// error
@@ -272,8 +268,10 @@ export default {
 				m_8h_1k: '', //分钟-800/100米
 				s_8h_1k: '' //秒-800/1000米
 			};
+			this.gender = true;
+			this.grade = 0;
 			uni.removeStorageSync(this.key);
-			this.$refs.uToast.show({ type: 'success', message: '重置成功', duration: 1000, position: 'bottom' });
+			this.$refs.uNotify.show({ type: 'primary', message: '重置成功', duration: 2000 });
 		}
 	},
 	onReady() {
@@ -310,15 +308,17 @@ export default {
 
 		/* 模态框数据 */
 		content() {
-			return `
-				(15%) BMI			：${this.score_BMI} 分<br>
-				(20%) 50米		：${this.score_shortRun} 分<br>
-				(20%) ${this.getStr_longRun}米	：${this.score_longRun} 分<br>
-				(15%) 肺活量 		：${this.score_vitalCapacity} <br>
-				(10%) ${this.getStr_diffProject}	：${this.score_diff_ProjectValue} 分<br>
-				(10%) 立定跳远		：${this.score_longJump} 分<br>
-				(10%) 坐位体前屈	：${this.score_sittingBodyFlex} 分<br>
-				`;
+			return computeUtil.getRichText({
+				score_BMI: this.score_BMI,
+				score_shortRun: this.score_shortRun,
+				name_longRun: this.getStr_longRun,
+				score_longRun: this.score_longRun,
+				score_vitalCapacity: this.score_vitalCapacity,
+				name_diff_ProjectValue: this.getStr_diffProject,
+				score_diff_ProjectValue: this.score_diff_ProjectValue,
+				score_longJump: this.score_longJump,
+				score_sittingBodyFlex: this.score_sittingBodyFlex
+			});
 		},
 
 		/* 额外加分 */
@@ -420,7 +420,7 @@ export default {
 }
 
 .from {
-	padding: 0 10vw;
+	padding: 2vh 10vw;
 	padding-bottom: 10vh;
 	background-color: #ffffff;
 
@@ -434,13 +434,14 @@ export default {
 
 .btn_view {
 	width: 100%;
+	padding: 10px;
 	position: fixed;
 	bottom: 0;
+	z-index: 10;
 	@include flex_box_father;
 	justify-content: space-around;
-	padding: 10px;
 	background-color: #ffffff;
-	border-top: 1rpx solid rgba(223, 248, 249, 0.3);
+	border-top: 1px solid #eaeaea;
 	.btn_list {
 	}
 }
