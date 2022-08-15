@@ -9,11 +9,17 @@
 		<view class="result_container">
 			<view class="box">
 				<view class="tit">成绩</view>
-				<view class="result">{{ score_all }}{{ extraPoints }}</view>
+				<view class="result">
+					<u-count-to :startVal="baseScore" :endVal="score_all"></u-count-to>
+					<text v-show="extraPoints">+</text>
+					<u-count-to :startVal="baseExtraScore" :endVal="extraPoints" v-if="extraPoints"></u-count-to>
+				</view>
 			</view>
 			<view class="box">
 				<view class="tit">BMI</view>
-				<view class="result">{{ BMI_result }}</view>
+				<view class="result">
+					<u-count-to :startVal="baseBMI" :endVal="BMI_result" :decimals="2"></u-count-to>
+				</view>
 			</view>
 		</view>
 		<!-- 中间表单域 -->
@@ -162,6 +168,9 @@
 			<view class="btn_list">
 				<u-button type="primary" text="查看分数详情" shape="circle" @click="showModleChange"></u-button>
 			</view>
+			<view class="btn_list">
+				<u-button type="warning" text="分享成绩" shape="circle" open-type="share"></u-button>
+			</view>
 		</view>
 	</view>
 </template>
@@ -177,6 +186,9 @@ export default {
 			grade: 0,
 			gradeList: ['大 一 / 大 二', '大 三 / 大 四'],
 			oldValue: '', //旧的值
+			baseBMI: 0, // BMI 基础、起始计算分数
+			baseScore: 0, //总分 基础、起始计算分数
+			baseExtraScore: 0, //加分 基础、起始计算分数
 			val_obj: {
 				weight: '', //体重
 				height: '', //身高
@@ -332,9 +344,9 @@ export default {
 				val_power = computeUtil.getExtraPoints_power(this.gender, this.grade, this.val_obj.diff_ProjectValue);
 			let val = val_run + val_power;
 			if (val != 0 && typeof val == 'number') {
-				return ' + ' + val;
+				return val;
 			} else {
-				return '';
+				return 0;
 			}
 		},
 
@@ -386,6 +398,17 @@ export default {
 		score_diff_ProjectValue() {
 			return computeUtil.getScore_diff_ProjectValue(this.gender, this.grade, this.val_obj.diff_ProjectValue);
 		}
+	},
+	watch: {
+		score_all(newValue, oldValue) {
+			this.baseScore = oldValue;
+		},
+		BMI_result(newValue, oldValue) {
+			this.baseBMI = oldValue;
+		},
+		extraPoints(newValue, oldValue) {
+			this.baseExtraScore = oldValue;
+		}
 	}
 };
 </script>
@@ -429,6 +452,13 @@ export default {
 	}
 	.doubInput {
 		display: flex;
+	}
+
+	/deep/ .u-form-item {
+		// padding: 0 0 30rpx;
+		.u-form-item__body {
+			padding: 10px 0 0 0;
+		}
 	}
 }
 
