@@ -30,7 +30,7 @@
 					:key="index"
 					@click="navOtherItemClick(item.path, index)"
 				>
-					<view class="item_number">{{ item.num }}</view>
+					<view class="item_number"><u-count-to :startVal="0" :endVal="item.num"></u-count-to></view>
 					<view class="item_text">{{ item.text }}</view>
 				</view>
 			</view>
