@@ -130,9 +130,11 @@
 					paySign: res.data.data.paySign,
 					success: res => {
 						this.selfMsg('支付成功！', 'success')
-						uni.switchTab({
-							url: '/pages/shop/shop'
-						})
+						setTimeout(() => {
+							uni.switchTab({
+								url: '/pages/shop/shop'
+							})
+						}, 1000)
 					},
 					fail: res => {
 						this.selfMsg('可在我的订单重新支付', 'error')

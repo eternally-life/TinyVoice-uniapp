@@ -20,7 +20,8 @@
 						<view class="one">
 							<view class="left">
 								<u-tag text="商品名"></u-tag>
-							</view>{{shopDetail.name ? shopDetail.name : '无'}}
+							</view>
+							<view class="tisp">{{shopDetail.name ? shopDetail.name : '无'}}</view>
 						</view>
 					</view>
 					<view class="name">
@@ -172,10 +173,9 @@
 				console.log(res);
 			},
 			btnImg(curt) {
-				console.log(curt, this.shopDetail.imgList[curt]);
-				// uni.showToast({
-				// 	title:'图片不可预览，图片数据已失效'
-				// })
+				// if (toString(this.shopDetail.imgList[curt]) == undefined) {
+				// 	return this.$ShowToastNone('图片不可预览，图片数据已失效')
+				// }
 				uni.previewImage({
 					// 为当前显示图片的链接/索引值，
 					current: curt,
@@ -338,11 +338,13 @@
 
 						.left {
 							padding: 0 20rpx 20rpx 0;
+							width: 150rpx;
 						}
 
 						.parse_detail {
 							padding: 20rpx 0rpx;
 							color: #4a4a4a;
+							flex: 1;
 
 							text {
 								display: inline-block;
@@ -376,6 +378,8 @@
 
 						.left {
 							padding: 20rpx 20rpx 20rpx 0;
+
+
 						}
 					}
 
