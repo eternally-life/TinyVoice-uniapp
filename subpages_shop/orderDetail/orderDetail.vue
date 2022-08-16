@@ -1,25 +1,29 @@
 <template>
 	<view class="container">
-		<select-address :addressInfo="addressInfo" :wxPhone="wxUserInfo.phonenumber" :singleOrder="singleOrder"
-			:skuId="skuId">
-		</select-address>
-		<view class="content">
-			<view class="left">
-				<view class="name">{{orderDetail.specification}}</view>
-				<view class="num">x {{value == 0 ? 1 : value}}</view>
-			</view>
-			<view class="mid">￥{{price ? parseFloat(price).toFixed(2) : parseFloat(orderDetail.price / 100).toFixed(2)}}
-			</view>
-			<view class="right">
-				<u-number-box v-model="value" @change="valChange" :min="1" :max="invoryMax"></u-number-box>
+		<view class="tip" v-if="!price">订单加载中...</view>
+		<block v-else>
+			<select-address :addressInfo="addressInfo" :wxPhone="wxUserInfo.phonenumber" :singleOrder="singleOrder"
+				:skuId="skuId">
+			</select-address>
+			<view class="content">
+				<view class="left">
+					<view class="name">{{orderDetail.specification}}</view>
+					<view class="num">x {{value == 0 ? 1 : value}}</view>
+				</view>
+				<view class="mid">
+					￥{{price ? parseFloat(price).toFixed(2) : parseFloat(orderDetail.price / 100).toFixed(2)}}
+				</view>
+				<view class="right">
+					<u-number-box v-model="value" @change="valChange" :min="1" :max="invoryMax"></u-number-box>
 
+				</view>
 			</view>
-		</view>
-		<view class="bot">
-			<view class="nextStep">
-				<button class="btn" @click="confirmPayOrder">提交订单</button>
+			<view class="bot">
+				<view class="nextStep">
+					<button class="btn" @click="$u.throttle(confirmPayOrder,500)">提交订单</button>
+				</view>
 			</view>
-		</view>
+		</block>
 		<u-toast ref="uToast"></u-toast>
 	</view>
 </template>
@@ -126,6 +130,11 @@
 					paySign: res.data.data.paySign,
 					success: res => {
 						this.selfMsg('支付成功！', 'success')
+						setTimeout(() => {
+							uni.switchTab({
+								url: '/pages/shop/shop'
+							})
+						}, 1000)
 					},
 					fail: res => {
 						this.selfMsg('可在我的订单重新支付', 'error')
@@ -145,6 +154,14 @@
 
 <style lang="scss" scoped>
 	.container {
+		.tip {
+			font-size: 28rpx;
+			color: #aaa;
+			width: 100%;
+			margin-top: 50rpx;
+			text-align: center;
+		}
+
 		.content {
 			padding: 40rpx;
 			margin: 20rpx 0;
