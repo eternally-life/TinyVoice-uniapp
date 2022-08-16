@@ -1,15 +1,17 @@
 <template>
 	<view class="container">
 		<u-toast ref="uToast"></u-toast>
-		<view class="tip" v-if="!shopList.length">商品详情加载中...</view>
+		<view class="tip" v-if="!shopList.length">商品详情加载中或重进...</view>
 		<block v-else>
 			<view class="header">
 				<!-- <image class="background" :src="shopDetail.image" mode="aspectFill"></image> -->
 				<view class="swp">
-					<u-swiper :list="shhopPicList" @change="e => currentNum = e.current" :autoplay="false"
-						indicatorStyle="right: 20px">
+					<u-swiper :list="shopDetail.imgList.length ? shopDetail.imgList : shopDetail.image"
+						@change="e => currentNum = e.current" :autoplay="false" indicatorStyle="right: 20px"
+						@click="btnImg()">
 						<view slot="indicator" class="indicator-num">
-							<text class="indicator-num__text">{{ currentNum + 1 }}/{{ shhopPicList.length }}</text>
+							<text
+								class="indicator-num__text">{{ currentNum + 1 }}/{{ shopDetail.imgList.length }}</text>
 						</view>
 					</u-swiper>
 				</view>
@@ -168,6 +170,25 @@
 					this.price = this.parmesList.price / 100
 				}
 				console.log(res);
+			},
+			btnImg(curt) {
+				console.log(curt, this.shopDetail.imgList[curt]);
+				// uni.showToast({
+				// 	title:'图片不可预览，图片数据已失效'
+				// })
+				uni.previewImage({
+					// 为当前显示图片的链接/索引值，
+					current: curt,
+					// 需要预览的图片链接列表
+					urls: [this.shopDetail.imgList[curt]],
+					longPressActions: {
+						itemList: ['发送给朋友', '保存图片', '收藏'],
+						success: function(data) {
+							console.log('选中了第' + (data.tapIndex + 1) + '个按钮,第' + (data.index + 1) + '张图片');
+						},
+
+					}
+				})
 			},
 			showAgreement() {
 				this.isAgreement = true
