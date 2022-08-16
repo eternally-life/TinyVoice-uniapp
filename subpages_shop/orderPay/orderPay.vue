@@ -1,52 +1,42 @@
 <template>
 	<view class="container">
-		<!-- <view
-			style="display: flex; justify-content: space-between; padding-left: 50rpx; padding: 30rpx 40rpx;background-color: #ffffff;">
-			请选择收货地址<text class="iconfont icon-dayuhao"></text>
-		</view> -->
-		<select-address :addressInfo="addressInfo" :wxPhone="wxUserInfo.phonenumber" :MultipleOrder="MultipleOrder">
-		</select-address>
-		<scroll-view scroll-y="true">
-			<view class="content" v-for="(item,index) in goods" :key="index">
-				<view class="left">
-					<view class="name">
-						{{item.commodityName}}-{{item.specificationName}}
+
+		<view class="tip" v-if="!goods.length">订单加载中...</view>
+		<block v-else>
+			<select-address :addressInfo="addressInfo" :wxPhone="wxUserInfo.phonenumber" :MultipleOrder="MultipleOrder">
+			</select-address>
+			<scroll-view scroll-y="true">
+				<view class="content" v-for="(item,index) in goods" :key="index">
+					<view class="left">
+						<view class="name">
+							{{item.commodityName}}-{{item.specificationName}}
+						</view>
+						<view class="num">x {{item.quantity}}</view>
 					</view>
-					<view class="num">x {{item.quantity}}</view>
+					<view class="mid">￥{{parseFloat(item.unitPrice / 100 ).toFixed(2)}} / 件</view>
+					<view class="detail-right">
+						<text class="subtract" @click="reduce(item)">-</text>
+						<text class="num">{{item.quantity}}</text>
+						<text @click="add(item)" class="add">+</text>
+					</view>
 				</view>
-				<view class="mid">￥{{parseFloat(item.unitPrice / 100 ).toFixed(2)}} / 件</view>
-				<view class="detail-right">
-					<text class="subtract" @click="reduce(item)">-</text>
-					<text class="num">{{item.quantity}}</text>
-					<text @click="add(item)" class="add">+</text>
+			</scroll-view>
+
+			<view class="end">
+				<view class="end-left">
+					<view class="" style="color: #333;">
+					</view>
+					<view style="color: #000;font-weight: bold;">
+						共 {{totalNum}} 件 合计:<text style="color: #f00;">￥</text> <text
+							style="color: #f00;font-size: 55rpx;">
+							{{parseFloat(totalPrice).toFixed(2)}}</text>
+					</view>
 				</view>
-			</view>
-		</scroll-view>
-		<!-- <view class="bot">
-			<view>
-				<view class="end-right" >
-					共({{totalNum}})件
-				</view>
-				合计：￥ <text
-					style="color: #f00;font-weight: bold;font-size: 36rpx;">{{parseFloat(totalPrice).toFixed(2)}}</text>
-			</view>
-			<view class="nextStep">
-				<button class="btn" @click="confirmPayOrder">提交订单</button>
-			</view>
-		</view> -->
-		<view class="end">
-			<view class="end-left">
-				<view class="" style="color: #333;">
-				</view>
-				<view style="color: #000;font-weight: bold;">
-					共 {{totalNum}} 件 合计:<text style="color: #f00;">￥</text> <text style="color: #f00;font-size: 55rpx;">
-						{{parseFloat(totalPrice).toFixed(2)}}</text>
+				<view class="end-right" @click="$u.throttle(confirmPayOrder,500)">
+					提交订单
 				</view>
 			</view>
-			<view class="end-right" @click="confirmPayOrder">
-				提交订单
-			</view>
-		</view>
+		</block>
 		<u-toast ref="uToast"></u-toast>
 	</view>
 </template>
@@ -205,6 +195,9 @@
 					paySign: res.data.data.paySign,
 					success: res => {
 						this.selfMsg('支付成功！', 'success')
+						uni.switchTab({
+							url: '/pages/shop/shop'
+						})
 					},
 					fail: res => {
 						this.selfMsg('可在我的订单重新支付', 'error')
@@ -224,6 +217,14 @@
 
 <style lang="scss" scoped>
 	.container {
+		.tip {
+			font-size: 28rpx;
+			color: #aaa;
+			width: 100%;
+			margin-top: 50rpx;
+			text-align: center;
+		}
+
 		.content {
 			padding: 20rpx 40rpx;
 			margin: 20rpx 0;
