@@ -35,7 +35,8 @@
             </view>
         </view>
         <view class="padding-left padding right">
-            <view class="grid col-3">
+            <view class="
+			 col-3">
                 <view @tap="ToCreat" class="padding-xs" data-link="typeface">
                     <view class="padding-tb-xl bg-pink shadow" style="height: 150rpx; border-radius: 20rpx">
                         <view class="justify-center flex text-white">花式字体</view>
@@ -95,7 +96,7 @@
                 </view>
             </view>
             <view @tap="ToCreat" class="cu-item" data-link="cut">
-                <view class="cu-avatar radius lg bg-white" style="background-image: url(../images/aixin.png)"></view>
+                <view class="cu-avatar radius lg bg-white" style="background-image: url(@/static/images/aixin.png)"></view>
                 <view class="content">
                     <view class="text-grey">九宫格切图</view>
                     <view class="text-gray text-sm flex">
@@ -112,7 +113,7 @@
                 </view>
             </view>
             <view @tap="ToCreat" class="cu-item" data-link="combine">
-                <view class="cu-avatar radius lg bg-white" style="background-image: url(../images/rongyu.png)"></view>
+                <view class="cu-avatar radius lg bg-white" style="background-image: url(@/static/images/rongyu.png)"></view>
                 <view class="content">
                     <view class="text-grey">多图频接</view>
                     <view class="text-gray text-sm flex">

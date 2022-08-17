@@ -36,7 +36,7 @@ export default {
 
         return {
             title: e.title,
-            path: '/pages/index/index',
+            path: '/subpages_toolkit/index/index',
             imageUrl: e.url
         };
     },

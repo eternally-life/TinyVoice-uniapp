@@ -170,7 +170,7 @@ export default {
 
         return {
             title: t.title,
-            path: '/pages/index/index',
+            path: '/subpages_toolkit/index/index',
             imageUrl: t.url
         };
     },
@@ -376,7 +376,7 @@ export default {
                 uni.navigateBack({});
             } else {
                 uni.reLaunch({
-                    url: '/pages/index/index'
+                    url: '/subpages_toolkit/index/index'
                 });
             }
         },
