@@ -76,12 +76,18 @@
 </script>
 
 <style lang="scss">
+	page {
+		background: url('https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fhbimg.huabanimg.com%2F9874f8e54542c8906b3b27040f12ce983f1ef9a510c227-PdgL2X_fw658&refer=http%3A%2F%2Fhbimg.huabanimg.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1663305128&t=9a6634539d52ea2946947a3760ccc791');
+		background-size: cover;
+		padding-bottom: 200rpx;
+	}
+	
 	.wrap {
 		margin: 300rpx auto;
 		width: 600rpx;
 		height: 500rpx;
 		border-radius: 30rpx;
-		box-shadow: 10rpx 10rpx 10px #ccc;
+		box-shadow: 0rpx 0rpx 10px #ccc;
 		background-color: #ffffff;
 
 		.wrap_message {
@@ -100,7 +106,7 @@
 
 		.publish_btn {
 			position: fixed;
-			bottom: 60rpx;
+			bottom: 360rpx;
 			left: 20rpx;
 			right: 20rpx;
 		}
