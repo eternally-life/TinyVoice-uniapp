@@ -5,7 +5,7 @@
 			<!-- <u-upload :fileList="fileList1" @afterRead="afterRead" @delete="deletePic" name="1" multiple :maxCount="1"
 				width="320rpx" height="320rpx"></u-upload> -->
 			<view v-if="!imgUrl">
-				<u-icon name="camera" color="#e0dee4" size="100"></u-icon>
+				<u-icon name="camera" color="#e0dee4" size="120"></u-icon>
 			</view>
 			<image class="img" :src="imgUrl" v-else></image>
 		</view>
@@ -94,8 +94,8 @@
 
 		.preview {
 			margin: 0rpx auto;
-			width: 322rpx;
-			height: 322rpx;
+			width: 320rpx;
+			height: 448rpx;
 			border: 1rpx gray solid;
 			display: flex;
 			align-items: center;
@@ -103,7 +103,7 @@
 
 			.img {
 				width: 320rpx;
-				height: 320rpx;
+				height: 448rpx;
 			}
 		}
 

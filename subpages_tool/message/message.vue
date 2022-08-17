@@ -2,7 +2,7 @@
 	<view class="wrap">
 		<view class="wrap_input">
 			<view class="input">
-				<u--input placeholder="快输入Ta的名字或你的名字看看吧!" @change="inputChange()" border="bottom" vale="userName"
+				<u--input placeholder="快输入Ta的名字或你的名字看看吧!" inputAlign="center" @change="inputChange()" border="bottom" vale="userName"
 					v-model="userName"></u--input>
 			</view>
 			<view class="button">
@@ -15,14 +15,16 @@
 			<view v-for="(item,index) in messageList" :key="index">
 
 				<view class="item_list">
-					<view class="item_time">
-						{{$u.timeFormat(item.createTime,'yyyy-mm-dd')}}
+					<view class="item_list_box">
+						
+						<!-- <u-gap height="1" bg-color="#bbb"></u-gap> -->
+						<view class="item_content">
+							{{item.content}}
+						</view>
+						<view class="item_time">
+							{{$u.timeFormat(item.createTime,'yyyy-mm-dd')}}
+						</view>
 					</view>
-					<u-gap height="1" bg-color="#bbb"></u-gap>
-					<view class="item_content">
-						{{item.content}}
-					</view>
-
 				</view>
 			</view>
 		</view>
@@ -112,7 +114,7 @@
 			.input {}
 
 			.button {
-				margin: 30rpx 30rpx;
+				margin: 30rpx auto;
 				width: 80%;
 
 				u-button {
@@ -124,11 +126,8 @@
 		.wrap_show {
 
 			position: relative;
-			background-color: #fff;
-			padding: 40rpx;
 			margin: 20rpx 0rpx;
-			border-radius: 30rpx;
-			box-shadow: 5rpx 5rpx 5px #ccc;
+			
 
 			.feedback_btn {
 				position: absolute;
@@ -138,20 +137,33 @@
 			}
 
 			.item_list {
-				height: 150rpx;
-				box-shadow: #d5d5d5 3rpx ;
-				display: flex;
-				flex-direction: column;
-				margin: 60rpx 10rpx;
+				
+				// box-shadow: #d5d5d5 3rpx;
+				// display: flex;
+				// flex-direction: column;
+				// margin: 60rpx 0rpx;
 
-				.item_time {
-					display: flex;
-					justify-content: flex-end;
-					font-size: 25rpx;
-					color: #ccc;
+				.item_list_box {
+					position: relative;
+					background-color: #fff;
+					border-radius: 30rpx;
+					box-shadow: 0rpx 0rpx 7px #42dac3;
+					// border: #82ffcf 1px solid;
+					margin: 30rpx auto;
+					// height: 150rpx;
+					padding: 30rpx;
+					.item_content {
+						margin-bottom: 50rpx;
+					}
+					.item_time {
+						position: absolute;
+						font-size: 25rpx;
+						color: #ccc;
+						bottom: 30rpx;
+						right: 30rpx;
+					}
 				}
 
-				.item_content {}
 			}
 
 		}

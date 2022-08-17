@@ -86,7 +86,7 @@
 
 		.wrap_message {
 			.message_name {
-				width: 300rpx;
+				width: 350rpx;
 				margin: 0 auto;
 				background-color: #ffffff;
 			}

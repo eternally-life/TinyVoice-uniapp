@@ -321,6 +321,15 @@
                     "enablePullDownRefresh": false
                 	}
                 }
+                ,{
+                    "path" : "resourcePublishing/resourcePublishing",
+                    "style" :                                                                                    
+                {
+                    "navigationBarTitleText": "资源发布",
+                    "enablePullDownRefresh": false
+                }
+                
+                }
             ]
 		}
 	],

@@ -19,20 +19,20 @@
 		</view>
 
 		<view class="wrap_block" v-for="(item,index) in resourceData" :key="index">
-			<view class="block_content" @click="enterResourcesUrl(index)">
-				<view class="res_name">
+			<view class="block_content">
+				<view class="res_name" @click="enterResourcesUrl(index)">
 					{{item.name}}
 				</view>
-				<view class="res_msg">
+				<view class="res_msg" @click="enterResourcesUrl(index)">
 					{{$u.timeFormat(item.createTime, 'yyyy-mm-dd')}}
 					下载数：{{item.downNum}}
 					所需积分：{{item.integral}}
 				</view>
 				<view class="res_size">
-					文件大小{{item.size}}m
+					文件大小{{item.size > 1048576? parseInt(item.size/1024/1024)+ "m" : parseInt(item.size/1024) + "kb"}}
 				</view>
 				<view class="download_btn">
-					<u-button color="linear-gradient(to right,rgb(12,235,235), rgb(32,227,178), rgb(41,255,198))"
+					<u-button shape="circle" color="linear-gradient(to right,rgb(12,235,235), rgb(32,227,178), rgb(41,255,198))"
 						@click="filedownload(item.resourceId,item.url)">下载</u-button>
 				</view>
 			</view>
@@ -40,13 +40,14 @@
 		<view class="loadmore_wrap" v-if="resourceData.length !== 0">
 			<text>{{ isNoMore ? '到底啦' : '' }}</text>
 		</view>
+		<view class="uploading" @click="uploading">
+			 <u-button icon="plus" size="large" shape="circle" iconColor="#31b6c3" @click="openPopup"></u-button>
+		</view>
 	</view>
 </template>
 
 <script>
 	import {
-		communityTinyserveresourceSave_Post,
-		communityTinyserveresourceByResourceId_Get,
 		communityTinyserveresourceDown_Get,
 		communityTinyserveresourcePage_Get
 	} from "@/api/工具模块/资源共享.js"
@@ -164,7 +165,7 @@
 						xlsx: 'doc',
 						ppt: 'doc',
 						pptx: 'doc',
-			  	pdf: 'doc'
+						pdf: 'doc'
 					},
 					result = (ok = '成功保存到相册', no = '保存失败') => {
 						return {
@@ -196,6 +197,12 @@
 					});
 				}
 			},
+			//跳转上传页
+			uploading(){
+				uni.navigateTo({
+					url: '/subpages_tool/resourcePublishing/resourcePublishing'
+				})
+			},
 			//	资源搜索
 			search(keyword) {
 				uni.showToast({
@@ -212,7 +219,7 @@
 					setTimeout(() => {
 						this.getResourcesMessage()
 						uni.hideLoading()
-					}, 500);
+					}, 100);
 				}
 			},
 
@@ -330,6 +337,12 @@
 			color: #888888;
 			background: #f1f1f1;
 			padding: 10rpx 0 20rpx 0;
+		}
+		.uploading{
+			position: fixed;
+			bottom: 60rpx;
+			right: 60rpx;
+			width: 50px;
 		}
 	}
 </style>

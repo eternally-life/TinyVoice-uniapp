@@ -1,6 +1,7 @@
 /*** glowxq glowxq@163.com  2022-07-31 19:39:29  生成模板  */
 import {
-	request
+	request,
+	requestFile
 } from "@/utils/request"
 
 
@@ -17,16 +18,18 @@ let communityTinyserveresourceSave_Body = {
 	/** 资源名   string required: */
 	describe: null,
 	/** 资源描述   string required: */
-	url: null,
+	file: null,
 	/** 资源地址   string required: */
 }
 
-export function communityTinyserveresourceSave_Post(communityTinyserveresourceSave_Body) {
-	return request({
+export function communityTinyserveresourceSave_Post(communityTinyserveresourceSave_Body ,file) {
+	console.log(communityTinyserveresourceSave_Body,file);
+	console.log("****************");
+	return requestFile({
 		url: `/community/tinyserveresource/save`,
 		method: 'post',
-
-		data: communityTinyserveresourceSave_Body
+		params: communityTinyserveresourceSave_Body,
+		file: file
 	})
 }
 /**  =========================================================================== ***/
