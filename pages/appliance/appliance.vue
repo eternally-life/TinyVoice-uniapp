@@ -14,8 +14,11 @@
 			<view class="myItem" @click="navItemClick(item.jumpUrl,item.jumpType)" v-for="(item, index) in navs"
 				:key="index">
 				<view class="myIcon">
-					<!-- <image :src="item.img"  mode="widthFix" /> -->
-					<view class="fix" :class="item.icon"></view>
+					
+					<view class="fix" v-if="item.iconType == 1" :class="item.icon"></view>
+					<view class="fix" v-if="item.iconType == 2" >
+						<image :src="item.image"  mode="widthFix" />
+					</view>
 				</view>
 				<text>{{ item.name }}</text>
 			</view>
@@ -172,6 +175,8 @@
 
 					.fix {
 						// color: #fff;
+						width: 100%;
+						height: 100%;
 						font-size: 50rpx;
 					}
 				}

@@ -330,6 +330,15 @@
                 }
                 
                 }
+                ,{
+                    "path" : "blog/blog",
+                    "style" :                                                                                    
+                {
+                    "navigationBarTitleText": "",
+                    "enablePullDownRefresh": false
+                }
+                
+                }
             ]
 		},
 		// 工具箱分包

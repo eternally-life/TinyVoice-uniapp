@@ -9,7 +9,7 @@
             <open-data class="img-df radius" type="userAvatarUrl"></open-data>
         </view>
         <view class="chat-item chat-left">
-            <image class="img-df radius" mode="widthFix" src="/static/images/logo.png"></image>
+            <image class="img-df radius" mode="widthFix" src="https://tinyvoice-oss-cdn.glowxq.com/material/tool/logo.png"></image>
             <view class="chat-main">
                 <view>
                     <view @tap="copyAndroid" class="chat-centact">安卓手机点我复制</view>
@@ -17,7 +17,7 @@
             </view>
         </view>
         <view class="chat-item chat-left">
-            <image class="img-df radius" mode="widthFix" src="/static/images/logo.png"></image>
+            <image class="img-df radius" mode="widthFix" src="https://tinyvoice-oss-cdn.glowxq.com/material/tool/logo.png"></image>
             <view class="chat-main">
                 <view>
                     <view @tap="copyIos" class="chat-centact">苹果手机点我复制</view>

@@ -78,7 +78,7 @@
         </view>
         <view class="cu-list menu-avatar">
             <view @tap="ToCreat" class="cu-item" data-link="screaming">
-                <view class="cu-avatar radius lg bg-white" style="background-image: url(../images/anquan.png)"></view>
+                <view class="cu-avatar radius lg bg-white" style="background-image: url(https://tinyvoice-oss-cdn.glowxq.com/material/tool/anquan.png)"></view>
                 <view class="content">
                     <view class="text-grey">尖叫字</view>
                     <view class="text-gray text-sm flex">
@@ -95,7 +95,7 @@
                 </view>
             </view>
             <view @tap="ToCreat" class="cu-item" data-link="cut">
-                <view class="cu-avatar radius lg bg-white" style="background-image: url(@/static/images/aixin.png)"></view>
+                <view class="cu-avatar radius lg bg-white" style="background-image: url(https://tinyvoice-oss-cdn.glowxq.com/material/tool/aixin.png)"></view>
                 <view class="content">
                     <view class="text-grey">九宫格切图</view>
                     <view class="text-gray text-sm flex">
@@ -112,7 +112,7 @@
                 </view>
             </view>
             <view @tap="ToCreat" class="cu-item" data-link="combine">
-                <view class="cu-avatar radius lg bg-white" style="background-image: url(@/static/images/rongyu.png)"></view>
+                <view class="cu-avatar radius lg bg-white" style="background-image: url(https://tinyvoice-oss-cdn.glowxq.com/material/tool/rongyu.png)"></view>
                 <view class="content">
                     <view class="text-grey">多图频接</view>
                     <view class="text-gray text-sm flex">
@@ -164,7 +164,7 @@ export default {
                 {
                     id: 5,
                     type: 'image',
-                    url: '/static/images/110404-1521083044b19d.jpg'
+                    url: 'https://tinyvoice-oss-cdn.glowxq.com/material/tool/110404-1521083044b19d.jpg'
                 }
             ],
 
