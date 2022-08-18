@@ -11,14 +11,17 @@
 		</view>
 		<!-- 选择底色 -->
 		<view class="button">
-			<button @click="backColor(1)" :style="baseColor===1? 'background-color:#fd0101;color:#ffffff;' : ''">红底</button>
-			<button @click="backColor(2)" :style="baseColor===2? 'background-color:#026afd;color:#ffffff;' : ''">蓝底</button>
+			<button @click="backColor(1)"
+				:style="baseColor===1? 'background-color:#fd0101;color:#ffffff;' : ''">红底</button>
+			<button @click="backColor(2)"
+				:style="baseColor===2? 'background-color:#026afd;color:#ffffff;' : ''">蓝底</button>
 			<button @click="backColor(3)" :style="baseColor===3? 'background-color:#fefefe;' : ''">白底</button>
 		</view>
 		<!-- 提交 -->
 		<view class="submit_photo">
-			<u-button type="primary" @click="submit_btn(handleType,baseColor,imgUrl)">确定</u-button>
+			<u-button customStyle=" fontSize:50rpx" type="primary" @click="submit_btn(handleType,baseColor,imgUrl)">确定</u-button>
 		</view>
+		<u-toast ref="uToast"></u-toast>
 	</view>
 
 
@@ -31,14 +34,17 @@
 	export default {
 		data() {
 			return {
-				imgUrl: '',	// 图片地址
+				imgUrl: '', // 图片地址 
+
 				handleType: 1, // 处理类型
+
 				baseColor: 1, // 底色
+				str: '',
+				afterImage: ''
 			}
 		},
 		onLoad(options) {
 			this.handleType = parseInt(options.type)
-			console.log(this.handleType);
 		},
 		methods: {
 			choosePhoto() {
@@ -52,37 +58,41 @@
 					}
 				});
 			},
-			async submit_btn(type,color,file){
-				if(file == '') {
-					uni.showModal({
-							title: '提示',
-							content: '照片别忘了选',
-							success: function(res) {
-							if (res.confirm) {
-							    // 执行确认后的操作
-							} 
-							else {
-								// 执行取消后的操作
-							}
-						}
-					})		
-					return 
+			async submit_btn(type, color, file) {
+				if (file == '') {
+					return this.selfMsg("照片别忘了选", "warning")
 				}
-				uni.showLoading({
-					title: '正在加载'
-				})
-				
-				
-				console.log({type,color,file});
-				console.log("hahahahahahah");
-				const res = await submitIdPhoto_post({type,color},file)
-				console.log(res)
+				// uni.showLoading({
+				// 	title: '正在加载'
+				// })
+				const res = await submitIdPhoto_post({type,color}, file)
+				let ps = {}
+				ps = JSON.parse(res.data)
+				if (ps.code === 200) { //请求成功
+					this.afterImage = ps.data.afterImage
+					// 预览图片
+					const _this = this
+					uni.navigateTo({
+						url: `/subpages_tool/id_photo/previewPhoto?imgUrl=${_this.afterImage}`
+					})
+					
+
+				} else {
+					return this.selfMsg(ps.msg, "warning")
+				}
+
 			},
 			// 选择底色
 			backColor(i) {
 				this.baseColor = parseInt(i)
-				console.log(this.baseColor)
+				// console.log(this.baseColor)
 			},
+			selfMsg(msg, mod) {
+				this.$refs.uToast.show({
+					type: mod,
+					message: msg
+				})
+			}
 		}
 
 	}
@@ -102,8 +112,13 @@
 			justify-content: center;
 
 			.img {
+// <<<<<<< HEAD
 				width: 320rpx;
 				height: 448rpx;
+// =======
+// 				width: 100%;
+// 				height: 100%;
+// >>>>>>> d268c1ba91a72cc2560b9ac6fdf56c7c9f7d96a9
 			}
 		}
 
