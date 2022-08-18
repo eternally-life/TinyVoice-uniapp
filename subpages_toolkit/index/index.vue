@@ -35,8 +35,7 @@
             </view>
         </view>
         <view class="padding-left padding right">
-            <view class="
-			 col-3">
+            <view class="grid col-3">
                 <view @tap="ToCreat" class="padding-xs" data-link="typeface">
                     <view class="padding-tb-xl bg-pink shadow" style="height: 150rpx; border-radius: 20rpx">
                         <view class="justify-center flex text-white">花式字体</view>
