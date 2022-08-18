@@ -18,8 +18,8 @@
 			<button @click="backColor(3)" :style="baseColor===3? 'background-color:#fefefe;' : ''">白底</button>
 		</view>
 		<!-- 提交 -->
-		<view class="submit_photo">
-			<u-button type="primary" @click="submit_btn(handleType,baseColor,imgUrl)">确定</u-button>
+		<view>
+			<u-button  customStyle="fontSize:50rpx;" type="primary" @click="submit_btn(handleType,baseColor,imgUrl)">确定</u-button>
 		</view>
 		<u-toast ref="uToast"></u-toast>
 	</view>
@@ -85,7 +85,7 @@
 			// 选择底色
 			backColor(i) {
 				this.baseColor = parseInt(i)
-				console.log(this.baseColor)
+				// console.log(this.baseColor)
 			},
 			selfMsg(msg, mod) {
 				this.$refs.uToast.show({
