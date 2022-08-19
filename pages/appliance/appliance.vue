@@ -14,7 +14,6 @@
 			<view class="myItem" @click="navItemClick(item.jumpUrl,item.jumpType)" v-for="(item, index) in navs"
 				:key="index">
 				<view class="myIcon">
-					
 					<view class="fix" v-if="item.iconType == 1" :class="item.icon"></view>
 					<view class="fix" v-if="item.iconType == 2" >
 						<image :src="item.image"  mode="widthFix" />
@@ -71,7 +70,7 @@
 						break;
 					case 3:
 						uni.navigateTo({
-							url: path
+							url: '/subpages_tool/web/web?url='+path
 						});
 						break;
 					case 4:
