@@ -32,7 +32,7 @@ var GRT = [
 	// code 样式
 	['code', "font-size:1rem; line-height:1.2rem; background:#F6F7F8; padding:16rpx 2%; width:96%;"],
 	// img 样式
-	['img', "width:100%; margin:8rpx 0;"],
+	['img', "width:70%; margin:8rpx 0;"],
 	// blockquote
 	['blockquote',
 		"font-size:1rem; border-left:6rpx solid #D1D1D1; line-height:2rem; border-radius:10rpx; background:#F6F7F8; padding:16rpx 2%;"
