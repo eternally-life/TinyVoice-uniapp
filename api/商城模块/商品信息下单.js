@@ -216,3 +216,21 @@ export function payTinymallReloadPay_Get(payTinymallReloadPay_Param) {
 	})
 }
 /**  =========================================================================== ***/
+/***  ===========================================================================
+ * path: /pay/tinymall/getSku
+ * summary: 通过商品ID 获取商品规格参数
+ * tags: 商品信息-下单(测通)
+ */
+let shopDetailById_Param = {
+	commodityId: null,
+	/** 商品ID    string required:false */
+}
+
+export function shopDetailById_Get(shopDetailById_Param) {
+	return request({
+		url: `/pay/tinymall/getCommodityDetail`,
+		method: 'get',
+		params: shopDetailById_Param
+
+	})
+}

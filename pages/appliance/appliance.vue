@@ -2,8 +2,8 @@
 	<view class="wrap">
 		<!-- 轮播图 -->
 		<view class="banner">
-			<u-swiper :list="list" indicator indicatorMode="dot" height="160" previousMargin="30" nextMargin="30" circular
-				:autoplay="false" radius="5"></u-swiper>
+			<u-swiper :list="list" indicator indicatorMode="dot" height="160" previousMargin="30" nextMargin="30"
+				circular :autoplay="false" radius="5"></u-swiper>
 		</view>
 		<!-- 应用列表 -->
 		<view class="comments_title">
@@ -11,15 +11,18 @@
 			<view class="comments_content">是工具呀</view>
 		</view>
 		<view class="centerInfo" v-if="navs.length > 0">
-			<view class="myItem" @click="navItemClick(item.jumpUrl)" v-for="(item, index) in navs" :key="index">
+			<view class="myItem" @click="navItemClick(item.jumpUrl,item.jumpType)" v-for="(item, index) in navs"
+				:key="index">
 				<view class="myIcon">
-					<!-- <image :src="item.img"  mode="widthFix" /> -->
-					<view class="fix" :class="item.icon"></view>
+					<view class="fix" v-if="item.iconType == 1" :class="item.icon"></view>
+					<view class="fix" v-if="item.iconType == 2" >
+						<image :src="item.image"  mode="widthFix" />
+					</view>
 				</view>
 				<text>{{ item.name }}</text>
 			</view>
 		</view>
-		<u-divider>更多功能开发中，敬请期待!</u-divider>
+		<u-divider text="更多功能开发中，敬请期待!"></u-divider>
 	</view>
 </template>
 
@@ -51,21 +54,47 @@
 					}
 				});
 			},
-			navItemClick(path) {
-				console.log(path);
-				uni.navigateTo({
-					url: path
-				});
+			navItemClick(path, jumpType) {
+				// jumpType跳转类型：1.普通页面,2.tabbar页面,3.网页,4.小程序
+				// console.log(path);
+				switch (jumpType) {
+					case 1:
+						uni.navigateTo({
+							url: path
+						});
+						break;
+					case 2:
+						uni.switchTab({
+							url: path
+						});
+						break;
+					case 3:
+						uni.navigateTo({
+							url: '/subpages_tool/web/web?url='+path
+						});
+						break;
+					case 4:
+						uni.navigateToMiniProgram({
+							appId: path,
+						});
+						break;
+					default:
+						uni.navigateTo({
+							url: path
+						});
+						break;
+				}
 			},
-			async getTool () {
+			async getTool() {
 				const res = await toolsList_Get()
 				// this.$ShowToastNone('刷新成功~')
-				if (res.data.code === 200 && res.data.data.length > 0){
+				if (res.data.code === 200 && res.data.data.length > 0) {
 					setTimeout(() => {
 						uni.stopPullDownRefresh()
 					}, 1000)
 					this.navs = res.data.data
 					this.isLoading = false
+					console.log(res.data.data)
 				}
 			}
 		},
@@ -120,8 +149,8 @@
 		.centerInfo {
 			// 横排显示
 			display: flex;
-			flex-wrap: wrap; 
-    		justify-content: flex-start;
+			flex-wrap: wrap;
+			justify-content: flex-start;
 			background-color: #fff;
 			border-radius: 30rpx;
 			padding: 20rpx 10rpx 40rpx;
@@ -130,7 +159,7 @@
 			.myItem {
 				// 5个区域 每个占25%
 				text-align: center;
-				margin: 0 20rpx;
+				width: 25%;
 
 				.myIcon {
 					width: 100rpx;
@@ -145,6 +174,8 @@
 
 					.fix {
 						// color: #fff;
+						width: 100%;
+						height: 100%;
 						font-size: 50rpx;
 					}
 				}

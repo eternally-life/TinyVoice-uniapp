@@ -47,7 +47,8 @@
 				"enablePullDownRefresh": true
 			}
 		}
-	],
+	   
+    ],
 	"subPackages": [
 		/* 基础分包 */
 		{
@@ -288,12 +289,20 @@
 					}
 				},
 				{
-					"path": "id_photo/Cphoto",
+					"path": "id_photo/previewPhoto",
 					"style": {
-						"navigationBarTitleText": "计算机证件照",
+						"navigationBarTitleText": "图片预览",
 						"enablePullDownRefresh": false
 					}
-				}, {
+				},
+				{
+					"path": "id_photo/photo_handle",
+					"style": {
+						"navigationBarTitleText": "选择照片",
+						"enablePullDownRefresh": false
+					}
+				}
+				, {
 					"path": "resources/resources",
 					"style": {
 						"navigationBarTitleText": "资源共享",
@@ -319,7 +328,118 @@
                     "enablePullDownRefresh": false
                 	}
                 }
+                ,{
+                    "path" : "resourcePublishing/resourcePublishing",
+                    "style" :                                                                                    
+                {
+                    "navigationBarTitleText": "资源发布",
+                    "enablePullDownRefresh": false
+                }
+                
+                }
+                ,{
+                    "path" : "blog/blog",
+                    "style" :                                                                                    
+                {
+                    "navigationBarTitleText": "",
+                    "enablePullDownRefresh": false
+                }
+                
+                }
+                ,{
+                    "path" : "web/web",
+                    "style" :                                                                                    
+                {
+                    "navigationBarTitleText": "",
+                    "enablePullDownRefresh": false
+                }
+                
+                }
             ]
+		},
+		// 工具箱分包
+		{
+			"root": "subpages_toolkit",
+			"pages": [{
+					"path": "index/index",
+					"style": {
+						"navigationBarTitleText": "主页",
+						"enablePullDownRefresh": false
+					}
+				},
+				{
+					"path": "creat/blank/blank",
+					"style": {
+						"navigationBarTitleText": "blank",
+						"enablePullDownRefresh": false
+					}
+				
+				}, {
+					"path": "creat/color/color",
+					"style": {
+						"navigationBarTitleText": "color",
+						"enablePullDownRefresh": false
+					}
+
+				}, {
+					"path": "creat/combine/combine",
+					"style": {
+						"navigationBarTitleText": "combine",
+						"enablePullDownRefresh": false
+					}
+
+				}, {
+					"path": "creat/cut/cut",
+					"style": {
+						"navigationBarTitleText": "cut",
+						"enablePullDownRefresh": false
+					}
+
+				}, {
+					"path": "creat/emojy/emojy",
+					"style": {
+						"navigationBarTitleText": "emojy",
+						"enablePullDownRefresh": false
+					}
+
+				}, {
+					"path": "creat/fly/fly",
+					"style": {
+						"navigationBarTitleText": "fly",
+						"enablePullDownRefresh": false
+					}
+
+				}, {
+					"path": "creat/screaming/screaming",
+					"style": {
+						"navigationBarTitleText": "screaming",
+						"enablePullDownRefresh": false
+					}
+
+				}, {
+					"path": "creat/tel/tel",
+					"style": {
+						"navigationBarTitleText": "tel",
+						"enablePullDownRefresh": false
+					}
+
+				}, {
+					"path": "creat/typeface/typeface",
+					"style": {
+						"navigationBarTitleText": "typeface",
+						"enablePullDownRefresh": false
+					}
+
+				}, {
+					"path": "creat/word/word",
+					"style": {
+						"navigationBarTitleText": "word",
+						"enablePullDownRefresh": false
+					}
+
+				}
+				
+		    ]
 		}
 	],
 	"globalStyle": {

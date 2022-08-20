@@ -26,12 +26,13 @@
 				</u-swipe-action-item>
 			</u-swipe-action>
 		</view>
-		<view class="empty" v-if="msgList.length == 0"><u-empty mode="list"></u-empty></view>
-		<view class="bottom_box" v-if="nowCrrent == 0 && msgList.length > 0">
+		<view class="empty" v-if="msgList.length == 0 && !loadStatu"><u-empty mode="list"></u-empty></view>
+		<view class="bottom_box" v-if="nowCrrent == 0 && msgList.length > 0 && !loadStatu">
 			<view class="btn">
 				<u-button type="primary" icon="file-text" text="全部消息设置为已读" @click="allin()"></u-button>
 			</view>
 		</view>
+		<view><u-loading-page :loading="loadStatu" loading-text="消息加载中..."></u-loading-page></view>
 	</view>
 </template>
 
@@ -45,6 +46,7 @@ export default {
 	data() {
 		return {
 			tabList: ['未读', '已读'],
+			loadStatu: true, //加载状态锁
 			nowCrrent: 0,
 			msgList: [],
 			options1: [
@@ -63,6 +65,7 @@ export default {
 	methods: {
 		click(index) {
 			if (index == this.nowCrrent) return;
+			this.loadStatu = true;
 			this.msgList = [];
 			this.nowCrrent = index;
 			this.getNoticeList();
@@ -90,6 +93,13 @@ export default {
 				// console.log(this.nowCrrent.toString(), '消息', res.data.data.records);
 				// if (res.data.data.records.length > 0) {
 				this.msgList = res.data.data.records;
+				this.loadStatu = false;
+				// if (this.nowCrrent == 0) {
+				// 	[0, 1, 2, 3, 4].map((val, index) => {
+				// 		this.msgList = this.msgList.concat(this.msgList);
+				// 		console.log('遍历', index, this.msgList);
+				// 	});
+				// }
 				// }
 			});
 		},
@@ -130,6 +140,7 @@ export default {
 	width: 70vw;
 }
 .container {
+	padding-bottom: 10vh;
 	.swipe-action {
 		&__content {
 			padding: 20rpx;

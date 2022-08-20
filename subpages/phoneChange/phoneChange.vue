@@ -6,7 +6,7 @@
 				<input
 					type="text"
 					style="width: 100%;"
-					placeholder="请输入手机号"
+					placeholder="请输新入手机号"
 					v-model="newPhoneNumber"
 					id="phonenumber"
 				/>
@@ -20,85 +20,97 @@
 					id="verificationCode"
 				/>
 				<view class="right-icon">
-					<view class="get" v-if="disabled" @click="getVerificationCode()">获取验证码</view>
-					<view class="reget" v-else>重新获取{{ timer }}s</view>
+					<view class="get" v-if="codeTimer <= 0" @click="getVerificationCode(newPhoneNumber)">
+						获取验证码
+					</view>
+					<view class="reget" v-else>{{ codeTimer }}s重新获取</view>
 				</view>
 			</view>
 		</view>
-		<view class="" v-if="current == 2">
-			<u-empty mode="list" :text="'手机号修改成功,将在' + backTime + '秒 后自动返回'"></u-empty>
-		</view>
+
 		<view class="btn_container">
 			<view class="btn_group" v-if="current == 0">
-				<view class="btn"><u-button type="primary" text="获取验证码" @click="next"></u-button></view>
+				<view class="btn">
+					<u-button
+						type="primary"
+						text="获取验证码"
+						@click="nextStep"
+						:disabled="inputStatu_phone"
+					></u-button>
+				</view>
 			</view>
 			<view class="btn_group" v-if="current == 1">
-				<view class="btn"><u-button class="btn" type="primary" text="上一步" @click="back"></u-button></view>
-				<view class="btn"><u-button class="btn" type="primary" text="完 成" @click="next"></u-button></view>
+				<view class="btn">
+					<u-button class="btn" type="primary" text="上一步" @click="backStep"></u-button>
+				</view>
+				<view class="btn">
+					<u-button
+						class="btn"
+						type="primary"
+						text=" 完 成 "
+						@click="nextStep"
+						:disabled="inputStatu_code"
+					></u-button>
+				</view>
 			</view>
 		</view>
-
-		<u-steps :current="current">
-			<u-steps-item title="新手机号"></u-steps-item>
-			<u-steps-item title="验证码"></u-steps-item>
-			<u-steps-item title="修改完成"></u-steps-item>
-		</u-steps>
+		<view class="step">
+			<u-steps :current="current">
+				<u-steps-item title="新手机号"></u-steps-item>
+				<u-steps-item title="验证码"></u-steps-item>
+				<u-steps-item title="修改完成"></u-steps-item>
+			</u-steps>
+		</view>
 		<!-- Toast 消息提示框 -->
 		<u-toast ref="uToast"></u-toast>
+		<u-notify ref="uNotify"></u-notify>
 	</view>
 </template>
 
 <script>
 import { authLoginregisterVerificationCode_Get } from '@/api/SYSTEM/登录注册.js'; //获取验证码
 import { systemTinyuserUpdatePhonenumber_Post } from '@/api/SYSTEM/用户信息.js'; //修改手机号
+import { setGloalDataUserInfo_static } from '@/utils/loginUtil.js';
 export default {
 	data() {
 		return {
 			current: 0,
-			timer: 60,
 			backTime: 3,
-			disabled: true,
+			authTimer: -1, //验证码定时器
+			codeTimer: 60, //验证码倒计时
+			inputStatu_phone: true, //手机号输入框状态
+			inputStatu_code: true, //验证码输入框状态
+			verificationCode: '', //验证码
 			newPhoneNumber: '', //新手机号
-			verificationCode: '' //验证码
+			oldPhonenumber: getApp().globalData.wxUserInfo.phonenumber
 		};
 	},
 	methods: {
 		// 下一步
-		next() {
-			uni.login({
-				success: function(loginRes) {
-					console.log('code', loginRes);
-				}
-			});
-			return;
-			let netFun = () => {},
-				para = {};
-
+		async nextStep() {
+			let res;
 			if (this.current == 0) {
 				if (!uni.$u.test.mobile(this.newPhoneNumber)) {
-					return this.selfMsg('请填写正确手机号码', 'warning');
+					return this.selfMsg('请填写正确的手机号码', 'warning');
 				}
-				netFun = authLoginregisterVerificationCode_Get;
-				para = {
-					phonenumber: this.newPhoneNumber
-				};
+				if (this.oldPhonenumber == this.newPhoneNumber) {
+					return this.selfMsg('新手机号不能与旧手机号相同', 'warning');
+				}
+				res = await this.getVerificationCode(this.newPhoneNumber);
 			} else if (this.current == 1) {
-				netFun = systemTinyuserUpdatePhonenumber_Post;
-				para = {
-					phonenumber: this.newPhoneNumber,
-					/** 手机号    string required:false */
-					code: this.verificationCode,
-					/**     string required:false */
-					wxCode: null
-				};
+				res = await this.changePhone();
 			}
-			netFun(para).then(res => {
-				console.log(`current = ${this.current}`, res);
-			});
+			if (!res) {
+				this.selfMsg('服务器异常，请稍后重试', 'warning');
+				return;
+			}
 			this.changeStep(1);
 		},
 		// 上一步
-		back() {
+		backStep() {
+			this.newPhoneNumber = '';
+			this.verificationCode = '';
+			clearInterval(this.authTimer);
 			this.changeStep(-1);
 		},
 		// 步骤状态修改
@@ -106,13 +118,90 @@ export default {
 			this.current += e;
 		},
 		// 获取验证码
-		getVerificationCode() {},
+		async getVerificationCode(phone) {
+			const res = await authLoginregisterVerificationCode_Get({
+				phonenumber: phone
+			});
+			console.log('验证码获取结果', res);
+			if (res.data.code === 200) {
+				this.codeCountDown();
+				return true;
+			} else {
+				return false;
+			}
+		},
+		// 修改手机号
+		async changePhone() {
+			const wxCode = await new Promise((resolve, reject) => {
+				uni.login({
+					success(loginRes) {
+						resolve(loginRes.code);
+					}
+				});
+			});
+			const res = await systemTinyuserUpdatePhonenumber_Post({
+				wxCode,
+				phonenumber: this.newPhoneNumber,
+				code: this.verificationCode
+			});
+			if (res.data.code === 200) {
+				return true;
+			} else {
+				return false;
+			}
+		},
+		// 验证码倒计时
+		codeCountDown() {
+			this.codeTimer = 60;
+			this.authTimer = setInterval(() => {
+				this.codeTimer--;
+				if (this.codeTimer <= 0) {
+					clearInterval(this.authTimer);
+				}
+			}, 1000);
+		},
 		//消息提示
 		selfMsg(msg, mod) {
 			this.$refs.uToast.show({
 				type: mod,
-				message: msg
+				message: msg,
+				position: 'top'
 			});
+		},
+		//返回提示
+		openNotify() {
+			let notifyData = {
+				message: `手机号修改成功，将在${this.backTime}秒后自动返回`,
+				type: 'success',
+				color: '#ffffff',
+				fontSize: 20,
+				duration: 1000
+			};
+			this.$refs.uNotify.show(notifyData);
+			const backTimer = setInterval(() => {
+				if (this.backTime == 0) {
+					clearInterval(backTimer);
+					uni.navigateBack({ delta: 1 });
+				} else {
+					notifyData.message = `手机号修改成功，将在${--this.backTime}秒后自动返回`;
+					this.$refs.uNotify.show(notifyData);
+				}
+			}, 1000);
+		}
+	},
+	watch: {
+		current(newValue) {
+			if (newValue == 2) {
+				this.openNotify();
+				getApp().globalData.wxUserInfo.phonenumber = this.newPhoneNumber;
+				setGloalDataUserInfo_static(getApp().globalData.wxUserInfo);
+			}
+		},
+		newPhoneNumber(inputValue) {
+			this.inputStatu_phone = inputValue ? false : true;
+		},
+		verificationCode(inputValue) {
+			this.inputStatu_code = inputValue ? false : true;
 		}
 	}
 };

@@ -117,6 +117,56 @@ export default {
 			return gender ? Details.pullUp_34(value) : Details.abdominalCurl_34(value);
 		}
 		return 0;;
+	},
+	/* 分数详情富文本 */
+	getRichText(para) {
+		return `
+<table border="1" cellpadding="2" style="width:70vw; border-collapse:collapse;">
+	<thead>
+		<tr>
+			<th scope="col">项 目</th>
+			<th scope="col">分 数</th>
+			<th scope="col">占 比</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>BMI</td>
+			<td align="center">${para.score_BMI}分</td>
+			<td align="center">15%</td>
+		</tr>
+		<tr>
+			<td>50米</td>
+			<td align="center">${para.score_shortRun}分</td>
+			<td align="center">20%</td>
+		</tr>
+		<tr>
+			<td>${para.name_longRun}米</td>
+			<td align="center">${para.score_longRun}分</td>
+			<td align="center">20%</td>
+		</tr>
+		<tr>
+			<td>肺活量</td>
+			<td align="center">${para.score_vitalCapacity}分</td>
+			<td align="center">15%</td>
+		</tr>
+		<tr>
+			<td>${para.name_diff_ProjectValue}</td>
+			<td align="center">${para.score_diff_ProjectValue}分</td>
+			<td align="center">10%</td>
+		</tr>
+		<tr>
+			<td>立定跳远</td>
+			<td align="center">${para.score_longJump}分</td>
+			<td align="center">10%</td>
+		</tr>
+		<tr>
+			<td>坐位体前屈</td>
+			<td align="center">${para.score_sittingBodyFlex}分</td>
+			<td align="center">10%</td>
+		</tr>
+	</tbody>
+</table>
+		`
 	}
-
 }

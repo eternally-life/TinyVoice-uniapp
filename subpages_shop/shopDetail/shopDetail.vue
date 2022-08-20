@@ -1,16 +1,27 @@
 <template>
 	<view class="container">
 		<u-toast ref="uToast"></u-toast>
-		<view class="tip" v-if="!shopList.length">商品详情加载中...</view>
+		<view class="tip" v-if="!shopList.length">商品详情加载中或重进...</view>
 		<block v-else>
 			<view class="header">
-				<image class="background" :src="shopDetail.image" mode="aspectFill"></image>
+				<!-- <image class="background" :src="shopDetail.image" mode="aspectFill"></image> -->
+				<view class="swp">
+					<u-swiper :list="shopDetail.imgList.length ? shopDetail.imgList : shopDetail.image"
+						@change="e => currentNum = e.current" :autoplay="false" indicatorStyle="right: 20px"
+						@click="btnImg()" height="160">
+						<view slot="indicator" class="indicator-num">
+							<text
+								class="indicator-num__text">{{ currentNum + 1 }}/{{ shopDetail.imgList.length }}</text>
+						</view>
+					</u-swiper>
+				</view>
 				<view class="top">
 					<view class="name">
 						<view class="one">
 							<view class="left">
-								<u-tag text="商品名"></u-tag>
-							</view>{{shopDetail.name ? shopDetail.name : '无'}}
+								<u-tag text="商品名称"></u-tag>
+							</view>
+							<view class="tisp">{{shopDetail.name ? shopDetail.name : '无'}}</view>
 						</view>
 					</view>
 					<view class="name">
@@ -18,7 +29,12 @@
 							<view class="left">
 								<u-tag text="商品介绍"></u-tag>
 							</view>
-							<u-parse :content="shopDetail.content ? shopDetail.content : '无'"></u-parse>
+							<view class="parse_detail">
+								<!-- <rich-text :nodes="shopDetail.content"></rich-text> -->
+								<!-- <u-parse :content="shopDetail.content ? shopDetail.content : '无'" :tagStyle="style">
+								</u-parse> -->
+								<u-parse :content="content" :tagStyle="style"></u-parse>
+							</view>
 						</view>
 					</view>
 				</view>
@@ -83,6 +99,7 @@
 	import {
 		payTinymallGetSku_Get,
 		payTinymallCreateOrder_Post,
+		shopDetailById_Get
 	} from '@/api/商城模块/商品信息下单.js'
 	import {
 		payTinymallshoppingSave_Post
@@ -91,6 +108,7 @@
 		systemParamsNoteList_Get,
 		systemParamsNotenoticeId_Get
 	} from '@/api/SYSTEM/参数字典公告.js'
+	const graceRichText = require('../../utils/richtext.js');
 	export default {
 		data() {
 			return {
@@ -100,22 +118,78 @@
 				price: 0,
 				current: 0,
 				parmesList: {},
-				isLoading: true,
 				isAgreement: false, // 展示协议
 				isTrue: false, // 判断用户是否点了协议
 				value: 1,
-				noticeData: {}
+				noticeData: {},
+				commodityId: null,
+				content: ``,
+				style: {
+					// 字符串的形式
+					// p: 'font-size:32rpx',
+					// img: 'width:200rpx;height200rpx;'
+				},
+				shhopPicList: [
+					'https://cdn.uviewui.com/uview/swiper/swiper2.png',
+					'https://cdn.uviewui.com/uview/swiper/swiper3.png',
+					'https://cdn.uviewui.com/uview/swiper/swiper1.png',
+				],
+				currentNum: 0
 			}
 		},
 		onLoad(opt) {
+			this.commodityId = opt.commodityId
+			this.getShopDetailById()
 			this.getNoticeByNoticeID()
-			this.shopDetail = JSON.parse(opt.shopDetail)
-			this.getSku()
-			uni.showLoading({
-				title: '正在加载'
-			})
+			// this.shopDetail = JSON.parse(decodeURIComponent(opt.shopDetail))
+			// this.getSku()
 		},
 		methods: {
+			async getShopDetailById() {
+				const res = await shopDetailById_Get({
+					commodityId: this.commodityId
+				})
+				if (res.data.code === 200) {
+					this.shopDetail = res.data.commodity
+					// 调用richtext.js的处理方法
+					this.content = graceRichText.format(res.data.commodity.content);
+
+
+					this.shopList = res.data.sku
+					// let newarr = [];
+					let newarr1 = [];
+					for (let i = 0; i < this.shopList.length; i++) {
+						// let temp = {
+						// 	"name": this.shopList[i]["specification"]
+						// };
+						// newarr.push(temp);
+						let temp1 = this.shopList[i]["specification"]
+						newarr1.push(temp1);
+					}
+					this.parmes = newarr1
+					this.parmesList = this.shopList[0]
+					this.price = this.parmesList.price / 100
+				}
+				console.log(res);
+			},
+			btnImg(curt) {
+				// if (toString(this.shopDetail.imgList[curt]) == undefined) {
+				// 	return this.$ShowToastNone('图片不可预览，图片数据已失效')
+				// }
+				uni.previewImage({
+					// 为当前显示图片的链接/索引值，
+					current: curt,
+					// 需要预览的图片链接列表
+					urls: [this.shopDetail.imgList[curt]],
+					longPressActions: {
+						itemList: ['发送给朋友', '保存图片', '收藏'],
+						success: function(data) {
+							console.log('选中了第' + (data.tapIndex + 1) + '个按钮,第' + (data.index + 1) + '张图片');
+						},
+
+					}
+				})
+			},
 			showAgreement() {
 				this.isAgreement = true
 			},
@@ -175,32 +249,24 @@
 				}
 
 			},
-			async getSku() {
-				const res = await payTinymallGetSku_Get({
-					commodityId: this.shopDetail.commodityId
-				})
-				if (res.data.code === 200) {
-					this.shopList = res.data.data
-					// let newarr = [];
-					let newarr1 = [];
-					for (let i = 0; i < this.shopList.length; i++) {
-						// let temp = {
-						// 	"name": this.shopList[i]["specification"]
-						// };
-						// newarr.push(temp);
-						let temp1 = this.shopList[i]["specification"]
-						newarr1.push(temp1);
-					}
-					this.parmes = newarr1
-					this.parmesList = this.shopList[0]
-					this.isLoading = false
-					this.price = this.parmesList.price / 100
-					uni.hideLoading()
-				} else {
-					this.selfMsg(res.data.msg, 'warning')
-				}
-				console.log(res);
-			},
+			// async getSku() {
+			// 	const res = await payTinymallGetSku_Get({
+			// 		commodityId: this.commodityId
+			// 	})
+			// 	if (res.data.code === 200) {
+			// 		this.shopList = res.data.data
+			// 		let newarr1 = [];
+			// 		for (let i = 0; i < this.shopList.length; i++) {
+			// 			let temp1 = this.shopList[i]["specification"]
+			// 			newarr1.push(temp1);
+			// 		}
+			// 		this.parmes = newarr1
+			// 		this.parmesList = this.shopList[0]
+			// 		this.price = this.parmesList.price / 100
+			// 	} else {
+			// 		this.selfMsg(res.data.msg, 'warning')
+			// 	}
+			// },
 			async getNoticeByNoticeID() {
 				const res = await systemParamsNotenoticeId_Get({
 					noticeId: 14
@@ -218,6 +284,13 @@
 </script>
 
 <style scoped lang="scss">
+	.data-v-451425b3 {
+		image {
+			width: 300rpx;
+			height: 200rpx;
+		}
+	}
+
 	.container {
 		position: relative;
 
@@ -232,6 +305,22 @@
 		.header {
 			background-color: #ffffff;
 
+			.swp {
+				.indicator-num {
+					padding: 2px 0;
+					background-color: rgba(0, 0, 0, 0.35);
+					border-radius: 100px;
+					width: 35px;
+					@include flex;
+					justify-content: center;
+
+					&__text {
+						color: #FFFFFF;
+						font-size: 12px;
+					}
+				}
+			}
+
 			.background {
 				width: 100%;
 				height: 350rpx;
@@ -245,9 +334,42 @@
 
 					.one {
 						display: flex;
+						align-items: baseline;
 
 						.left {
 							padding: 0 20rpx 20rpx 0;
+							width: 170rpx;
+
+							.u-tag-wrapper {
+								align-items: center;
+							}
+
+						}
+
+						.tisp {
+							font-size: 30rpx;
+							flex: 1;
+							color: rgb(56, 56, 56);
+							word-break: break-all;
+							text-overflow: ellipsis;
+							display: -webkit-box;
+							/** 对象作为伸缩盒子模型显示 **/
+							-webkit-box-orient: vertical;
+							/** 设置或检索伸缩盒对象的子元素的排列方式 **/
+							-webkit-line-clamp: 2;
+							/** 显示的行数 **/
+							overflow: hidden;
+							/** 隐藏超出的内容 **/
+						}
+
+						.parse_detail {
+							padding: 20rpx 0rpx;
+							color: #4a4a4a;
+							flex: 1;
+
+							text {
+								display: inline-block;
+							}
 						}
 					}
 				}
@@ -258,7 +380,7 @@
 			position: relative;
 			background-color: #fff;
 			padding: 40rpx;
-			margin: 50rpx 30rpx;
+			margin: 50rpx 30rpx 260rpx;
 			border-radius: 30rpx;
 			box-shadow: 10rpx 10rpx 10px #ccc;
 
@@ -273,9 +395,12 @@
 				.type {
 					.one {
 						display: flex;
+						align-items: baseline;
 
 						.left {
-							padding: 0 20rpx 20rpx 0;
+							padding: 20rpx 20rpx 20rpx 0;
+
+
 						}
 					}
 
@@ -284,9 +409,9 @@
 		}
 
 		.bot {
-			// position: absolute;
-			// bottom: 0rpx;
-			// left: 0;
+			position: fixed;
+			bottom: 0rpx;
+			z-index: 99;
 			padding-top: 20rpx;
 			width: 100%;
 			background-color: #fff;
