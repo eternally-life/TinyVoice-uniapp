@@ -433,6 +433,41 @@
 				}
 				
 		    ]
+		},
+		//小空调分包
+		{
+			"root": "subpages_ice",
+			"pages": [{
+					"path": "index/index",
+					"style": {
+						"navigationBarTitleText": "主页",
+						"enablePullDownRefresh": false
+					}
+				},
+				{
+					"path": "cure/poem",
+					"style": {
+						"navigationBarTitleText": "poem",
+						"enablePullDownRefresh": false
+					}
+				
+				}, {
+					"path": "help/index",
+					"style": {
+						"navigationBarTitleText": "help",
+						"enablePullDownRefresh": false
+					}
+		
+				}, {
+					"path": "home/home",
+					"style": {
+						"navigationBarTitleText": "小空调",
+						"enablePullDownRefresh": false
+					}
+		
+				}
+				
+		    ]
 		}
 	],
 	"globalStyle": {
