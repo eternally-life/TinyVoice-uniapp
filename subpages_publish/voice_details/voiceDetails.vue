@@ -27,13 +27,14 @@
         <u-album :urls="currentShowVoice.images" multipleSize="223rpx"></u-album>
       </view>
       <view class="function_btns">
-        <view class="btn_collection">
-          转发：
-          0
+        <view class="btn_share">
+          <button open-type="share">分享</button>
+        </view>
+        <view class="btn_collection" @click="shareVoice">
+          <i class="iconfont icon-zhuanfa" style="font-size:40rpx;"></i>
         </view>
         <view class="btn_like" @click="likeThisVoice()">
-          喜欢：
-          {{ currentShowVoice.likeNum }}
+          <i class="iconfont icon-xihuan" style="font-size:40rpx;"></i>{{ currentShowVoice.likeNum }}
         </view>
       </view>
     </view>
@@ -164,7 +165,10 @@
 </template>
 
 <script>
-import { communityTinybbsReplysave_Post, communityTinybbsLike_Get, communityTinybbsReplylsave_Post, communityTinybbsReplyllsave_Post } from '@/api/社区模块/微音论坛.js'
+import {
+  communityTinybbsReplysave_Post, communityTinybbsLike_Get, communityTinybbsReplylsave_Post,
+  communityTinybbsReplyllsave_Post, communityTinybbsPage_Get
+} from '@/api/社区模块/微音论坛.js'
 export default {
   data() {
     return {
@@ -224,13 +228,27 @@ export default {
   },
   onLoad() {
     const eventChannel = this.getOpenerEventChannel()
-    eventChannel.on('acceptVoiceData', ({ data }) => {
-      console.log(data);
+    eventChannel.on('acceptVoiceData', ({ data, needReload = false }) => {
+      if (needReload) {
+        this.getSmallVoiceData(data.bbsId)
+        return
+      }
       this.currentShowVoice = data
       this.currentShowVoice.replyList && this.currentShowVoice.replyList.reverse()
     })
   },
   methods: {
+    async getSmallVoiceData(bbsId) {
+      const requestObj = {
+        pageNum: 0,
+        pageSize: 10,
+        timeSort: 0,
+        targetId: bbsId
+      }
+      const res = await communityTinybbsPage_Get(requestObj)
+      console.log(res);
+      this.currentShowVoice = res.data.data.records[0]
+    },
     enterOppositePage(index, replyLayerIndex) {
       // uni.navigateTo({
       //   url: '/subpages_publish/voice_details/oppositeDetails',
@@ -480,12 +498,14 @@ export default {
     .voice_imgs {
       width: 100%;
       min-height: 218rpx;
+      margin-bottom: 30rpx;
     }
 
     .function_btns {
       display: flex;
       justify-content: space-between;
-      padding: 30rpx;
+      padding: 0 30rpx;
+      position: relative;
 
       .btn_collection {
         display: flex;
@@ -502,6 +522,19 @@ export default {
 
         i {
           padding-right: 10rpx;
+        }
+      }
+
+      .btn_share {
+        position: absolute;
+        left: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        opacity: 0;
+
+        button {
+          width: 150rpx;
+          height: 50rpx;
         }
       }
     }

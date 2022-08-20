@@ -53,11 +53,11 @@ export function communityTinybbsReplyllsave_Post(communityTinybbsReplyllsave_Bod
  * tags: 微音论坛
  */
 
-export function communityTinybbsDelete_Delete() {
+export function communityTinybbsDelete_Delete(data) {
   return request({
     url: `/community/tinybbs/delete`,
     method: 'delete',
-
+    data
 
   })
 }

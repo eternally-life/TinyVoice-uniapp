@@ -207,6 +207,7 @@ export default {
     .tag_item_right {
       display: flex;
       flex-wrap: wrap;
+      width: 250px;
 
       .tag_item {
         margin-right: 20rpx;

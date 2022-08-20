@@ -1,22 +1,31 @@
 /* ======固定部分 开始====== */
 @font-face {
-	font-family: "iconfont";
-	/* Project id 3523630 */
-	src:
-		url('static/icon/iconfont.woff?t=1659429687997') format('woff'),
-		url('static/icon/iconfont.ttf?t=1659429687997') format('truetype');
+  font-family: "iconfont";
+  /* Project id 3523630 */
+  src: url("static/icon/iconfont.woff?t=1659429687997") format("woff"),
+    url("static/icon/iconfont.ttf?t=1659429687997") format("truetype");
 }
 
 .iconfont {
-	font-family: "iconfont" !important;
-	font-size: 16px;
-	font-style: normal;
-	-webkit-font-smoothing: antialiased;
-	-moz-osx-font-smoothing: grayscale;
+  font-family: "iconfont" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-/* ======固定部分 结束====== */
-/* ----以下为更新时替换部分---- */
+.icon-xihuan:before {
+  content: "\e761";
+}
+
+.icon-zhuanfa:before {
+  content: "\e6c9";
+}
+
+.icon-pinglun:before {
+  content: "\e618";
+}
+
 .icon-liuyan:before {
   content: "\e65e";
 }
@@ -196,4 +205,3 @@
 .icon-qiehuan:before {
   content: "\e63b";
 }
-
