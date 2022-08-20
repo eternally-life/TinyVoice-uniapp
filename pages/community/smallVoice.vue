@@ -430,6 +430,7 @@ export default {
       background: #c5c5c533;
       border-radius: 5px;
       padding: 10px;
+      margin-top: 30rpx;
 
       .comments_item {
         display: flex;
