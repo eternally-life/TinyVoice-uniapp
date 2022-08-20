@@ -2,7 +2,8 @@
 	<view class="wrap">
 		<!-- 轮播图 -->
 		<view class="banner">
-			<u-swiper :list="list" indicator indicatorMode="dot" height="160" previousMargin="30" nextMargin="30"
+			
+			<u-swiper :list="list" indicatorInactiveColor= "rgba(255,255,255,0.7)" indicatorActiveColor="rgba(45,193,207,0.7)" indicator indicatorMode="dot" height="150" previousMargin="30" nextMargin="30"
 				circular :autoplay="false" radius="5"></u-swiper>
 		</view>
 		<!-- 应用列表 -->
@@ -66,8 +67,6 @@
 					console.log('结果', res);
 					if (res.data.code == 200 && res.data.data.records.length > 0) {
 						let temp = []
-							.concat(res.data.data.records)
-							.concat(res.data.data.records)
 							.concat(res.data.data.records);
 						this.list = temp.map(value => value.url);
 					}
@@ -175,7 +174,7 @@
 			justify-content: flex-start;
 			background-color: #fff;
 			border-radius: 30rpx;
-			padding: 20rpx 10rpx 40rpx;
+			padding: 20rpx 10rpx 35rpx;
 			margin: 10rpx 50rpx;
 
 			.myItem {
@@ -189,7 +188,7 @@
 					line-height: 100rpx;
 					// border-radius: 15rpx;
 					// // 图片居中
-					margin: 10rpx auto;
+					margin: 20rpx auto;
 					border-bottom: #8a8a8a;
 					// 修改图标颜色大小
 					background-image: linear-gradient(45deg, #ffffff, #ffffff);
