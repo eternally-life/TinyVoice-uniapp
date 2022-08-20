@@ -8,10 +8,27 @@
 		<!-- 应用列表 -->
 		<view class="comments_title">
 			<view class="comments_border"></view>
+			<view class="comments_content">快来看看!</view>
+		</view>
+		<view class="centerInfo" v-if="navs.length > 0">
+			<view class="myItem" @click="navItemClick(item.jumpUrl,item.jumpType)" v-for="(item, index) in navsWeb"
+				:key="index">
+				<view class="myIcon">
+					<view class="fix" v-if="item.iconType == 1" :class="item.icon"></view>
+					<view class="fix" v-if="item.iconType == 2" >
+						<image :src="item.image"  mode="widthFix" />
+					</view>
+				</view>
+				<text>{{ item.name }}</text>
+			</view>
+		</view>
+		<!-- 应用列表 -->
+		<view class="comments_title">
+			<view class="comments_border"></view>
 			<view class="comments_content">是工具呀</view>
 		</view>
 		<view class="centerInfo" v-if="navs.length > 0">
-			<view class="myItem" @click="navItemClick(item.jumpUrl,item.jumpType)" v-for="(item, index) in navs"
+			<view class="myItem" @click="navItemClick(item.jumpUrl,item.jumpType)" v-for="(item, index) in navsTool"
 				:key="index">
 				<view class="myIcon">
 					<view class="fix" v-if="item.iconType == 1" :class="item.icon"></view>
@@ -35,7 +52,9 @@
 		data() {
 			return {
 				list: [],
-				navs: []
+				navs: [],
+				navsWeb:[],
+				navsTool:[]
 			};
 		},
 		methods: {
@@ -93,6 +112,9 @@
 						uni.stopPullDownRefresh()
 					}, 1000)
 					this.navs = res.data.data
+					this.navsWeb = res.data.data.filter(e=>e.jumpType==3)
+					this.navsTool = res.data.data.filter(e=>e.jumpType!=3)
+					
 					this.isLoading = false
 					console.log(res.data.data)
 				}
