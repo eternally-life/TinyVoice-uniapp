@@ -39,6 +39,13 @@
 				"navigationBarTitleText": "工具",
 				"enablePullDownRefresh": true
 			}
+		},
+    {
+			"path": "pages/small_voice/myVoice",
+			"style": {
+				"navigationBarTitleText": "我的发布",
+				"enablePullDownRefresh": true
+			}
 		}
 	],
 	"subPackages": [
