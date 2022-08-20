@@ -467,7 +467,7 @@
 			},
 			{
 				"pagePath": "pages/appliance/appliance",
-				"text": "工具",
+				"text": "服务",
 				"iconPath": "static/tabBar/unchecked_tool.png",
 				"selectedIconPath": "static/tabBar/select_tool.png"
 			},
