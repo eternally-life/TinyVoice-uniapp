@@ -339,6 +339,15 @@
                 }
                 
                 }
+                ,{
+                    "path" : "web/web",
+                    "style" :                                                                                    
+                {
+                    "navigationBarTitleText": "",
+                    "enablePullDownRefresh": false
+                }
+                
+                }
             ]
 		},
 		// 工具箱分包

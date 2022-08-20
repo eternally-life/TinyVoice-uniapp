@@ -8,7 +8,7 @@
 				<view class="swp">
 					<u-swiper :list="shopDetail.imgList.length ? shopDetail.imgList : shopDetail.image"
 						@change="e => currentNum = e.current" :autoplay="false" indicatorStyle="right: 20px"
-						@click="btnImg()">
+						@click="btnImg()" height="160">
 						<view slot="indicator" class="indicator-num">
 							<text
 								class="indicator-num__text">{{ currentNum + 1 }}/{{ shopDetail.imgList.length }}</text>
@@ -19,7 +19,7 @@
 					<view class="name">
 						<view class="one">
 							<view class="left">
-								<u-tag text="商品名"></u-tag>
+								<u-tag text="商品名称"></u-tag>
 							</view>
 							<view class="tisp">{{shopDetail.name ? shopDetail.name : '无'}}</view>
 						</view>
@@ -338,7 +338,28 @@
 
 						.left {
 							padding: 0 20rpx 20rpx 0;
-							width: 150rpx;
+							width: 170rpx;
+
+							.u-tag-wrapper {
+								align-items: center;
+							}
+
+						}
+
+						.tisp {
+							font-size: 30rpx;
+							flex: 1;
+							color: rgb(56, 56, 56);
+							word-break: break-all;
+							text-overflow: ellipsis;
+							display: -webkit-box;
+							/** 对象作为伸缩盒子模型显示 **/
+							-webkit-box-orient: vertical;
+							/** 设置或检索伸缩盒对象的子元素的排列方式 **/
+							-webkit-line-clamp: 2;
+							/** 显示的行数 **/
+							overflow: hidden;
+							/** 隐藏超出的内容 **/
 						}
 
 						.parse_detail {
