@@ -31,11 +31,11 @@
 			savePhoto(filePath) {
 				uni.downloadFile({ //下载文件资源到本地,返回文件的本地临时路径
 					url: filePath, //网络图片路径
-					success:(res) => {
+					success: (res) => {
 						var imageUrl = res.tempFilePath; //临时文件路径
 						uni.saveImageToPhotosAlbum({
 							filePath: imageUrl,
-							success: function () {
+							success: function() {
 								uni.showModal({
 									content: '保存成功！',
 									showCancel: false
@@ -50,24 +50,28 @@
 </script>
 
 <style scoped lang="scss">
-	.rect {
-		width: 100%;
-		display: flex;
-		align-items: center;
+	.warp {
+		.rect {
+			width: 100%;
+			display: flex;
+			align-items: center;
+			width: 320rpx;
+			height: 448rpx;
+			margin: 30rpx auto;
+		}
 
-	}
+		.rect:nth-child(1) {
+			margin: 100rpx auto;
+		}
 
-	.rect:nth-child(1) {
-		margin: 100rpx auto;
-	}
+		.btn {
+			display: flex;
+			align-items: center;
 
-	.btn {
-		display: flex;
-		align-items: center;
-
-		button {
-			background-color: #bbb;
-			border: 1rpx solid #ccc;
+			button {
+				background-color: #bbb;
+				border: 1rpx solid #ccc;
+			}
 		}
 	}
 </style>

@@ -24,8 +24,8 @@
 						</view>
 					</view>
 				</view>
-				<view class="fogetPassword" @click="showMsg = true">
-					忘记密码？
+				<view class="fogetPassword" @click="showMsg = true" style="padding: 10rpx 0;">
+					<!-- 忘记密码？ -->
 				</view>
 				<view class="loginBtn">
 					<!-- <text class="btnValue">登 录</text> -->

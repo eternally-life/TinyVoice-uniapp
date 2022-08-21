@@ -87,11 +87,11 @@
 </template>
 <script module="mod" lang="wxs" src="../../utils/mod.wxs"></script>
 <script>
-require('../../AF69DFF5BC64A5DFC90FB7F2A9B24571.js');
+require('@/data/AF69DFF5BC64A5DFC90FB7F2A9B24571.js');
 
-var e = require('../../AE450F94BC64A5DFC823679305A24571.js');
+var e = require('@/data/AE450F94BC64A5DFC823679305A24571.js');
 
-var t = require('../../71CC79E6BC64A5DF17AA11E1F0B24571.js');
+var t = require('@/data/71CC79E6BC64A5DF17AA11E1F0B24571.js');
 
 var app = getApp();
 export default {

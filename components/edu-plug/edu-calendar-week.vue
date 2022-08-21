@@ -3,8 +3,9 @@
 		<view class="container" v-show="calendarType == 0">
 			<!-- 日 带有点击事件  可切换查看单日数据 -->
 			<view class="weekUl">
-				<!-- <view class="weekLi" @click="toHelp()"><i class="iconfont font-fix">&#xed19;</i></view> -->
-				<view class="weekLi" @click="toHelp()"><view class="t-icon font-fix" :class="icon"></view></view>
+				<view class="weekLi dayIcon" hover-class="help_hover" hover-stay-time="500" @click="toHelp()">
+					<view class="iconfont icon-shezhi f-icon"></view>
+				</view>
 
 				<view v-for="(item, index) in showWeek_static" :key="index" class="weekLi" @click="changeFlag(index)">
 					<view class="dayItem " :class="[dayStyle(index)]">{{ item }}</view>
@@ -14,9 +15,15 @@
 		<view class="container" v-show="calendarType == 1">
 			<!-- 周 不可点击切换单日数据 -->
 			<view class="weekUl_static">
-				<!-- <view class="weekLi_static" @click="toHelp()"><i class="iconfont font-fix">&#xed19;</i></view> -->
-				<view class="weekLi_static" @click="toHelp()"><view class="t-icon font-fix" :class="icon"></view></view>
-				<view v-for="(item, index) in showWeek_dynamic" :key="index" class="weekLi_static" @click="weekStrFlage_CN = !weekStrFlage_CN">
+				<view class="weekLi_static" hover-class="help_hover" hover-stay-time="500" @click="toHelp()">
+					<view class="iconfont icon-shezhi f-icon"></view>
+				</view>
+				<view
+					v-for="(item, index) in showWeek_dynamic"
+					:key="index"
+					class="weekLi_static"
+					@click="weekStrFlage_CN = !weekStrFlage_CN"
+				>
 					<view class="dayItem_static" :class="[getNowStyle(index)]">{{ item }}</view>
 				</view>
 			</view>
@@ -52,7 +59,7 @@ export default {
 		...mapMutations('edu', ['setTempEduTime2']),
 		toHelp() {
 			uni.navigateTo({
-				url: '/pages/edu_help_setting/edu_help_setting'
+				url: '/subpages_edu/help_setting/help_setting'
 			});
 		},
 		/* 点击切换标记	日期使用 */
@@ -206,10 +213,18 @@ export default {
 		}
 	},
 	computed: {
-		...mapState('edu', ['calendarType', 'nowTime', 'monthType', 'week2TimeFlage', 'eduTime', 'tempEduTime2','week_GB']),
+		...mapState('edu', [
+			'calendarType',
+			'nowTime',
+			'monthType',
+			'week2TimeFlage',
+			'eduTime',
+			'tempEduTime2',
+			'week_GB'
+		]),
 		/** 日期样式
-		 * 
-		 * 
+		 *
+		 *
 		 * */
 		dayStyle(index) {
 			return index => {
@@ -220,7 +235,7 @@ export default {
 				}
 			};
 		},
-		
+
 		/**动态显示的周数
 		 * 依据 weekStrFlage_CN 判断是否显示星期
 		 * 根据	全局 week2TimeFlage时间状态 显示当前周 或其他周的日期
@@ -228,14 +243,14 @@ export default {
 		showWeek_dynamic() {
 			return this.weekStrFlage_CN ? this.week_GB : this.week2TimeFlage ? this.dynamic_week : this.week;
 		},
-		
+
 		/**静态显示周数
 		 * 显示单周日期 或 星期
 		 * */
 		showWeek_static() {
 			return this.weekStrFlage_CN ? this.week_GB : this.week;
 		},
-		
+
 		/* 本区动态周样式 */
 		getNowStyle(index) {
 			return index => {
@@ -262,7 +277,7 @@ export default {
 	},
 	// 卸载
 	onUnload() {
-		uni.$off('changeDate')
+		uni.$off('changeDate');
 	}
 };
 </script>
@@ -270,19 +285,30 @@ export default {
 <style scoped lang="scss">
 $item_width: 74rpx;
 $icon_size: 46rpx;
+$bg_color: #60c5ba;
 @mixin com_date_style {
 	border-radius: 50%;
 	color: #8a8989;
 }
 @mixin flag {
 	color: #fff;
-	background-color: #60c5ba;
+	background-color: $bg_color;
 }
 
 @mixin font-fix {
 	width: $icon_size;
 	height: $icon_size;
 }
+
+.f-icon {
+	color: #60c5ba;
+	font-size: 32rpx;
+}
+.help_hover {
+	background-color: #e5e4e4;
+}
+
+$day_item: 70rpx;
 
 .weekApp {
 	width: 90%;
@@ -292,9 +318,14 @@ $icon_size: 46rpx;
 		.weekUl {
 			display: flex;
 			justify-content: flex-end;
+			.dayIcon {
+				margin-right: 6vw;
+				line-height: $day_item;
+				text-align: center;
+			}
 			.weekLi {
-				width: 70rpx;
-				height: 70rpx;
+				width: $day_item;
+				height: $day_item;
 				margin-left: 10rpx;
 				.font-fix {
 					@include font-fix;
