@@ -13,7 +13,8 @@
           </view>
         </view>
       </view>
-      <view class="user_right"> </view>
+      <view class="user_right">
+      </view>
     </view>
 
     <view class="tabs_box">
@@ -48,6 +49,13 @@
               </view>
             </view>
             <view class="user_right" @click.stop="deleteVoiceReady(item.bbsId, index)">
+              <i class="iconfont" v-if="item.type === 5">&#xe7e9;</i>
+              <i class="iconfont is_like" v-if="item.type === 4">&#xe86f;</i>
+              <i class="iconfont" v-if="item.type === 3">&#xe630;</i>
+              <i class="iconfont" v-if="item.type === 6">&#xe8ef;</i>
+              <view class="supermarket_price" v-if="item.type === 2">￥<view class="price">{{ item.price.toFixed(2) }}
+                </view>
+              </view>
               <text>删除</text>
             </view>
           </view>
@@ -69,7 +77,9 @@
               {{ item.replyList ? item.replyList.length : '0' }}
             </view>
             <view class="btn_like" @click="likeThisVoice(item.bbsId, index)">
-              <i class="iconfont icon-xihuan" style="font-size:40rpx;"></i>{{ item.likeNum }}
+              <block v-if="!item.isLike"><i class="iconfont" style="font-size:40rpx;">&#xe761;</i></block>
+              <block v-if="item.isLike"><i class="iconfont" style="font-size:40rpx;color:#F75F5E">&#xe86f;</i></block>
+              {{ item.likeNum }}
             </view>
           </view>
         </view>
@@ -86,7 +96,15 @@
                 }}</view>
               </view>
             </view>
-            <view class="user_right"> </view>
+            <view class="user_right">
+              <i class="iconfont" v-if="item.type === 5">&#xe7e9;</i>
+              <i class="iconfont is_like" v-if="item.type === 4">&#xe86f;</i>
+              <i class="iconfont" v-if="item.type === 3">&#xe630;</i>
+              <i class="iconfont" v-if="item.type === 6">&#xe8ef;</i>
+              <view class="supermarket_price" v-if="item.type === 2">￥<view class="price">{{ item.price.toFixed(2) }}
+                </view>
+              </view>
+            </view>
           </view>
           <view class="voice_content" @click="enterVoiceDetail(index)">
             <u-parse :content="item.content"></u-parse>
@@ -106,7 +124,9 @@
               {{ item.replyList ? item.replyList.length : '0' }}
             </view>
             <view class="btn_like" @click="likeThisVoice(item.bbsId, index)">
-              <i class="iconfont icon-xihuan" style="font-size:40rpx;"></i>{{ item.likeNum }}
+              <block v-if="!item.isLike"><i class="iconfont" style="font-size:40rpx;">&#xe761;</i></block>
+              <block v-if="item.isLike"><i class="iconfont" style="font-size:40rpx;color:#F75F5E">&#xe86f;</i></block>
+              {{ item.likeNum }}
             </view>
           </view>
         </view>
@@ -246,6 +266,15 @@ export default {
               v.images.push(item.url)
             })
           }
+          v.isLike = false
+          //判断微音是否被点赞👇
+          if (v.likeList) {
+            v.likeList.forEach((info) => {
+              if (this.userinfo.userId === info.userId) {
+                v.isLike = true
+              }
+            })
+          }
           return v
         })
         this.currentPageNumber++
@@ -305,13 +334,22 @@ export default {
         tinyBbsId: bbsId,
       })
       if (res.data.msg === '取消点赞') {
-        //已经点过赞了
-        this.smallVoiceData[index].likeNum--
-        this.currentIndex === 1 ? this.myLikeVoiceData[index].likeNum-- : ''
+        if (this.currentIndex === 1) {
+          this.myLikeVoiceData[index].likeNum--
+          this.myLikeVoiceData[index].isLike = false
+        } else {
+          this.smallVoiceData[index].likeNum--
+          this.smallVoiceData[index].isLike = false
+        }
       } else {
         //点赞
-        this.smallVoiceData[index].likeNum++
-        this.currentIndex === 1 ? this.myLikeVoiceData[index].likeNum++ : ''
+        if (this.currentIndex === 1) {
+          this.myLikeVoiceData[index].likeNum++
+          this.myLikeVoiceData[index].isLike = true
+        } else {
+          this.smallVoiceData[index].likeNum++
+          this.smallVoiceData[index].isLike = true
+        }
       }
     },
     //查看微音详情
@@ -471,6 +509,7 @@ export default {
   .voice_item {
     padding: 30rpx 30rpx;
     background: #fff;
+    overflow: hidden;
 
     &:nth-child(n + 3) {
       margin-top: 30rpx;
@@ -516,12 +555,60 @@ export default {
         font-size: 28rpx;
         padding-top: 10rpx;
         width: fit-content;
+        position: relative;
+        display: flex;
+        align-items: center;
+
+        .supermarket_price {
+          border-radius: 10rpx;
+          height: 36rpx;
+          background: #ea605e;
+          color: #fff;
+          font-weight: normal;
+          display: flex;
+          align-items: flex-end;
+          font-size: 28rpx;
+          padding: 0 10rpx;
+          margin-right: 20rpx;
+
+          .price {
+            font-size: 24rpx;
+            font-weight: 100;
+
+            &::first-letter {
+              font-size: 28rpx;
+            }
+          }
+
+        }
+
+        .is_like {
+          display: block;
+          position: absolute;
+          top: 50%;
+          right: 50%;
+          width: 200rpx;
+          height: 200rpx;
+          z-index: 0;
+          pointer-events: none;
+          font-size: 500rpx !important;
+          transform: translate(-40%, -70%);
+          color: #F75F5E33 !important;
+        }
+
+        i {
+          font-size: 36rpx;
+          color: #5db4ab;
+          margin-right: 20rpx;
+        }
 
         text {
           color: #f56c6c;
           border: solid 2rpx #f56c6c;
           padding: 9rpx 25rpx;
           border-radius: 30rpx;
+          position: relative;
+          z-index: 1;
         }
       }
     }

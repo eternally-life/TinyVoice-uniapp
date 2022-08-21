@@ -16,7 +16,14 @@
           </view>
         </view>
         <view class="user_right">
-          <!-- <text>+ 关注</text> -->
+          <i class="iconfont" v-if="currentShowVoice.type === 5">&#xe7e9;</i>
+          <i class="iconfont is_like" v-if="currentShowVoice.type === 4">&#xe86f;</i>
+          <i class="iconfont" v-if="currentShowVoice.type === 3">&#xe630;</i>
+          <i class="iconfont" v-if="currentShowVoice.type === 6">&#xe8ef;</i>
+          <view class="supermarket_price" v-if="currentShowVoice.type === 2">￥<view class="price">{{
+              currentShowVoice.price.toFixed(2)
+          }}</view>
+          </view>
         </view>
       </view>
       <view class="voice_content">
@@ -34,7 +41,10 @@
           <i class="iconfont icon-zhuanfa" style="font-size:40rpx;"></i>
         </view>
         <view class="btn_like" @click="likeThisVoice()">
-          <i class="iconfont icon-xihuan" style="font-size:40rpx;"></i>{{ currentShowVoice.likeNum }}
+          <block v-if="!currentShowVoice.isLike"><i class="iconfont" style="font-size:40rpx;">&#xe761;</i></block>
+          <block v-if="currentShowVoice.isLike"><i class="iconfont" style="font-size:40rpx;color:#F75F5E">&#xe86f;</i>
+          </block>
+          {{ currentShowVoice.likeNum }}
         </view>
       </view>
     </view>
@@ -373,9 +383,11 @@ export default {
       if (res.data.msg === '取消点赞') {
         //已经点过赞了
         this.currentShowVoice.likeNum--
+        this.currentShowVoice.isLike = false
       } else {
         //点赞
         this.currentShowVoice.likeNum++
+        this.currentShowVoice.isLike = true
         uni.$emit('refresh')
       }
     },
@@ -431,6 +443,7 @@ export default {
   .voice_item {
     padding: 30rpx 30rpx;
     background: #fff;
+    overflow: hidden;
 
     &:nth-child(n + 2) {
       margin-top: 30rpx;
@@ -476,12 +489,61 @@ export default {
         font-size: 28rpx;
         padding-top: 10rpx;
         width: fit-content;
+        position: relative;
+
+        .supermarket_price {
+          border-radius: 10rpx;
+          height: 36rpx;
+          background: #ea605e;
+          color: #fff;
+          font-weight: normal;
+          display: flex;
+          align-items: flex-end;
+          font-size: 28rpx;
+          padding: 0 10rpx;
+          margin-right: 20rpx;
+
+          .price {
+            font-size: 24rpx;
+            font-weight: 100;
+
+            &::first-letter {
+              font-size: 28rpx;
+            }
+          }
+
+        }
+
+        .is_like {
+          display: block;
+          position: absolute;
+          top: 50%;
+          right: 50%;
+          width: 200rpx;
+          height: 200rpx;
+          z-index: 0;
+          pointer-events: none;
+          font-size: 500rpx !important;
+          transform: translate(-40%, -70%);
+          color: #F75F5E33 !important;
+        }
+
+        i {
+          font-size: 36rpx;
+          color: #5db4ab;
+        }
 
         text {
           color: #5db4ab;
           background: #eff9f8;
           padding: 9rpx 25rpx;
           border-radius: 30rpx;
+        }
+
+        .special {
+          display: flex;
+          flex-direction: column;
+          align-items: flex-end;
         }
       }
     }

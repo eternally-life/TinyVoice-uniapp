@@ -29,11 +29,20 @@
           </view>
         </view>
         <view class="user_right">
+          <i class="iconfont" v-if="item.type === 5">&#xe7e9;</i>
+          <i class="iconfont is_like" v-if="item.type === 4">&#xe86f;</i>
+          <i class="iconfont" v-if="item.type === 3">&#xe630;</i>
+          <i class="iconfont" v-if="item.type === 6">&#xe8ef;</i>
+          <view class="supermarket_price" v-if="item.type === 2">￥<view class="price">{{ item.price.toFixed(2) }}</view></view>
         </view>
       </view>
       <view class="voice_content" @click="enterVoiceDetail(index)">
         <!-- <text>{{ item.content }}</text> -->
         <u-parse :content="item.content"></u-parse>
+        <block v-if="item.audio">
+          <audio :src="item.audio" controls @click.stop="" name="倾情朗诵" :author="item.nickName"
+            :poster="item.avatar"></audio>
+        </block>
       </view>
       <view class="voice_imgs" v-if="item.images && item.images.length !== 0">
         <u-album :urls="item.images" multipleSize="220rpx" singleMode="aspectFill"></u-album>
@@ -50,7 +59,9 @@
           {{ item.replyList ? item.replyList.length : '0' }}
         </view>
         <view class="btn_like" @click="likeThisVoice(item.bbsId, index)">
-          <i class="iconfont icon-xihuan" style="font-size:40rpx;"></i>{{ item.likeNum }}
+          <block v-if="!item.isLike"><i class="iconfont" style="font-size:40rpx;">&#xe761;</i></block>
+          <block v-if="item.isLike"><i class="iconfont" style="font-size:40rpx;color:#F75F5E">&#xe86f;</i></block>
+          {{ item.likeNum }}
         </view>
       </view>
       <view class="comments_wrap" @click="enterVoiceDetail(index)" v-if="item.replyList && item.replyList.length !== 0">
@@ -115,7 +126,7 @@ export default {
           name: '表白',
         },
         {
-          name: '匿名',
+          name: '隐藏',
         },
       ],
       isNoMore: false
@@ -203,6 +214,15 @@ export default {
               v.images.push(item.url)
             })
           }
+          v.isLike = false
+          //判断微音是否被点赞👇
+          if (v.likeList) {
+            v.likeList.forEach((info) => {
+              if (this.userinfo.userId === info.userId) {
+                v.isLike = true
+              }
+            })
+          }
           return v
         })
         this.currentPageNumber++
@@ -220,9 +240,11 @@ export default {
       if (res.data.msg === '取消点赞') {
         //已经点过赞了
         this.smallVoiceData[index].likeNum--
+        this.smallVoiceData[index].isLike = false
       } else {
         //点赞
         this.smallVoiceData[index].likeNum++
+        this.smallVoiceData[index].isLike = true
       }
     },
     //查看微音详情
@@ -296,6 +318,7 @@ export default {
   .voice_item {
     padding: 30rpx 30rpx;
     background: #fff;
+    overflow: hidden;
 
     &:nth-child(n + 4) {
       margin-top: 30rpx;
@@ -346,6 +369,46 @@ export default {
         font-size: 28rpx;
         padding-top: 10rpx;
         width: fit-content;
+        position: relative;
+
+        .supermarket_price{
+          padding: 0 10rpx;
+          border-radius: 10rpx;
+          background: #ea605e;
+          color: #fff;
+          font-weight: normal;
+          display: flex;
+          align-items: flex-end;
+          font-size: 28rpx;
+
+          .price{
+            font-size: 24rpx;
+            font-weight: 100;
+            &::first-letter{
+              font-size: 28rpx;
+            }
+          }
+          
+        }
+
+        .is_like {
+          display: block;
+          position: absolute;
+          top: 50%;
+          right: 50%;
+          width: 200rpx;
+          height: 200rpx;
+          z-index: 0;
+          pointer-events: none;
+          font-size: 500rpx !important;
+          transform: translate(-40%, -70%);
+          color: #F75F5E33 !important;
+        }
+
+        i {
+          font-size: 36rpx;
+          color: #5db4ab;
+        }
 
         text {
           color: #5db4ab;
@@ -365,6 +428,12 @@ export default {
     .voice_content {
       padding: 20rpx 0rpx;
       color: #4a4a4a;
+      position: relative;
+      z-index: 1;
+
+      audio {
+        margin-top: 30rpx;
+      }
 
       text {
         display: inline-block;

@@ -14,6 +14,18 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-guanfang2:before {
+  content: "\e7e9";
+}
+
+.icon-xihuan1:before {
+  content: "\e86f";
+}
+
+.icon-shezhi:before {
+  content: "\e62a";
+}
+
 .icon-xihuan:before {
   content: "\e761";
 }

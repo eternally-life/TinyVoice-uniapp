@@ -30,27 +30,43 @@
             </u-tag>
           </view>
           <view class="tag_item">
-            <u-tag @click="taggleTagIndex(6)" text="匿名" type="warning" plain borderColor="#000"
+            <u-tag @click="taggleTagIndex(6)" text="隐藏" type="warning" plain borderColor="#000"
               :color="activeTagIndex === 6 ? '#fff' : '#000'" :bgColor="activeTagIndex === 6 ? '#000' : '#fff'">
+            </u-tag>
+          </view>
+          <view class="tag_item">
+            <u-tag @click="taggleTagIndex(2)" text="二手市场" type="warning" plain borderColor="#fbbd08"
+              :color="activeTagIndex === 2 ? '#fff' : '#fbbd08'" :bgColor="activeTagIndex === 2 ? '#fbbd08' : '#fff'">
+            </u-tag>
+          </view>
+          <view class="tag_item" v-if="wxUserInfo.roles && wxUserInfo.roles.length > 0">
+            <u-tag @click="taggleTagIndex(5)" text="官方" type="warning" plain borderColor="#5e00ff"
+              :color="activeTagIndex === 5 ? '#fff' : '#5e00ff'" :bgColor="activeTagIndex === 5 ? '#5e00ff' : '#fff'">
             </u-tag>
           </view>
         </view>
       </view>
-      <view class="choose_date" v-if="activeTagIndex === 2">
+      <!-- <view class="choose_date" v-if="activeTagIndex === 2">
         <u-datetime-picker :show="datetimeShow" v-model="chooseDate" mode="date" :formatter="formatter"
           ref="datetimePicker" :maxDate="new Date().getTime()" @cancel="datetimeShow = false" @confirm="changeDate">
         </u-datetime-picker>
         <u-button @click="datetimeShow = true" size="small" :customStyle="customStyle" stle="width:100rpx;">选择日期
         </u-button>
+      </view> -->
+      <view class="choose_price" v-if="activeTagIndex === 2">
+        <text>价格：</text>
+        <u--input placeholder="价格/元" border="bottom" clearable v-model="goodPrice">
+        </u--input>
+        <text>元</text>
       </view>
-      <block v-if="activeTagIndex === 2">
+      <!-- <block v-if="activeTagIndex === 2">
         <view class="chooose_date_wrap">
           <text>丢失时间：<text style="color: #999;">{{ calculateTime(chooseDate) }}</text></text>
         </view>
         <view class="chooose_date_wrap">
           <text>Tips：<text style="color: #999;text-decoration: underline;">可以在内容中留下联系方式哦</text></text>
         </view>
-      </block>
+      </block> -->
     </view>
     <view class="publish_btn">
       <u-button type="primary" @click="sendSamllVoice" text="发布" :customStyle="customStyle" :loading="publishLoading"
@@ -72,7 +88,8 @@ export default {
       datetimeShow: false,
       chooseDate: Number(new Date()),
       imgArr: [],
-      wxUserInfo: {}
+      wxUserInfo: {},
+      goodPrice: '0.00'
     }
   },
   props: {
@@ -102,7 +119,8 @@ export default {
         type: this.activeTagIndex,
         content: this.voiceContent,
         imgList: this.imgArr,
-        contact: this.activeTagIndex === 3 ? this.wxUserInfo.phonenumber : null
+        contact: this.activeTagIndex === 3 || this.activeTagIndex === 2 ? this.wxUserInfo.phonenumber : null,
+        price: this.activeTagIndex === 2 ? this.goodPrice : null
       })
         .then((res) => {
           if (res.data.code === 200) {
@@ -193,6 +211,17 @@ export default {
     }
   }
 
+  .choose_price {
+    display: flex;
+    align-items: center;
+    padding: 0 20rpx;
+
+    text {
+      font-size: 28rpx;
+      color: #60c5ba;
+    }
+  }
+
   .publish_type_wrap {
     display: flex;
     align-items: flex-start;
@@ -211,7 +240,8 @@ export default {
 
       .tag_item {
         margin-right: 20rpx;
-        &:nth-child(n+4){
+
+        &:nth-child(n+4) {
           margin-top: 20rpx;
         }
       }
