@@ -7,9 +7,9 @@
 				circular :autoplay="false" radius="5"></u-swiper>
 		</view>
 		<!-- 应用列表 -->
-		<view class="comments_title">
-			<view class="comments_border"></view>
-			<view class="comments_content">快来看看!</view>
+		<view class="column_title">
+			<view class="column_border"></view>
+			<view class="column_content">快来看看!</view>
 		</view>
 		<view class="centerInfo" v-if="navs.length > 0">
 			<view class="myItem" @click="navItemClick(item.jumpUrl,item.jumpType)" v-for="(item, index) in navsWeb"
@@ -24,12 +24,12 @@
 			</view>
 		</view>
 		<!-- 应用列表 -->
-		<view class="comments_title">
-			<view class="comments_border"></view>
-			<view class="comments_content">是工具呀</view>
+		<view class="column_title">
+			<view class="column_border"></view>
+			<view class="column_content">是工具呀</view>
 		</view>
 		<view class="centerInfo" v-if="navs.length > 0">
-			<view class="myItem" @click="navItemClick(item.jumpUrl,item.jumpType)" v-for="(item, index) in navsTool"
+			<view class="myItem" @click="navItemClick(item.jumpUrl,item.appId,item.jumpType)" v-for="(item, index) in navsTool"
 				:key="index">
 				<view class="myIcon">
 					<view class="fix" v-if="item.iconType == 1" :class="item.icon"></view>
@@ -72,7 +72,7 @@
 					}
 				});
 			},
-			navItemClick(path, jumpType) {
+			navItemClick(path, appId,jumpType) {
 				// jumpType跳转类型：1.普通页面,2.tabbar页面,3.网页,4.小程序
 				console.log(this.navsTool);
 				switch (jumpType) {
@@ -93,7 +93,7 @@
 						break;
 					case 4:
 						uni.navigateToMiniProgram({
-							appId: path,
+							appId: appId,
 						});
 						break;
 					default:
