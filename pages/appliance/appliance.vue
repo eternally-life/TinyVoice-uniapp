@@ -74,7 +74,7 @@
 			},
 			navItemClick(path, jumpType) {
 				// jumpType跳转类型：1.普通页面,2.tabbar页面,3.网页,4.小程序
-				// console.log(path);
+				console.log(this.navsTool);
 				switch (jumpType) {
 					case 1:
 						uni.navigateTo({
