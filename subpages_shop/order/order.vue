@@ -33,7 +33,8 @@
 								<!-- <text class="desc">
 									{{i.content}}
 								</text> -->
-								<u-parse :content="i.content ? i.content : '无'" class="desc"></u-parse>
+								<u-parse :content="i.content ? i.content : '无'" class="desc" :tagStyle="style">
+								</u-parse>
 							</view>
 							<view class="right">
 								<text class="price">￥{{i.totalPrice/100}}</text>
@@ -104,6 +105,8 @@
 		payTinymallafterPayAfter_Post,
 		payTinymallafterCloseAfter_Get
 	} from '@/api/商城模块/售后测通.js'
+
+	const graceRichText = require('../../utils/richtext.js');
 	export default {
 		data() {
 			return {
@@ -132,7 +135,11 @@
 					/** 订单ID   string required: */
 					demand: "",
 					/** 需求   string required: */
-				}
+				},
+				style: {
+					p: 'font-size:32rpx',
+					img: 'width:70%; margin:8rpx 0;'
+				},
 			}
 		},
 		onLoad() {
@@ -383,6 +390,7 @@
 							.desc {
 								font-size: 24rpx;
 								color: #8e8e8e;
+
 							}
 						}
 
