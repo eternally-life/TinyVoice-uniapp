@@ -1,10 +1,8 @@
 
 // const BASE_URL = 'https://tiny-voice.glowxq.com/prod-api'  // 生产 api
-// const BASE_URL = 'https://tinyvoice.glowxq.com/prod-api'  // 生产 api
-// const BASE_URL = 'https://tinyvoice.glowxq.com:10000' 
 // const BASE_URL = 'http://127.0.0.1:8080' 
-const BASE_URL = 'http://106.52.58.11:12574' // 开发api
-// const BASE_URL = 'https://tinyvoice.glowxq.com/prod-api'  // 微音生产 api
+// const BASE_URL = 'http://106.52.58.11:12574' // 开发api
+const BASE_URL = 'https://tinyvoice.glowxq.com/prod-api'  // 微音生产 api
 
 const loginUtil = require('./loginUtil.js')
 
