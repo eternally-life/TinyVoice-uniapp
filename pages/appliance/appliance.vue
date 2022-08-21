@@ -7,9 +7,9 @@
 				circular :autoplay="false" radius="5"></u-swiper>
 		</view>
 		<!-- 应用列表 -->
-		<view class="comments_title">
-			<view class="comments_border"></view>
-			<view class="comments_content">快来看看!</view>
+		<view class="column_title">
+			<view class="column_border"></view>
+			<view class="column_content">快来看看!</view>
 		</view>
 		<view class="centerInfo" v-if="navs.length > 0">
 			<view class="myItem" @click="navItemClick(item.jumpUrl,item.jumpType)" v-for="(item, index) in navsWeb"
@@ -24,9 +24,9 @@
 			</view>
 		</view>
 		<!-- 应用列表 -->
-		<view class="comments_title">
-			<view class="comments_border"></view>
-			<view class="comments_content">是工具呀</view>
+		<view class="column_title">
+			<view class="column_border"></view>
+			<view class="column_content">是工具呀</view>
 		</view>
 		<view class="centerInfo" v-if="navs.length > 0">
 			<view class="myItem" @click="navItemClick(item.jumpUrl,item.jumpType)" v-for="(item, index) in navsTool"

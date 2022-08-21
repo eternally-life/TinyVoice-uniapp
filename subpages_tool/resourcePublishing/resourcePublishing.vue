@@ -13,16 +13,16 @@
 					width="320rpx" height="320rpx"></u-upload> -->
 				<view v-if="!fileUrl">
 					<u-icon name="plus" color="#e0dee4" size="100"></u-icon>
-					文件资源:{{this.showName}}
+
 				</view>
 
 				<image class="img" :src="fileUrl" v-else></image>
 			</view>
-
+			文件资源:{{showName}}
 
 		</view>
 		<view class="submit_photo">
-			<u-button type="primary" @click="resultPath(fileName,fileDescribe,fileIntegral,fileUrl)">确定</u-button>
+			<u-button shape="circle" type="primary" @click="resultPath(fileName,fileDescribe,fileIntegral,fileUrl)">确定</u-button>
 		</view>
 	</view>
 </template>
@@ -58,19 +58,17 @@
 							return;
 						}
 						_this.fileUrl = res.tempFiles[0].path
-						this.showName = res.tempFiles[0].name
+						_this.showName = res.tempFiles[0].name
+						console.log(_this.showName);
 					}
 				});
 			},
 			// 选取的文件路径获取后回调
 			async resultPath(name, describe, integral, file) {
 				uni.showLoading({
-					title: '上传中...',
+					title: '上传中...', 
 				});
-				console.log(this.fileName);
-				console.log(this.fileDescribe);
-				console.log("==================");
-				console.log(this.fileUrl);
+				console.log(this.showName);
 				const res = await communityTinyserveresourceSave_Post({
 					integral,
 					name,
@@ -92,7 +90,7 @@
 			margin: 30rpx auto;
 			padding: 30rpx;
 			width: 650rpx;
-			height: 566rpx;
+			
 			border-radius: 15rpx;
 			box-shadow: 0rpx 0rpx 10rpx #ccc;
 			position: relative;
@@ -102,10 +100,14 @@
 				margin: 30rpx auto;
 
 				.img {
-					width: 320rpx;
-					height: 320rpx;
+					width: 200rpx;
+					height: 200rpx;
 				}
 			}
+		}
+		.submit_photo{
+			width: 80%;
+			margin: 50rpx auto;
 		}
 	}
 </style>
