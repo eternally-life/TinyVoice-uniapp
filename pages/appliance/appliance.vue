@@ -2,22 +2,22 @@
 	<view class="wrap">
 		<!-- 轮播图 -->
 		<view class="banner">
-			
-			<u-swiper :list="list" indicatorInactiveColor= "rgba(255,255,255,0.7)" indicatorActiveColor="rgba(45,193,207,0.7)" indicator indicatorMode="dot" height="150" previousMargin="30" nextMargin="30"
-				circular :autoplay="false" radius="5"></u-swiper>
+			<u-swiper :list="list" indicatorInactiveColor="rgba(255,255,255,0.7)"
+				indicatorActiveColor="rgba(45,193,207,0.7)" indicator indicatorMode="dot" height="150"
+				previousMargin="30" nextMargin="30" circular :autoplay="false" radius="5"></u-swiper>
 		</view>
 		<!-- 应用列表 -->
 		<view class="column_title">
 			<view class="column_border"></view>
-			<view class="column_content">快来看看!</view>
+			<view class="column_content">快来看看 \(￣︶￣*\))</view>
 		</view>
 		<view class="centerInfo" v-if="navs.length > 0">
-			<view class="myItem" @click="navItemClick(item.jumpUrl,item.jumpType)" v-for="(item, index) in navsWeb"
+			<view class="myItem" @click="navItemClick(item.jumpUrl,item.appId,item.jumpType)" v-for="(item, index) in navsWeb"
 				:key="index">
 				<view class="myIcon">
 					<view class="fix" v-if="item.iconType == 1" :class="item.icon"></view>
-					<view class="fix" v-if="item.iconType == 2" >
-						<image :src="item.image"  mode="widthFix" />
+					<view class="fix" v-if="item.iconType == 2">
+						<image :src="item.image" mode="widthFix" />
 					</view>
 				</view>
 				<text>{{ item.name }}</text>
@@ -26,15 +26,15 @@
 		<!-- 应用列表 -->
 		<view class="column_title">
 			<view class="column_border"></view>
-			<view class="column_content">是工具呀</view>
+			<view class="column_content">是工具呀 →_→</view>
 		</view>
 		<view class="centerInfo" v-if="navs.length > 0">
-			<view class="myItem" @click="navItemClick(item.jumpUrl,item.appId,item.jumpType)" v-for="(item, index) in navsTool"
-				:key="index">
+			<view class="myItem" @click="navItemClick(item.jumpUrl,item.appId,item.jumpType)"
+				v-for="(item, index) in navsTool" :key="index">
 				<view class="myIcon">
 					<view class="fix" v-if="item.iconType == 1" :class="item.icon"></view>
-					<view class="fix" v-if="item.iconType == 2" >
-						<image :src="item.image"  mode="widthFix" />
+					<view class="fix" v-if="item.iconType == 2">
+						<image :src="item.image" mode="widthFix" />
 					</view>
 				</view>
 				<text>{{ item.name }}</text>
@@ -54,8 +54,8 @@
 			return {
 				list: [],
 				navs: [],
-				navsWeb:[],
-				navsTool:[]
+				navsWeb: [],
+				navsTool: []
 			};
 		},
 		methods: {
@@ -72,9 +72,10 @@
 					}
 				});
 			},
-			navItemClick(path, appId,jumpType) {
+			navItemClick(path, appId, jumpType) {
 				// jumpType跳转类型：1.普通页面,2.tabbar页面,3.网页,4.小程序
-				console.log(this.navsTool);
+				console.log(path);
+				console.log(jumpType);
 				switch (jumpType) {
 					case 1:
 						uni.navigateTo({
@@ -87,8 +88,10 @@
 						});
 						break;
 					case 3:
+						console.log(path)
+						console.log(123132)
 						uni.navigateTo({
-							url: '/subpages_tool/web/web?url='+path
+							url: '/subpages_tool/web/web?url=' + path
 						});
 						break;
 					case 4:
@@ -111,9 +114,9 @@
 						uni.stopPullDownRefresh()
 					}, 1000)
 					this.navs = res.data.data
-					this.navsWeb = res.data.data.filter(e=>e.jumpType==3)
-					this.navsTool = res.data.data.filter(e=>e.jumpType!=3)
-					
+					this.navsWeb = res.data.data.filter(e => e.jumpType == 3)
+					this.navsTool = res.data.data.filter(e => e.jumpType != 3)
+
 					this.isLoading = false
 					console.log(res.data.data)
 				}
@@ -165,6 +168,18 @@
 			justify-content: center;
 			align-items: center;
 			background: white;
+		}
+		.column_title{
+			margin: 30rpx;
+			border-left: 10rpx solid #2dc1cf;
+			padding-left: 15rpx;
+			.column_border{
+			
+			}
+			.column_content{
+				
+				// font-weight: bold;
+			}
 		}
 
 		.centerInfo {

@@ -489,12 +489,13 @@
 		"color": "#000000",
 		"selectedColor": "#2dc1cf",
 		"backgroundColor": "#FFFFFF",
-		"list": [{
-				"pagePath": "pages/edu/edu",
-				"text": "学习",
-				"iconPath": "static/tabBar/unchecked_home.png",
-				"selectedIconPath": "static/tabBar/select_home.png"
-			},
+		"list": [
+			// {
+			// 	"pagePath": "pages/edu/edu",
+			// 	"text": "学习",
+			// 	"iconPath": "static/tabBar/unchecked_home.png",
+			// 	"selectedIconPath": "static/tabBar/select_home.png"
+			// },
 			{
 				"pagePath": "pages/shop/shop",
 				"text": "商城",
