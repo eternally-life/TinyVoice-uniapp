@@ -40,7 +40,7 @@
 
 <script>
 import cuCustom from '@/colorui/components/cu-custom';
-var t = require('../../../14F192A656B80DDF7297FAA1889CE943.js');
+var t = require('../../../data/14F192A656B80DDF7297FAA1889CE943.js');
 
 export default {
     components: {
