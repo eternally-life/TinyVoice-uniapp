@@ -128,6 +128,12 @@ export default {
         {
           name: '隐藏',
         },
+        {
+          name: '二手市场',
+        },
+        {
+          name: '官方',
+        },
       ],
       isNoMore: false
     }
@@ -190,7 +196,6 @@ export default {
     pullDownRefresh() {
       this.smallVoiceData = []
       this.currentPageNumber = 1
-      this.voiceType = 1
       this.getSmallVoiceData()
     },
     //发送请求
@@ -274,7 +279,7 @@ export default {
         this.voiceType = 1
       }
       if (payload.index === 1) {
-        this.voiceType = 2
+        this.voiceType = 3
         this.menuList[1].badge.isDot = false
       }
       if (payload.index === 2) {
@@ -282,6 +287,12 @@ export default {
       }
       if (payload.index === 3) {
         this.voiceType = 6
+      }
+      if (payload.index === 4) {
+        this.voiceType = 2
+      }
+      if (payload.index === 5) {
+        this.voiceType = 5
       }
       this.isLoading = true
       this.isNoMore = false
