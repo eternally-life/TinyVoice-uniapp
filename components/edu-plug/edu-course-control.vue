@@ -241,7 +241,11 @@ export default {
 			clearTimeout(this.watchDogID);
 		}
 	},
-	created() {
+	unmounted() {
+		uni.$off('pull');
+		uni.$off('goBack');
+	},
+	mounted() {
 		// 触发外部刷新
 		uni.$on('pull', () => {
 			this.getCourse();
@@ -250,12 +254,6 @@ export default {
 		uni.$on('goBack', () => {
 			this.weekRender(this.eduTime.weekSeq);
 		});
-	},
-	onUnload() {
-		uni.$off('pull');
-		uni.$off('goBack');
-	},
-	mounted() {
 		// 挂载完成再操作
 		try {
 			[this.timeInfo.nowWeek, this.timeInfo.nowNum] = manageData.timeAnalysis(this.$store.state.edu.timeNode);
