@@ -40,6 +40,8 @@
 									content: '保存成功！',
 									showCancel: false
 								});
+								uni.navigateBack({})
+								
 							}
 						});
 					}

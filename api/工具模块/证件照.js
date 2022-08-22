@@ -27,3 +27,25 @@ export function submitIdPhoto_post(submitIdPhoto_params, file) {
 		file: file
 	})
 }
+
+
+/***  ===========================================================================
+ * path: /community/tinyphotosspec/page
+ * summary: 分页获取 微音证件照规格
+ * 
+ */
+
+let getTinyPhotoSpec_params = {
+	pageNum: null, //第几页
+	pageSize: null, //页码大小
+	sort: null, 	// 排序方式 1-默认 2-下载量 3-热门
+}
+
+export function getTinyPhotoSpec_get(getTinyPhotoSpec_params) {
+console.log(getTinyPhotoSpec_params)
+	return requestFile({
+		url: `/community/tinyphotosspec/page`,
+		method: 'get',
+		params: getTinyPhotoSpec_params
+	})
+}

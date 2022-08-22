@@ -15,26 +15,17 @@
 					<text class="detail">{{ option.detail_2 }}</text>
 				</view>
 			</view>
-			<!-- 考试证件照 -->
-			<text class="title">考试证件照</text>
-			<view class="list">
-				<view class="item" v-for="(option,index) in testType" :key="index" @tap="chooseType(option.id)">
-					<text class="photoType">{{ option.photoType }}</text>
-					<text class="detail">{{ option.detail_1 }}</text>
-					<text class="detail">{{ option.detail_2 }}</text>
-				</view>
-			</view>
 		</view>
 	</view>
 </template>
 
 <script>
+	import { 
+		getTinyPhotoSpec_get
+	} from '@/api/工具模块/证件照.js'
 	export default {
 		data() {
 			return {
-				list1: [	// 轮播图 图片地址
-					
-				],
 				hotType: [ // 热门类型的数据
 					{
 						id: 6,
@@ -55,39 +46,27 @@
 						detail_2: '180×240px'
 					},
 				],
-				testType: [{
-						id: 2,
-						photoType: '计算机等级考试',
-						detail_1: '35×53mm',
-						detail_2: '413×579px'
-					},
-					{
-						id: 3,
-						photoType: '普通话考试',
-						detail_1: '33×48mm',
-						detail_2: '390×567px'
-					},
-					{
-						id: 4,
-						photoType: '英语四六级',
-						detail_1: '33×48mm',
-						detail_2: '390×567px'
-					},
-					{
-						id: 5,
-						photoType: '考研',
-						detail_1: '33×48mm',
-						detail_2: '390×567px'
-					},
-				]
-
+				getSpecData:{	//分页获取微音证件照规格参数
+					pageNum:1,
+					pageSize:10,
+					sort:1,
+				},
 			}
 		},
+		onLoad(){
+			this.getTinyPhotospec(this.getSpecData)
+		},
 		methods: {
+			// 选择类型
 			chooseType(type) {
 				uni.navigateTo({
-					url: '/subpages_tool/id_photo/photo_handle?type=' + type
+					url: '/subpages_tool/id_photo/photoHandle?type=' + type
 				});
+			},
+			// 分页获取微音证件照规格
+			async getTinyPhotospec(getSpecData){
+				const res = await getTinyPhotoSpec_get(getSpecData)
+				console.log('哈哈哈'+res)
 			}
 		}
 	}

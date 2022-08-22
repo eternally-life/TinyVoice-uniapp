@@ -15,7 +15,8 @@
 				:style="baseColor===1? 'background-color:#fd0101;color:#ffffff;' : ''">红底</button>
 			<button @click="backColor(2)"
 				:style="baseColor===2? 'background-color:#026afd;color:#ffffff;' : ''">蓝底</button>
-			<button @click="backColor(3)" :style="baseColor===3? 'background-color:#fefefe;' : ''">白底</button>
+			<button @click="backColor(3)"
+			 :style="baseColor===3? 'background-color:#fefefe;' : ''">白底</button>
 		</view>
 		<!-- 提交 -->
 		<view class="submit_photo">
@@ -34,19 +35,22 @@
 	export default {
 		data() {
 			return {
-				imgUrl: '', // 图片地址 
+				imgUrl: '', // 选择的图片
 
 				handleType: 1, // 处理类型
 
 				baseColor: 1, // 底色
-				str: '',
-				afterImage: ''
+				
+				afterImage: ''	,// 处理后的图片
+				
+				isChooseColor: true	// 是否可选择底色
 			}
 		},
 		onLoad(options) {
 			this.handleType = parseInt(options.type)
 		},
 		methods: {
+			// 选择图片的处理函数
 			choosePhoto() {
 				let _this = this
 				uni.chooseImage({
@@ -54,10 +58,17 @@
 					sizeType: ['original', 'compressed'],
 					sourceType: ['album'],
 					success: function(res) {
-						_this.imgUrl = res.tempFilePaths[0]
+						let imgUrl = res.tempFilePaths[0]
+						let imgSuffix =imgUrl.substring(imgUrl.lastIndexOf('.')+1)	// 图片后缀名
+						if(imgSuffix === 'gif'){	// 禁选的图片格式
+							return _this.selfMsg("请选择正确的图片格式哦", "warning")
+						}
+						_this.imgUrl = imgUrl
+						console.log(imgSuffix)
 					}
 				});
 			},
+			// 提交所选的图片
 			async submit_btn(type, color, file) {
 				if (file == '') {
 					return this.selfMsg("照片别忘了选", "warning")
@@ -75,8 +86,6 @@
 					uni.navigateTo({
 						url: `/subpages_tool/id_photo/previewPhoto?imgUrl=${_this.afterImage}`
 					})
-					
-
 				} else {
 					return this.selfMsg(ps.msg, "warning")
 				}

@@ -1,5 +1,5 @@
 // const BASE_URL = 'http://498812h08b.zicp.vip'
-const BASE_URL = 'http://106.52.58.11:12574' // 开发api
+const BASE_URL = 'http://106.52.58.11:28080' // 开发api
 // const BASE_URL = 'https://tinyvoice.glowxq.com:10000' 
 // const BASE_URL = 'http://127.0.0.1:8080' 
 const loginUtil = require('./loginUtil.js')
@@ -52,8 +52,8 @@ export function requestFile({
 	uni.showLoading({
 		title: '加载中'
 	})
-	console.log(file);
-	console.log("++++++++++++++++++++++++++");
+	// console.log(file);
+	// console.log("++++++++++++++++++++++++++");
 	return new Promise(function(resolve, reject) {
 		uni.uploadFile({
 			url: BASE_URL + url + urlencode(params),
