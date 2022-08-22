@@ -23,6 +23,8 @@ export function loginStatus(code) {
 		setGloalDataLoginNum()
 		let loginNum = getApp().globalData.loginNum
 		console.log("=======" + loginNum)
+		getApp().globalData.wxUserInfo = null;
+		uni.removeStorageSync('wxUserInfo');
 		uni.showModal({
 			title: '登录已经过期,是否重新登录',
 			success: (res) => {
