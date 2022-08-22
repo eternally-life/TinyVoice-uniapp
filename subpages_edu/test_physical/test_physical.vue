@@ -45,24 +45,27 @@
 					</view>
 				</u-form-item>
 				<u-form-item label="50米">
-					<view class="inputStyle">
+					<view class="inputStyle" :class="focusInput == 'val_50' ? 'focusInput' : ''">
 						<u-input
+							type="digit"
 							inputAlign="right"
+							:suffixIconStyle="focusInput == 'val_50' ? { color: '#fff' } : ''"
 							v-model="val_obj.val_50"
-							@focus="focus(val_obj.val_50)"
+							@focus="focus({ value: val_obj.val_50, target: 'val_50' })"
 							@blur="blur"
 							placeholder="0"
 						>
-							<u-text text="秒" slot="suffix" margin="0 3px 0 3px" type="tips"></u-text>
+							<u-text text="秒" slot="suffix" margin="0 3px 0 3px"></u-text>
 						</u-input>
 					</view>
 				</u-form-item>
 				<u-form-item :label="getStr_diffProject">
-					<view class="inputStyle">
+					<view class="inputStyle" :class="focusInput == 'diff_ProjectValue' ? 'focusInput' : ''">
 						<u-input
 							inputAlign="right"
+							type="number"
 							v-model="val_obj.diff_ProjectValue"
-							@focus="focus(val_obj.diff_ProjectValue)"
+							@focus="focus({ value: val_obj.diff_ProjectValue, target: 'diff_ProjectValue' })"
 							@blur="blur"
 							placeholder="0"
 						>
@@ -72,32 +75,39 @@
 				</u-form-item>
 				<u-form-item :label="getStr_longRun + '米'">
 					<view class="inputStyle doubInput">
-						<u-input
-							inputAlign="right"
-							v-model="val_obj.m_8h_1k"
-							@focus="focus(val_obj.m_8h_1k)"
-							@blur="blur"
-							placeholder="0"
-						>
-							<u-text text="分" slot="suffix" margin="0 3px 0 3px" type="tips"></u-text>
-						</u-input>
-						<u-input
-							inputAlign="right"
-							v-model="val_obj.s_8h_1k"
-							@focus="focus(val_obj.s_8h_1k)"
-							@blur="blur"
-							placeholder="0"
-						>
-							<u-text text="秒" slot="suffix" margin="0 3px 0 3px" type="tips"></u-text>
-						</u-input>
+						<view :class="focusInput == 'm_8h_1k' ? 'focusInput' : ''">
+							<u-input
+								inputAlign="right"
+								type="number"
+								v-model="val_obj.m_8h_1k"
+								@focus="focus({ value: val_obj.m_8h_1k, target: 'm_8h_1k' })"
+								@blur="blur"
+								placeholder="0"
+							>
+								<u-text text="分" slot="suffix" margin="0 3px 0 3px" type="tips"></u-text>
+							</u-input>
+						</view>
+						<view :class="focusInput == 's_8h_1k' ? 'focusInput' : ''">
+							<u-input
+								inputAlign="right"
+								type="number"
+								v-model="val_obj.s_8h_1k"
+								@focus="focus({ value: val_obj.s_8h_1k, target: 's_8h_1k' })"
+								@blur="blur"
+								placeholder="0"
+							>
+								<u-text text="秒" slot="suffix" margin="0 3px 0 3px" type="tips"></u-text>
+							</u-input>
+						</view>
 					</view>
 				</u-form-item>
 				<u-form-item label="身高">
-					<view class="inputStyle">
+					<view class="inputStyle" :class="focusInput == 'height' ? 'focusInput' : ''">
 						<u-input
 							inputAlign="right"
+							type="digit"
 							v-model="val_obj.height"
-							@focus="focus(val_obj.height)"
+							@focus="focus({ value: val_obj.height, target: 'height' })"
 							@blur="blur"
 							placeholder="0"
 						>
@@ -106,11 +116,12 @@
 					</view>
 				</u-form-item>
 				<u-form-item label="体重">
-					<view class="inputStyle">
+					<view class="inputStyle" :class="focusInput == 'weight' ? 'focusInput' : ''">
 						<u-input
 							inputAlign="right"
 							v-model="val_obj.weight"
-							@focus="focus(val_obj.weight)"
+							type="digit"
+							@focus="focus({ value: val_obj.weight, target: 'weight' })"
 							@blur="blur"
 							placeholder="0"
 						>
@@ -119,11 +130,12 @@
 					</view>
 				</u-form-item>
 				<u-form-item label="肺活量">
-					<view class="inputStyle">
+					<view class="inputStyle" :class="focusInput == 'vitalCapacity' ? 'focusInput' : ''">
 						<u-input
 							inputAlign="right"
+							type="number"
 							v-model="val_obj.vitalCapacity"
-							@focus="focus(val_obj.vitalCapacity)"
+							@focus="focus({ value: val_obj.vitalCapacity, target: 'vitalCapacity' })"
 							@blur="blur"
 							placeholder="0"
 						>
@@ -132,11 +144,12 @@
 					</view>
 				</u-form-item>
 				<u-form-item label="立定跳远">
-					<view class="inputStyle">
+					<view class="inputStyle" :class="focusInput == 'longJump' ? 'focusInput' : ''">
 						<u-input
 							inputAlign="right"
+							type="digit"
 							v-model="val_obj.longJump"
-							@focus="focus(val_obj.longJump)"
+							@focus="focus({ value: val_obj.longJump, target: 'longJump' })"
 							@blur="blur"
 							placeholder="0"
 						>
@@ -145,11 +158,12 @@
 					</view>
 				</u-form-item>
 				<u-form-item label="坐位体前屈">
-					<view class="inputStyle">
+					<view class="inputStyle" :class="focusInput == 'sittingBodyFlex' ? 'focusInput' : ''">
 						<u-input
+							type="digit"
 							inputAlign="right"
 							v-model="val_obj.sittingBodyFlex"
-							@focus="focus(val_obj.sittingBodyFlex)"
+							@focus="focus({ value: val_obj.sittingBodyFlex, target: 'sittingBodyFlex' })"
 							@blur="blur"
 							placeholder="0"
 						>
@@ -185,6 +199,7 @@ export default {
 			gender: true,
 			grade: 0,
 			gradeList: ['大 一 / 大 二', '大 三 / 大 四'],
+			focusInput: '', //聚焦的input
 			oldValue: '', //旧的值
 			baseBMI: 0, // BMI 基础、起始计算分数
 			baseScore: 0, //总分 基础、起始计算分数
@@ -204,11 +219,13 @@ export default {
 	},
 	methods: {
 		/* 聚焦 设置临时输入值 */
-		focus(value) {
+		focus({ value, target }) {
+			this.focusInput = target;
 			this.oldValue = value;
 		},
 		/* 输入框失去焦点	 比较差异、存储  */
 		blur(value) {
+			this.focusInput = '';
 			if (this.oldValue == value) return;
 			this.saveStorageInput();
 		},
@@ -449,6 +466,9 @@ export default {
 
 	.inputStyle {
 		width: 100%;
+	}
+	.focusInput {
+		background-color: #60c5ba38;
 	}
 	.doubInput {
 		display: flex;

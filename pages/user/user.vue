@@ -176,15 +176,15 @@ export default {
 		},
 
 		toLogin() {
-			if (Object.keys(this.wxUserInfo).length > 0) {
-				uni.navigateTo({
-					url: '/subpages/userInfo/userInfo'
-				});
-				return;
+			try {
+				if (Object.keys(this.wxUserInfo).length > 0) {
+					uni.navigateTo({ url: '/subpages/userInfo/userInfo' });
+					return;
+				}
+				uni.navigateTo({ url: '/subpages/login/login' });
+			} catch (e) {
+				uni.navigateTo({ url: '/subpages/login/login' });
 			}
-			uni.navigateTo({
-				url: '/subpages/login/login'
-			});
 		},
 
 		// 获通知列表
