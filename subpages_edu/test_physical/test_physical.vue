@@ -69,7 +69,7 @@
 							@blur="blur"
 							placeholder="0"
 						>
-							<u-text text="个" slot="suffix" margin="0 3px 0 3px" type="tips"></u-text>
+							<u-text text="个" slot="suffix" margin="0 3px 0 3px"></u-text>
 						</u-input>
 					</view>
 				</u-form-item>
@@ -84,7 +84,7 @@
 								@blur="blur"
 								placeholder="0"
 							>
-								<u-text text="分" slot="suffix" margin="0 3px 0 3px" type="tips"></u-text>
+								<u-text text="分" slot="suffix" margin="0 3px 0 3px"></u-text>
 							</u-input>
 						</view>
 						<view :class="focusInput == 's_8h_1k' ? 'focusInput' : ''">
@@ -96,7 +96,7 @@
 								@blur="blur"
 								placeholder="0"
 							>
-								<u-text text="秒" slot="suffix" margin="0 3px 0 3px" type="tips"></u-text>
+								<u-text text="秒" slot="suffix" margin="0 3px 0 3px"></u-text>
 							</u-input>
 						</view>
 					</view>
@@ -111,7 +111,7 @@
 							@blur="blur"
 							placeholder="0"
 						>
-							<u-text :text="getStr_height" slot="suffix" margin="0 3px 0 3px" type="tips"></u-text>
+							<u-text :text="getStr_height" slot="suffix" margin="0 3px 0 3px"></u-text>
 						</u-input>
 					</view>
 				</u-form-item>
@@ -125,7 +125,7 @@
 							@blur="blur"
 							placeholder="0"
 						>
-							<u-text text="千克" slot="suffix" margin="0 3px 0 3px" type="tips"></u-text>
+							<u-text text="千克" slot="suffix" margin="0 3px 0 3px"></u-text>
 						</u-input>
 					</view>
 				</u-form-item>
@@ -139,7 +139,7 @@
 							@blur="blur"
 							placeholder="0"
 						>
-							<u-text text="毫升" slot="suffix" margin="0 3px 0 3px" type="tips"></u-text>
+							<u-text text="毫升" slot="suffix" margin="0 3px 0 3px"></u-text>
 						</u-input>
 					</view>
 				</u-form-item>
@@ -153,7 +153,7 @@
 							@blur="blur"
 							placeholder="0"
 						>
-							<u-text text="厘米" slot="suffix" margin="0 3px 0 3px" type="tips"></u-text>
+							<u-text text="厘米" slot="suffix" margin="0 3px 0 3px"></u-text>
 						</u-input>
 					</view>
 				</u-form-item>
@@ -167,7 +167,7 @@
 							@blur="blur"
 							placeholder="0"
 						>
-							<u-text text="厘米" slot="suffix" margin="0 3px 0 3px" type="tips"></u-text>
+							<u-text text="厘米" slot="suffix" margin="0 3px 0 3px"></u-text>
 						</u-input>
 					</view>
 				</u-form-item>
