@@ -27,11 +27,11 @@
 					</view>
 				</view>
 				<view class="comment_right">
-					<view class="">{{item.replyName}}</view>
-					<view class="">
+					<view class="item_name">{{item.replyName}}</view>
+					<view class="item_time">
 						{{$u.timeFormat(item.createTime, 'yyyy-mm-dd')}}
 					</view>
-					<view class="">
+					<view class="item_content">
 						{{item.content}}
 					</view>
 				</view>
@@ -144,7 +144,14 @@
 					flex-direction: column;
 					justify-content: space-around;
 					margin-left: 30rpx;
-
+					.item_name{
+						
+					}
+					.item_time{
+						font-size: 20rpx;
+						color: #a8a8a8;
+					}
+					.item_content{}
 				}
 			}
 		}

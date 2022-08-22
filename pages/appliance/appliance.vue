@@ -170,14 +170,23 @@
 			background: white;
 		}
 		.column_title{
-			margin: 30rpx;
-			border-left: 10rpx solid #2dc1cf;
-			padding-left: 15rpx;
-			.column_border{
+			display: flex;
+			align-items: center;
+			padding: 30rpx;
+			margin-top: 30rpx;
 			
+			.column_border{
+			width: 8rpx;
+			height: 50rpx;
+			background: #2dc1cf;
+			border-top-left-radius: 10rpx;
+			border-top-right-radius: 10rpx;
+			border-bottom-left-radius: 10rpx;
+			border-bottom-right-radius: 10rpx;
 			}
 			.column_content{
-				
+				color: #4a4a4a;
+				margin-left: 10rpx;
 				// font-weight: bold;
 			}
 		}
