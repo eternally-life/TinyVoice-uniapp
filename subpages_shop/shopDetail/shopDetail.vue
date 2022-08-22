@@ -337,8 +337,10 @@
 						align-items: baseline;
 
 						.left {
-							padding: 0 20rpx 20rpx 0;
-							width: 170rpx;
+							display: flex;
+							flex-wrap: nowrap;
+							margin: 0 30rpx 20rpx 0;
+							width: 150rpx;
 
 							.u-tag-wrapper {
 								align-items: center;
@@ -388,6 +390,8 @@
 				padding-top: 10rpx;
 
 				.title {
+					display: flex;
+					flex-wrap: nowrap;
 					padding: 20rpx 0;
 					width: 200rpx;
 				}
