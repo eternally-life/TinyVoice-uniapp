@@ -10,7 +10,7 @@
 
 <script>
 import { mapState, mapMutations, mapAction } from 'vuex';
-// const GUET = require('@/api/GUET/教务开放接口.js');
+import { eduGuetCourseTable_Post } from '@/api/GUET/教务开放接口';
 const manageData = require('@/utils/manageData.js');
 export default {
 	name: 'edu-course-control',
@@ -104,7 +104,7 @@ export default {
 				this.creatWatchDog();
 
 				//判断是否离线
-				let temp = await GUET.eduGuetCourseTable_Post({ token: token }).then(res => {
+				let temp = await eduGuetCourseTable_Post({ token: token }).then(res => {
 					console.log(res);
 					if (res.data.code == 200) {
 						//清除看门狗

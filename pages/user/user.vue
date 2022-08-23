@@ -211,7 +211,7 @@ export default {
 		getUserInfo() {
 			if (Object.keys(this.wxUserInfo).length !== 0) return;
 			systemTinyuserGetInfo_Get().then(res => {
-				console.log('获取个人信息', res);
+				// console.log('获取个人消息', res);
 				if (res.data.code == 200) {
 					this.wxUserInfo = res.data.user;
 					this.otherInfo[0].num = res.data.user.integral;

@@ -28,7 +28,7 @@
 
 <script>
 import { mapState } from 'vuex';
-// import { eduGuetSelectSource_Post, eduGuetInsteadCheckscore_Post } from '@/api/GUET/教务开放接口.js';
+import { eduGuetSelectSource_Post, eduGuetInsteadCheckscore_Post } from '@/api/GUET/教务开放接口.js';
 // import { systemUsermanageList, systemUsermanageGetInfo_Get } from '@/api/SYS/用户信息管理.js';
 export default {
 	name: 'EduFinalExam',

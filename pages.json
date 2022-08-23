@@ -113,6 +113,15 @@
                 }
                 
                 }
+                ,{
+                    "path" : "campusAuthentication/campusAuthentication",
+                    "style" :                                                                                    
+                {
+                    "navigationBarTitleText": "校 园 认 证",
+                    "enablePullDownRefresh": false
+                }
+                
+                }
             ]
 		},
 		/* 商城相关分包 */

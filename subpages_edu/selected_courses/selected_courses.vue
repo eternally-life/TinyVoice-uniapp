@@ -23,7 +23,7 @@
 </template>
 
 <script>
-// import { eduGuetSelectedCourse_Post } from '@/api/GUET/教务开放接口.js';
+import { eduGuetSelectedCourse_Post } from '@/api/GUET/教务开放接口.js';
 export default {
 	name: 'EduSelectedCourses',
 	data() {

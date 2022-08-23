@@ -13,7 +13,7 @@
 </template>
 
 <script>
-// import { eduGuetSelectWeightedScore_Post } from '@/api/GUET/教务开放接口.js';
+import { eduGuetSelectWeightedScore_Post } from '@/api/GUET/教务开放接口.js';
 export default {
 	data() {
 		return {

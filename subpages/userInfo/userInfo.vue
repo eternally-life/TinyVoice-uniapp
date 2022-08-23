@@ -54,8 +54,8 @@ export default {
 			inputValue: '', //输入框值
 			inpuType: '', //输入框修改类型
 			cellList: [
-						{
-			title: '昵称',
+				{
+					title: '昵称',
 					name: 'nickName'
 				},
 				{
@@ -69,15 +69,11 @@ export default {
 				{
 					title: '手机号',
 					name: 'phone'
+				},
+				{
+					title: '校园认证',
+					name: 'std'
 				}
-				// {
-				// 	title: '身份',
-				// 	name: 'std'
-				// },
-				// {
-				// 	title: '收货地址',
-				// 	name: 'add'
-				// }
 			],
 			sexColumns: [['小哥哥', '小姐姐', '保密']]
 		};
@@ -159,6 +155,12 @@ export default {
 			console.log('点击', e);
 			if (e.name == 'sex') {
 				this.isShowPicke = true;
+				return;
+			}
+			if (e.name == 'std') {
+				uni.navigateTo({
+					url: '/subpages/campusAuthentication/campusAuthentication'
+				});
 				return;
 			}
 			if (e.name == 'phone') {
