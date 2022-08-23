@@ -54,7 +54,7 @@
 					<!-- #endif -->
 					<view class="wxLogin" @click="judgesLogin" v-if="showJugdesButton">
 						<view class="t-icon-zhanghao" style="width: 60rpx; height: 60rpx;"></view>
-						<br />评委
+						<br />测试
 					</view>
 					<view class="visit" @tap="visit">
 						<view class="t-icon-zhanghao" style="width: 60rpx; height: 60rpx;"></view>
@@ -173,10 +173,10 @@
 					}
 				})
 			},
-			async judgesLogin() { // 评委登录
+			async judgesLogin() { // 测试登录
 				const reslut = await authLoginregisterLogin_Post({
-					password: 'admin123',
-					username: 'admin'
+					password: '123456',
+					username: '123456'
 				})
 				if (reslut.data.code === 200) {
 					this.setNotic_Pamres()
