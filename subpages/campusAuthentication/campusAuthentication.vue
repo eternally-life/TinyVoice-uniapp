@@ -19,14 +19,17 @@
 					</u-radio-group>
 				</u-form-item>
 				<!-- 学号 -->
-				<u-form-item label="学号">
-					<view class=""><u-input v-model="us" inputAlign="left"></u-input></view>
-				</u-form-item>
+				<u-form-item label="学号"><u-input v-model="us" placeholder="请输入学号"></u-input></u-form-item>
 				<!-- 密码 -->
 				<u-form-item label="密码">
-					<view class=""><u-input v-model="pwd" inputAlign="left"></u-input></view>
+					<u-input v-model="pwd" placeholder="请输入密码" :password="!pwdShow">
+						<view class="" style="width: 5vw;" slot="suffix" @click="pwdShow = !pwdShow">
+							<u-icon :name="pwdShow ? 'eye-fill' : 'eye-off'" size="24"></u-icon>
+						</view>
+					</u-input>
 				</u-form-item>
 			</u-form>
+			<view class="btn"><u-button type="primary" text="进行认证"></u-button></view>
 		</view>
 	</view>
 </template>
@@ -35,10 +38,11 @@
 export default {
 	data() {
 		return {
-			us: '191602020513',
-			pwd: '1916020205613',
+			us: '',
+			pwd: '',
 			tp: 0,
-			selectRadio:'教师',
+			pwdShow: false,
+			selectRadio: '教师',
 			radiolist1: [
 				{
 					name: '教师',
@@ -56,5 +60,11 @@ export default {
 
 <style lang="scss" scoped>
 .ufrom {
+	width: 70vw;
+	margin: 20vh auto;
+	.btn {
+		margin-top: 10vh;
+		width: 100%;
+	}
 }
 </style>
