@@ -1,7 +1,7 @@
 <template>
 	<view>
 		<view class="ufrom">
-			<u-form>
+			<u-form :rules="rules" ref="uForm" :model="formData">
 				<!-- 身份 -->
 				<u-form-item label="身份">
 					<u-radio-group v-model="tp" placement="row">
@@ -19,27 +19,32 @@
 					</u-radio-group>
 				</u-form-item>
 				<!-- 学号 -->
-				<u-form-item label="学号"><u-input v-model="us" placeholder="请输入学号"></u-input></u-form-item>
+				<u-form-item label="学号" prop="us">
+					<u-input v-model="formData.us" placeholder="请输入学号"></u-input>
+				</u-form-item>
 				<!-- 密码 -->
-				<u-form-item label="密码">
-					<u-input v-model="pwd" placeholder="请输入密码" :password="!pwdShow">
+				<u-form-item label="密码" prop="pwd">
+					<u-input v-model="formData.pwd" placeholder="请输入密码" :password="!pwdShow">
 						<view class="" style="width: 5vw;" slot="suffix" @click="pwdShow = !pwdShow">
 							<u-icon :name="pwdShow ? 'eye-fill' : 'eye-off'" size="24"></u-icon>
 						</view>
 					</u-input>
 				</u-form-item>
 			</u-form>
-			<view class="btn"><u-button type="primary" text="进行认证"></u-button></view>
+			<view class="btn"><u-button type="primary" text="进行认证" @click="submit"></u-button></view>
 		</view>
 	</view>
 </template>
 
 <script>
+import { eduGuetVerifyCommon_Post } from '@/api/GUET/教务开放接口.js';
 export default {
 	data() {
 		return {
-			us: '',
-			pwd: '',
+			formData: {
+				us: '',
+				pwd: ''
+			},
 			tp: 0,
 			pwdShow: false,
 			selectRadio: '教师',
@@ -52,8 +57,53 @@ export default {
 					name: '学生',
 					tp: 2
 				}
-			]
+			],
+			rules: {
+				us: {
+					type: 'string',
+					required: true,
+					message: '请填写学号',
+					trigger: ['blur', 'change']
+				},
+				pwd: {
+					type: 'string',
+					required: true,
+					message: '请填写密码',
+					trigger: ['blur', 'change']
+				}
+			}
 		};
+	},
+	methods: {
+		submit() {
+			this.$refs.uForm
+				.validate()
+				.then(res => {
+					uni.showLoading({ title: '认证中~' });
+					this.ac();
+					// this.type == 0 ? this.add() : this.edit();
+				})
+				.catch(errors => {
+					uni.$u.toast('请完善信息');
+				});
+		},
+		ac() {
+			const tp = this.radiolist1.filter(val => val.name == this.selectRadio)[0].tp;
+			const para = {
+				...this.formData,
+				tp
+			};
+			console.log('提交参数', para);
+			eduGuetVerifyCommon_Post(para).then(res => {
+				console.log('认证请求结果', res);
+				if (res.data.code == 200) {
+					uni.showToast({ icon: 'success', title: res.data.msg });
+					uni.navigateBack({ delta: 1 });
+				} else {
+					uni.showToast({ icon: 'none', title: res.data.msg });
+				}
+			});
+		}
 	}
 };
 </script>
