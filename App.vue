@@ -18,6 +18,7 @@ export default {
 		qqUserInfo: {},
 		phoneNumber: '', // 全局手机号
 		is_voiceEduSelect: false, //教务特殊功能鉴权
+		appName: '校园微音',
 		logo: 'http://tinyvoice-oss-cdn.glowxq.com/logo/logo.png',
 		/* 缓存键 */
 		storageKey: {
@@ -38,11 +39,11 @@ page {
 /*每个页面公共css */
 @import 'uview-ui/index.scss';
 //icon图标
-@import './style/icon.css';
+@import '@/style/icon.css';
 // 彩色icon图标
-@import './style/color_icon.css';
+@import '@/style/color_icon.css';
 // animate动画库
-@import './style/animate.min.css';
+@import '@/style/animate.min.css';
 
 @import '@/style/colorUI.css';
 </style>
