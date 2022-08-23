@@ -236,7 +236,7 @@
 						}
 					}, 1000)
 				} else {
-					return this.selfMsg(res.data.data, 'warning');
+					return this.selfMsg(res.data.msg, 'warning');
 				}
 				console.log(res);
 
