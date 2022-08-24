@@ -53,6 +53,7 @@ export default {
 			isShowPop: false, //弹出框
 			inputValue: '', //输入框值
 			inpuType: '', //输入框修改类型
+			eduInfo: {},
 			cellList: [
 				{
 					title: '昵称',
@@ -204,7 +205,7 @@ export default {
 				case 'sex':
 					return this.$options.filters['genderString'](this.userInfo.sex);
 				case 'std':
-					return '学生';
+					return this.eduInfo.studentNumber || '未认证';
 				case 'email':
 					return this.userInfo.email;
 				case 'add':
@@ -218,6 +219,7 @@ export default {
 	},
 	onShow() {
 		this.userInfo = getApp().globalData.wxUserInfo;
+		this.eduInfo = getApp().globalData.eduInfo;
 	},
 	filters: {
 		genderString(sex) {

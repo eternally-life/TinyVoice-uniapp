@@ -47,6 +47,7 @@ export default {
 				us: '',
 				pwd: ''
 			},
+			eduInfo: {},
 			tp: 0,
 			pwdShow: false,
 			selectRadio: '教师',
@@ -82,8 +83,11 @@ export default {
 				.validate()
 				.then(res => {
 					uni.showLoading({ title: '认证中~' });
-					this.ac();
-					// this.type == 0 ? this.add() : this.edit();
+					if (this.eduInfo.studentNumber != this.formData.us) {
+						this.ac();
+					} else {
+						uni.$u.toast('请勿重复绑定同一身份信息');
+					}
 				})
 				.catch(errors => {
 					uni.$u.toast('请完善信息');
@@ -109,6 +113,9 @@ export default {
 				}
 			});
 		}
+	},
+	onShow() {
+		this.eduInfo = getApp().globalData.eduInfo;
 	}
 };
 </script>
