@@ -198,46 +198,46 @@ export default {
 		this.setModelShow(false);
 		this.setCourseDetails(null);
 	},
-	// onReady() {
-	// 	try {
-	// 		const value = uni.getStorageSync('wxUserInfo');
-	// 		if (value) {
-	// 			this.$store.commit('edu/setEduInfo', value.eduGuetUser);
-	// 		} else {
-	// 			throw '获取wxUserInfo缓存数据为' + value;
-	// 		}
-	// 	} catch (e) {
-	// 		console.warn(e);
-	// 	}
-	// },
+	onReady() {
+		try {
+			const value = uni.getStorageSync('eduInfo');
+			if (value) {
+				this.$store.commit('edu/setEduInfo', value);
+			} else {
+				throw '获取eduInfo缓存数据为' + value;
+			}
+		} catch (e) {
+			console.warn(e);
+		}
+	},
 	// 允许下拉刷新
-	// onPullDownRefresh() {
-	// 	let key = this.lastTimeKEY;
-	// 	let lastTime = uni.getStorageSync(key),
-	// 		nowTime = parseInt(new Date().valueOf() / 1000);
-	// 	//符合条件  通过ref调用组件内的课表刷新方法
-	// 	if (this.isCantRefresh(nowTime, lastTime)) {
-	// 		this.$refs.uToast.show({
-	// 			type: 'success',
-	// 			message: '尝试更新课表数据',
-	// 			duration: 1000,
-	// 			position: 'bottom'
-	// 		});
-	// 		this.$refs.course.getCourse();
+	onPullDownRefresh() {
+		let key = this.lastTimeKEY;
+		let lastTime = uni.getStorageSync(key),
+			nowTime = parseInt(new Date().valueOf() / 1000);
+		//符合条件  通过ref调用组件内的课表刷新方法
+		if (this.isCantRefresh(nowTime, lastTime)) {
+			this.$refs.uToast.show({
+				type: 'success',
+				message: '尝试更新课表数据',
+				duration: 1000,
+				position: 'bottom'
+			});
+			this.$refs.course.getCourse();
 
-	// 		setTimeout(() => {
-	// 			uni.stopPullDownRefresh();
-	// 		}, 2000);
-	// 	} else {
-	// 		this.$refs.uToast.show({
-	// 			type: 'error',
-	// 			message: '距离上次更新还没过1小时，请稍后再试',
-	// 			duration: 1500,
-	// 			position: 'bottom'
-	// 		});
-	// 		uni.stopPullDownRefresh();
-	// 	}
-	// }
+			setTimeout(() => {
+				uni.stopPullDownRefresh();
+			}, 2000);
+		} else {
+			this.$refs.uToast.show({
+				type: 'error',
+				message: '距离上次更新还没过1小时，请稍后再试',
+				duration: 1500,
+				position: 'bottom'
+			});
+			uni.stopPullDownRefresh();
+		}
+	}
 };
 </script>
 

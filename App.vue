@@ -16,13 +16,15 @@ export default {
 		loginNum: 0,
 		wxUserInfo: {},
 		qqUserInfo: {},
+		eduInfo: null, //个人教务信息
 		phoneNumber: '', // 全局手机号
 		is_voiceEduSelect: false, //教务特殊功能鉴权
 		appName: '校园微音',
 		logo: 'http://tinyvoice-oss-cdn.glowxq.com/logo/logo.png',
 		/* 缓存键 */
 		storageKey: {
-			courseKEY: '', //课表存储键
+			eduInfo: 'eduInfo', //个人教务信息缓存键
+			courseKEY: '20231', //课表存储键
 			eduSwitchKEY: 'eduSwitch', //教务设置存储键
 			courseFTimeKEY: 'LastRefreshTime', //最近一次刷新课表时间 存储键
 			sportKey: 'PEInput' //体测输入存储键

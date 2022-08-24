@@ -38,6 +38,8 @@
 
 <script>
 import { eduGuetVerifyCommon_Post } from '@/api/GUET/教务开放接口.js';
+import { systemTinyuserGetInfo_Get } from '@/api/SYSTEM/用户信息.js';
+import { setGloalDataUserInfo } from '@/utils/loginUtil.js';
 export default {
 	data() {
 		return {
@@ -94,11 +96,14 @@ export default {
 				tp
 			};
 			console.log('提交参数', para);
-			eduGuetVerifyCommon_Post(para).then(res => {
+			eduGuetVerifyCommon_Post(para).then(async res => {
 				console.log('认证请求结果', res);
 				if (res.data.code == 200) {
 					uni.showToast({ icon: 'success', title: res.data.msg });
-					uni.navigateBack({ delta: 1 });
+					await setGloalDataUserInfo();
+					setTimeout(() => {
+						uni.navigateBack({ delta: 1 });
+					}, 1000);
 				} else {
 					uni.showToast({ icon: 'none', title: res.data.msg });
 				}

@@ -98,7 +98,7 @@ export default {
 		/* 接口请求课表 */
 		async getCourse() {
 			let token = getApp().globalData.token;
-			console.log('token: ', token);
+			// console.log('token: ', token);
 			if (token != null || token != undefined) {
 				// 生成看门狗
 				this.creatWatchDog();

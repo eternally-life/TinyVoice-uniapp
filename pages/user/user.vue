@@ -85,6 +85,7 @@ import { systemParamsNoteList_Get, systemParamsConfList_Get } from '@/api/SYSTEM
 import { systemSyssignPage_Get, systemSyssignSave_Post } from '@/api/SYSTEM/签到.js';
 import { systemSysmsgPage_Get } from '@/api/SYSTEM/消息提醒.js';
 import { getSetInfo_QQ, getSetInfo_WX, getNaviList, getOtherInfo_WX, getOtherInfo_QQ } from './datalist.js';
+import { setGloalDataEduInfo } from '@/utils/loginUtil.js';
 export default {
 	data() {
 		return {
@@ -92,6 +93,7 @@ export default {
 			content: '', // 富文本内容
 			noticeTitle: '', // 音符说明标题
 			wxUserInfo: {},
+			eduInfo: {},
 			signined: false, //是否已签到
 			token: '',
 			// 导航区数据
@@ -211,9 +213,12 @@ export default {
 		getUserInfo() {
 			if (Object.keys(this.wxUserInfo).length !== 0) return;
 			systemTinyuserGetInfo_Get().then(res => {
-				// console.log('获取个人消息', res);
+				console.log('获取个人信息', res);
 				if (res.data.code == 200) {
 					this.wxUserInfo = res.data.user;
+					this.eduInfo = res.data.guet;
+					setGloalDataEduInfo(res.data.guet);
+					this.$store.commit('edu/setEduInfo', res.data.guet);
 					this.otherInfo[0].num = res.data.user.integral;
 					getApp().globalData.wxUserInfo = res.data.user;
 					uni.setStorageSync('wxUserInfo', res.data.user);

@@ -168,14 +168,22 @@ export function setGloalDataUserInfo() {
 		if (res.data.code === 200) {
 			getApp().globalData.wxUserInfo = res.data.user
 			uni.setStorageSync('wxUserInfo', res.data.user)
+			setGloalDataEduInfo(res.data.guet);
 		}
 	})
 }
 
-// 存储全局用户信息(静态修改)
+// 存储全局用户教务信息(接口、静态均可)
+export function setGloalDataEduInfo(eduInfo) {
+	getApp().globalData.eduInfo = eduInfo
+	uni.setStorageSync(getApp().globalData.storageKey.eduInfo, eduInfo)
+}
+
+
+// 修改全局用户信息(静态修改)
 export function setGloalDataUserInfo_static(para) {
 	getApp().globalData.wxUserInfo = para
-	uni.setStorageSync('wxUserInfo', para)
+	uni.setStorageSync('wxUserInfo', para);
 }
 
 // 存储缓存公告信息

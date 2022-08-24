@@ -203,14 +203,14 @@ export default {
 		uni.$off('toDataList');
 	},
 	onReady() {
-		this.getFlage_normal();
+		// this.getFlage_normal();
 
 		// 从代查跳转  无需再次鉴权
 		if (this.transferType == 2) {
 			this.queryFlage_admin = getApp().globalData.is_voiceEduSelect;
 			return;
 		}
-		this.authentication();
+		// this.authentication();
 	}
 };
 </script>
