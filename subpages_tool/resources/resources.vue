@@ -1,5 +1,6 @@
 <template>
 	<view class="wrap">
+		<u-sticky><u-notice-bar text="目前资源不耗音符,免费下载!"></u-notice-bar></u-sticky>
 		<!-- //	Logo -->
 		<view class="wrap_background">
 			<view class="bac_logo">
@@ -392,7 +393,8 @@
 			font-size: 24rpx;
 			color: #888888;
 			background: #f1f1f1;
-			padding: 10rpx 0 20rpx 0;
+			padding: 0 0 50rpx 0;
+			margin-top: 50rpx;
 		}
 
 		.uploading {
@@ -400,6 +402,7 @@
 			bottom: 80rpx;
 			right: 80rpx;
 			width: 100rpx;
+			z-index: 2;
 		}
 	}
 </style>

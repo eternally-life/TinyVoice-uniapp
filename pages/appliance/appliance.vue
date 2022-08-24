@@ -12,8 +12,8 @@
 			<view class="column_content">快来看看 \(￣︶￣*\))</view>
 		</view>
 		<view class="centerInfo" v-if="navs.length > 0">
-			<view class="myItem" @click="navItemClick(item.jumpUrl,item.appId,item.jumpType)" v-for="(item, index) in navsWeb"
-				:key="index">
+			<view class="myItem" @click="navItemClick(item.jumpUrl,item.appId,item.jumpType)"
+				v-for="(item, index) in navsWeb" :key="index">
 				<view class="myIcon">
 					<view class="fix" v-if="item.iconType == 1" :class="item.icon"></view>
 					<view class="fix" v-if="item.iconType == 2">
@@ -139,13 +139,13 @@
 			margin: 30rpx 0;
 		}
 
-		.comments_title {
+		.column_title {
 			display: flex;
 			align-items: center;
 			padding: 30rpx;
 			margin-top: 30rpx;
 
-			.comments_border {
+			.column_border {
 				width: 8rpx;
 				height: 50rpx;
 				background: #2dc1cf;
@@ -155,7 +155,7 @@
 				border-bottom-right-radius: 10rpx;
 			}
 
-			.comments_content {
+			.column_content {
 				color: #4a4a4a;
 				margin-left: 10rpx;
 			}
@@ -168,18 +168,6 @@
 			justify-content: center;
 			align-items: center;
 			background: white;
-		}
-		.column_title{
-			margin: 30rpx;
-			border-left: 10rpx solid #2dc1cf;
-			padding-left: 15rpx;
-			.column_border{
-			
-			}
-			.column_content{
-				
-				// font-weight: bold;
-			}
 		}
 
 		.centerInfo {

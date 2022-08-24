@@ -76,6 +76,7 @@
 				}, file)
 				console.log(res);
 				uni.hideLoading()
+				uni.navigateBack()
 			},
 		},
 	}
