@@ -11,6 +11,7 @@
 <script>
 import { mapState, mapMutations, mapAction } from 'vuex';
 import { eduGuetCourseTable_Post } from '@/api/GUET/教务开放接口';
+import { systemParamsConfigKeyconfigKey_Get } from '@/api/SYSTEM/参数字典公告.js';
 const manageData = require('@/utils/manageData.js');
 export default {
 	name: 'eduCourseControl',
@@ -103,8 +104,16 @@ export default {
 				// 生成看门狗
 				this.creatWatchDog();
 
+				const termRes = await systemParamsConfigKeyconfigKey_Get({ configKey: 'edu:guet:term' });
+				console.log('获取到学期参数', termRes);
 				//判断是否离线
-				let temp = await eduGuetCourseTable_Post({term: '20221'}).then(res => {
+				if (termRes.data.code != 200) {
+					this.$ShowToastSuc('服务器获取学期异常');
+					this.killWatchDog();
+					return;
+				}
+				
+				let temp = await eduGuetCourseTable_Post({ term: termRes.data.msg }).then(res => {
 					console.log('课表请求', res);
 					if (res.data.code == 200) {
 						//清除看门狗
@@ -259,6 +268,9 @@ export default {
 			[this.timeInfo.nowWeek, this.timeInfo.nowNum] = manageData.timeAnalysis(this.$store.state.edu.timeNode);
 			this.timeInfo.weekActiveFlag = this.timeInfo.nowWeek;
 			// 更新vuex中的时间公共数据
+			if(this.$store.state.edu.timeNode>new Date().getTime()){
+				this.$store.commit('edu/setTimeNode', -1);
+			}
 			this.$store.dispatch('edu/setWeek', [this.timeInfo.nowWeek, this.timeInfo.nowNum]);
 			// console.log('时间分析', this.timeInfo);
 

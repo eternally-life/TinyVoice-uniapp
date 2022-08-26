@@ -29,8 +29,8 @@
 </template>
 
 <script>
-import eduCalendarControl from './eduCalendarControl.vue';
-import eduCourseControl from './eduCourseControl.vue';
+import eduCalendarControl from './eduCalendarControl';
+import eduCourseControl from './eduCourseControl';
 import { mapState, mapMutations } from 'vuex';
 export default {
 	components: {

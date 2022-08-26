@@ -75,5 +75,9 @@ export default {
 	/* 设置家务开关状态 */
 	setEduSwitch(state, newValue) {
 		state.eduSwitch = newValue;
+	},
+	
+	setTimeNode(state,newValue){
+		state.timeNode = newValue;
 	}
 }

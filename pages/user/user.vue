@@ -86,6 +86,7 @@ import { systemSyssignPage_Get, systemSyssignSave_Post } from '@/api/SYSTEM/签�
 import { systemSysmsgPage_Get } from '@/api/SYSTEM/消息提醒.js';
 import { getSetInfo_QQ, getSetInfo_WX, getNaviList, getOtherInfo_WX, getOtherInfo_QQ } from './datalist.js';
 import { setGloalDataEduInfo } from '@/utils/loginUtil.js';
+import { systemParamsConfigKeyconfigKey_Get } from '@/api/SYSTEM/参数字典公告.js';
 export default {
 	data() {
 		return {
@@ -113,6 +114,7 @@ export default {
 	onLoad() {
 		this.token = getApp().globalData.token;
 		this.getUserInfo();
+		this.setEduOpenTime();
 		uni.$on('refresh', () => {
 			this.getUserInfo();
 		});
@@ -226,6 +228,13 @@ export default {
 					this.getNoticeList();
 				}
 			});
+		},
+		async setEduOpenTime() {
+			const timeNodeRes = await systemParamsConfigKeyconfigKey_Get({ configKey: 'system:edu:opentime' });
+			console.log('获取开学时间', timeNodeRes);
+			if (timeNodeRes.data.code == 200) {
+				this.$store.commit('edu/setTimeNode', Number(timeNodeRes.data.msg));
+			}
 		},
 		// 导航栏点击跳转
 		navOtherItemClick(path, index) {
