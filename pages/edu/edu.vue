@@ -17,10 +17,10 @@
 		<!-- 滑动检测 -->
 		<view @touchstart.native.prevent="touchStart" @touchend.native.prevent="toucheEnd" :style="[getDynamicHeight]">
 			<!-- 日期模块 -->
-			<edu-calendar-control />
+			<eduCalendarControl />
 
 			<!-- 课块区域 -->
-			<edu-course-control ref="course" />
+			<eduCourseControl ref="course" />
 		</view>
 
 		<!-- 课程详情模态框 -->
@@ -29,8 +29,14 @@
 </template>
 
 <script>
+import eduCalendarControl from './eduCalendarControl.vue';
+import eduCourseControl from './eduCourseControl.vue';
 import { mapState, mapMutations } from 'vuex';
 export default {
+	components: {
+		eduCalendarControl,
+		eduCourseControl
+	},
 	data() {
 		return {
 			calenTypeList: ['日', '周', '月'],

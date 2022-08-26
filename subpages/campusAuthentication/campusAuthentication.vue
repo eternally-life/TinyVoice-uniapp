@@ -121,6 +121,9 @@ export default {
 	},
 	onShow() {
 		this.eduInfo = getApp().globalData.eduInfo;
+	},
+	onReady() {
+		this.$refs.uForm.setRules(this.rules);
 	}
 };
 </script>

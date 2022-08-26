@@ -24,7 +24,7 @@ export default {
 		/* 缓存键 */
 		storageKey: {
 			eduInfo: 'eduInfo', //个人教务信息缓存键
-			courseKEY: '20231', //课表存储键
+			courseKEY: '20221', //课表存储键
 			eduSwitchKEY: 'eduSwitch', //教务设置存储键
 			courseFTimeKEY: 'LastRefreshTime', //最近一次刷新课表时间 存储键
 			sportKey: 'PEInput' //体测输入存储键
