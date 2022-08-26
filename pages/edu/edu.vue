@@ -204,6 +204,15 @@ export default {
 		this.setModelShow(false);
 		this.setCourseDetails(null);
 	},
+	onShow() {
+		// 当未认证时跳转认证
+		const value = getApp().globalData.eduInfo;
+		if (Object.keys(value) == '{}' || value == null || value == undefined) {
+			uni.reLaunch({
+				url: '/subpages/campusAuthentication/campusAuthentication'
+			});
+		}
+	},
 	onReady() {
 		try {
 			const value = uni.getStorageSync('eduInfo');
