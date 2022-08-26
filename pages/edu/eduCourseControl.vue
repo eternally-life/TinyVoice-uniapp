@@ -112,7 +112,7 @@ export default {
 					this.killWatchDog();
 					return;
 				}
-				
+
 				let temp = await eduGuetCourseTable_Post({ term: termRes.data.msg }).then(res => {
 					console.log('课表请求', res);
 					if (res.data.code == 200) {
@@ -266,10 +266,14 @@ export default {
 		// 挂载完成再操作
 		try {
 			[this.timeInfo.nowWeek, this.timeInfo.nowNum] = manageData.timeAnalysis(this.$store.state.edu.timeNode);
+			// 当前时间为负数时 则归为0
+			this.timeInfo.nowWeek = this.timeInfo.nowWeek < 0 ? 0 : this.timeInfo.nowWeek;
 			this.timeInfo.weekActiveFlag = this.timeInfo.nowWeek;
+
+			console.log('计算周数', this.timeInfo);
 			// 更新vuex中的时间公共数据
-			if(this.$store.state.edu.timeNode>new Date().getTime()){
-				this.$store.commit('edu/setTimeNode', -1);
+			if (this.$store.state.edu.timeNode > new Date().getTime()) {
+				this.$store.commit('edu/setTimeNode', 0);
 			}
 			this.$store.dispatch('edu/setWeek', [this.timeInfo.nowWeek, this.timeInfo.nowNum]);
 			// console.log('时间分析', this.timeInfo);
