@@ -33,16 +33,24 @@
 			</u-form>
 			<view class="btn"><u-button type="primary" text="进行认证" @click="submit"></u-button></view>
 		</view>
+		<view class="notic">
+			<view class="notic_title">{{ notice.title }}</view>
+			<u-parse :content="notice.noticeContent"></u-parse>
+		</view>
 	</view>
 </template>
 
 <script>
-import { eduGuetVerifyCommon_Post } from '@/api/GUET/教务开放接口.js';
-import { systemTinyuserGetInfo_Get } from '@/api/SYSTEM/用户信息.js';
 import { setGloalDataUserInfo } from '@/utils/loginUtil.js';
+import { eduGuetVerifyCommon_Post } from '@/api/GUET/教务开放接口.js';
+import { systemParamsNotenoticeId_Get } from '@/api/SYSTEM/参数字典公告.js';
 export default {
 	data() {
 		return {
+			notice: {
+				title: '校园微音公告标题',
+				noticeContent: '校园微音公告标题内容'
+			},
 			formData: {
 				us: '',
 				pwd: ''
@@ -86,7 +94,7 @@ export default {
 				.validate()
 				.then(res => {
 					uni.showLoading({ title: '认证中~' });
-						this.ac();
+					this.ac();
 					// if (this.eduInfo.studentNumber != this.formData.us) {
 					// } else {
 					// 	uni.$u.toast('请勿重复绑定同一身份信息');
@@ -127,17 +135,42 @@ export default {
 	},
 	onReady() {
 		this.$refs.uForm.setRules(this.rules);
+	},
+	onLoad() {
+		systemParamsNotenoticeId_Get({ noticeId: 20 }).then(res => {
+			console.log('公告数据', res);
+			if (res.data.code == 200) {
+				this.notice.title = res.data.data.noticeTitle;
+				this.notice.noticeContent = res.data.data.noticeContent;
+			}
+		});
 	}
 };
 </script>
 
 <style lang="scss" scoped>
+$com_w: 70vw;
 .ufrom {
-	width: 70vw;
+	width: $com_w;
 	margin: 20vh auto;
 	.btn {
 		margin-top: 10vh;
 		width: 100%;
+	}
+}
+.notic {
+	width: $com_w;
+	padding: 10px;
+	margin: 0 auto;
+	border-radius: 10px;
+	background-color: #fcbd71;
+	&_title {
+		width: 100%;
+		margin-top: 10rxp;
+		margin-bottom: 10rxp;
+		font-size: 16px;
+		text-align: center;
+		font-weight: bolder;
 	}
 }
 </style>
