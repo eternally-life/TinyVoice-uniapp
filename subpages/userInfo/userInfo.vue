@@ -205,7 +205,7 @@ export default {
 				case 'sex':
 					return this.$options.filters['genderString'](this.userInfo.sex);
 				case 'std':
-					return this.eduInfo.studentNumber || '未认证';
+					return this.eduInfo.studentNumber ?? '未认证';
 				case 'email':
 					return this.userInfo.email;
 				case 'add':

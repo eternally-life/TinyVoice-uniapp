@@ -79,15 +79,18 @@ export default {
 	},
 	methods: {
 		submit() {
+			// this.ac();
+			// return;
+			// 暂时跳过检测
 			this.$refs.uForm
 				.validate()
 				.then(res => {
 					uni.showLoading({ title: '认证中~' });
-					if (this.eduInfo.studentNumber != this.formData.us) {
 						this.ac();
-					} else {
-						uni.$u.toast('请勿重复绑定同一身份信息');
-					}
+					// if (this.eduInfo.studentNumber != this.formData.us) {
+					// } else {
+					// 	uni.$u.toast('请勿重复绑定同一身份信息');
+					// }
 				})
 				.catch(errors => {
 					console.log(errors);
