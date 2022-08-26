@@ -15,7 +15,7 @@
 				<view class="right" @click="toLogin">
 					<view class="user">
 						<text class="name">{{ wxUserInfo.nickName || '点击登录' }}</text>
-						<text class="desc">{{ wxUserInfo.isAuth ? '' : '未校园认证' }}</text>
+						<text class="desc">{{ wxUserInfo.isAuth | isAuth }}</text>
 					</view>
 				</view>
 				<view class="sign">
@@ -307,6 +307,19 @@ export default {
 	},
 	computed: {
 		...mapState('edu', ['eduSwitch'])
+	},
+	filters: {
+		// 身份过滤器
+		isAuth(value) {
+			switch (value) {
+				case 1:
+					return '教师认证';
+				case 2:
+					return '学生认证';
+				default:
+					return '未认证';
+			}
+		}
 	}
 };
 </script>
