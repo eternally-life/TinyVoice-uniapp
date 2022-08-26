@@ -104,8 +104,8 @@ export default {
 				this.creatWatchDog();
 
 				//判断是否离线
-				let temp = await eduGuetCourseTable_Post({ token: token }).then(res => {
-					console.log(res);
+				let temp = await eduGuetCourseTable_Post({term: '20221'}).then(res => {
+					console.log('课表请求', res);
 					if (res.data.code == 200) {
 						//清除看门狗
 						this.killWatchDog();
