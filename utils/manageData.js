@@ -170,7 +170,7 @@ function dayDataUnpacking(singleDay) {
 // 异步存储课表数据
 function saveData(key, value) {
 	if (value == 0 || value == null || value == undefined) {
-		console.error(key + "缓存数据读取异常：", value);
+		console.error(key + "缓存数据读取异常~~~：", value);
 		return false;
 	}
 	try {
