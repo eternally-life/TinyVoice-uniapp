@@ -165,6 +165,7 @@ export function setGloalDataToken(token) {
 // 存储全局用户信息(请求接口)
 export function setGloalDataUserInfo() {
 	systemTinyuserGetInfo_Get().then(res => {
+		console.log('重新获取用户数据', res);
 		if (res.data.code === 200) {
 			getApp().globalData.wxUserInfo = res.data.user
 			uni.setStorageSync('wxUserInfo', res.data.user)

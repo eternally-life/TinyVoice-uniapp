@@ -50,15 +50,15 @@ export default {
 			eduInfo: {},
 			tp: 0,
 			pwdShow: false,
-			selectRadio: '教师',
+			selectRadio: '学生',
 			radiolist1: [
-				{
-					name: '教师',
-					tp: 1
-				},
 				{
 					name: '学生',
 					tp: 2
+				},
+				{
+					name: '教师',
+					tp: 1
 				}
 			],
 			rules: {
@@ -90,7 +90,12 @@ export default {
 					}
 				})
 				.catch(errors => {
-					uni.$u.toast('请完善信息');
+					console.log(errors);
+					if (errors.length > 0) {
+						uni.$u.toast(errors[0].message);
+					} else {
+						uni.$u.toast('校验异常');
+					}
 				});
 		},
 		ac() {
