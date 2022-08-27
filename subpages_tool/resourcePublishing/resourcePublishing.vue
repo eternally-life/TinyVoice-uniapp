@@ -1,11 +1,20 @@
 <template>
 	<view class="wrap">
 		<view class="wrap_box">
-			<view class="form">
-				<u--input placeholder="下载所需音符" border="bottom" v-model="fileIntegral"></u--input>
-				<u--input placeholder="资源名称" border="bottom" v-model="fileName"></u--input>
-				<u--input placeholder="资源描述" border="bottom" v-model="fileDescribe"></u--input>
-			</view>
+			<u-form ref="uForm" :rules="formRules" :model="formData" class="form" labelPosition="left" :labelWidth="80">
+				<u-form-item label="音符" prop="integral" borderBottom>
+					<u--input placeholder="下载所需音符数" border=none v-model="formData.integral"></u--input>
+				</u-form-item>
+				<u-form-item label="名称" prop="name" borderBottom>
+					<u--input placeholder="资源名称" border=none maxlength="10" v-model="formData.name"></u--input>
+				</u-form-item>
+				<u-form-item label="描述" prop="describe" borderBottom>
+					<u-textarea placeholder="资源描述" maxlength="100" v-model="formData.describe"></u-textarea>
+				</u-form-item>
+
+
+
+			</u-form>
 
 
 			<view class="add-btn" @click="openFile">
@@ -22,7 +31,8 @@
 
 		</view>
 		<view class="submit_photo">
-			<u-button shape="circle" type="primary" @click="resultPath(fileName,fileDescribe,fileIntegral,fileUrl)">确定</u-button>
+			<u-button shape="circle" type="primary" @click="submit(fileUrl)">确定
+			</u-button>
 		</view>
 	</view>
 </template>
@@ -30,15 +40,22 @@
 <script>
 	import {
 		communityTinyserveresourceSave_Post
-	} from "@/api/工具模块/资源共享.js"
+	} from "@/api/工具模块/资源共享.js";
+	
+	import {
+		getRule
+	} from './rules.js';
 	export default {
 		data() {
 			return {
-				showName: "",
-				fileIntegral: "",
-				fileName: "",
-				fileDescribe: "",
+				showName: '',
 				fileUrl: '',
+				formData: {
+					integral: '',
+					name: '',
+					describe: '',
+				},
+				formRules: getRule()
 			};
 		},
 		methods: {
@@ -64,20 +81,41 @@
 				});
 			},
 			// 选取的文件路径获取后回调
-			async resultPath(name, describe, integral, file) {
-				uni.showLoading({
-					title: '上传中...', 
-				});
-				console.log(this.showName);
-				const res = await communityTinyserveresourceSave_Post({
-					integral,
-					name,
-					describe
-				}, file)
-				console.log(res);
-				uni.hideLoading()
-				uni.navigateBack()
+			submit(url) {
+				this.$refs.uForm
+					.validate()
+					.then(res => {
+						uni.showLoading({
+							title: '加载中'
+						});
+						this.resultPath(url)
+					})
+					.catch(errors => {
+						uni.$u.toast('请完善信息');
+					});
 			},
+			
+			//	添加资源
+			resultPath(file) {
+				console.log(this.showName);
+				communityTinyserveresourceSave_Post({
+				...this.formData
+				}, file).then(res => {
+					let json = JSON.parse(res.data);
+					if (json.code == 200) {
+						uni.$u.toast('添加资源成功');
+						this.goBack()
+					};
+				})
+				
+			},
+			goBack(){
+				setTimeout(() => {
+					uni.navigateBack({
+						delta: 1
+					});
+				}, 1000);
+			}
 		},
 	}
 </script>
@@ -91,7 +129,7 @@
 			margin: 30rpx auto;
 			padding: 30rpx;
 			width: 650rpx;
-			
+
 			border-radius: 15rpx;
 			box-shadow: 0rpx 0rpx 10rpx #ccc;
 			position: relative;
@@ -106,7 +144,8 @@
 				}
 			}
 		}
-		.submit_photo{
+
+		.submit_photo {
 			width: 80%;
 			margin: 50rpx auto;
 		}

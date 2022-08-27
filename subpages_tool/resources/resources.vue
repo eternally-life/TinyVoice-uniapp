@@ -1,6 +1,5 @@
 <template>
 	<view class="wrap">
-		<u-sticky><u-notice-bar text="目前资源不耗音符,免费下载!"></u-notice-bar></u-sticky>
 		<!-- //	Logo -->
 		<view class="wrap_background">
 			<view class="bac_logo">
@@ -63,7 +62,7 @@
 		</view>
 		<!-- //	资源上传跳转 -->
 		<view class="uploading" @click="uploading">
-			<u-button icon="plus" size="large" shape="circle" iconColor="#31b6c3" @click="openPopup"></u-button>
+			<u-button icon="plus" size="large" shape="circle" iconColor="#31b6c3"></u-button>
 		</view>
 	</view>
 </template>
