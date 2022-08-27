@@ -25,7 +25,8 @@
 								{{item.status == '0' ? '已退款' : item.status == '1' ? '待付款' : item.status == '2' ? '已付款' : item.status == '3' ? '出库' : item.status == '4' ? '订单完成' : item.status == '5' ? '退款关闭' :  item.status == '6' ? '售后中' :'售后完成' }}
 							</view>
 						</view>
-						<view class="mid" v-for="(i,idx) in item.orderDataList" :key="idx">
+						<view class="mid" v-for="(i,idx) in item.orderDataList" :key="idx"
+							:style="item.orderDataList.length == 1 ? '' : 'border-bottom: 1rpx solid #ddd7d9;'">
 							<image :src="i.image" mode=""></image>
 							<view class="center">
 								<text class="name">{{i.commodityName}}
@@ -138,7 +139,7 @@
 				},
 				style: {
 					p: 'font-size:32rpx',
-					img: 'width:70%; margin:8rpx 0;'
+					img: 'width:40%; margin:8rpx 0;'
 				},
 			}
 		},
@@ -293,7 +294,7 @@
 						this.selfMsg('支付成功！', 'success')
 					},
 					fail: res => {
-						this.selfMsg('可在我的订单重新支付', 'error')
+						this.selfMsg('两小时之内未支付订单无效', 'error')
 					}
 				})
 			},
@@ -363,7 +364,7 @@
 						justify-content: space-between;
 						align-items: center;
 						color: #7d7d7d;
-						margin-bottom: 20rpx;
+						padding: 20rpx 0;
 
 						image {
 							width: 100rpx;
@@ -398,6 +399,7 @@
 							display: flex;
 							flex-direction: column;
 							align-items: center;
+							width: 70rpx;
 
 							.price {
 								color: #707070;
