@@ -185,6 +185,8 @@ let payTinymallCreateOrder_Body = {
 	/** 订单数据   object required: */
 	addrId: null,
 	/** 地址ID   integer required: */
+	takeCode: null,
+	remark: null
 }
 
 export function payTinymallCreateOrder_Post(payTinymallCreateOrder_Body) {
