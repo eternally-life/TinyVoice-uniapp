@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<view class="ufrom">
+		<view v-if="audit=='false'" class="ufrom">
 			<u-form :rules="rules" ref="uForm" :model="formData">
 				<!-- 身份 -->
 				<u-form-item label="身份">
@@ -43,10 +43,12 @@
 <script>
 import { setGloalDataUserInfo } from '@/utils/loginUtil.js';
 import { eduGuetVerifyCommon_Post } from '@/api/GUET/教务开放接口.js';
-import { systemParamsNotenoticeId_Get } from '@/api/SYSTEM/参数字典公告.js';
+import { systemParamsNotenoticeId_Get,systemParamsConfigKeyconfigKey_Get } from '@/api/SYSTEM/参数字典公告.js';
+
 export default {
 	data() {
 		return {
+			audit:'true',
 			notice: {
 				title: '校园微音公告标题',
 				noticeContent: '校园微音公告标题内容'
@@ -85,7 +87,17 @@ export default {
 			}
 		};
 	},
+	created() {
+		this.getParam()
+	},
 	methods: {
+		getParam(){
+			systemParamsConfigKeyconfigKey_Get({configKey:"system:show:audit"})
+			.then(res=>{
+				this.audit = res.data.msg
+				console.log(res);
+			})
+		},
 		submit() {
 			// this.ac();
 			// return;
