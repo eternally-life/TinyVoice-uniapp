@@ -21,7 +21,20 @@
 					</view>
 				</view>
 			</scroll-view>
-
+			<view class="remak">
+				<view class="title">取件码</view>
+				<view class="content">
+					<u--input v-model="orderParmes.takeCode" placeholder="特殊订单请填写取件码" maxlength="8"
+						@focus="focusTakeCode" placeholderStyle="color: #b3b3b3;" clearable border="none"></u--input>
+				</view>
+			</view>
+			<view class="remak">
+				<view class="title">备注</view>
+				<view class="content">
+					<u--input v-model="orderParmes.remark" placeholder="订单备注..." maxlength="20" @focus="focusTakeCode"
+						placeholderStyle="color: #b3b3b3;" clearable border="none"></u--input>
+				</view>
+			</view>
 			<view class="end">
 				<view class="end-left">
 					<view class="" style="color: #333;">
@@ -67,6 +80,8 @@
 					/** 联系方式=电话   string required: */
 					addrId: null,
 					/** 地址ID   integer required: */
+					takeCode: null,
+					remark: null,
 					/** 订单数据   object required: */
 					orderData: {
 						commodityIds: [
@@ -106,6 +121,7 @@
 			this.wxUserInfo = getApp().globalData.wxUserInfo
 			console.log(opt);
 			this.getAddressIdData()
+			this.orderParmes.addrId = opt.addrId
 		},
 		methods: {
 			getAddressIdData() { // 根据address页面传过来的地址ID 获取数据
@@ -142,11 +158,15 @@
 					this.selfMsg(res.data.msg, 'warning')
 				}
 			},
+			focusTakeCode() {
+				if (!this.orderParmes.addrId) {
+					return this.selfMsg('请先选择收货地址', 'warning')
+				}
+			},
 			async confirmPayOrder() {
 				this.mapGoods = []
 				this.orderParmes.orderData.commodityIds = []
 				this.orderParmes.orderData.skuIdAndQuantity = {}
-				this.orderParmes.addrId = this.addrId
 				if (!this.orderParmes.addrId) {
 					return this.selfMsg('请先选择收货地址', 'warning')
 				}
@@ -203,6 +223,11 @@
 					},
 					fail: res => {
 						this.selfMsg('可在我的订单重新支付', 'error')
+						setTimeout(() => {
+							uni.switchTab({
+								url: '/pages/shop/shop'
+							})
+						}, 1000)
 					}
 				})
 
@@ -277,6 +302,34 @@
 				.subtract {
 					border-radius: 30rpx 10rpx 10rpx 30rpx;
 				}
+			}
+		}
+
+		.remak {
+
+			display: flex;
+			padding: 40rpx;
+			margin-top: 20rpx;
+			color: #a2a2a2;
+			font-size: 30rpx;
+			align-items: center;
+			background-color: #ffffff;
+
+			.title {
+				font-size: 35rpx;
+				color: #000000;
+				padding-right: 30rpx;
+			}
+
+			.content {
+				display: contents;
+
+				/* #ifdef MP-QQ */
+				u--input {
+					margin-top: 15rpx;
+				}
+
+				/* #endif*/
 			}
 		}
 

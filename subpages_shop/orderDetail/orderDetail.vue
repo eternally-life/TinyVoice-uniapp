@@ -18,6 +18,20 @@
 
 				</view>
 			</view>
+			<view class="remak">
+				<view class="title">取件码</view>
+				<view class="content">
+					<u--input v-model="orderParmes.takeCode" placeholder="特殊订单请填写取件码" maxlength="8"
+						@focus="focusTakeCode" placeholderStyle="color: #b3b3b3;" clearable border="none"></u--input>
+				</view>
+			</view>
+			<view class="remak">
+				<view class="title">备注</view>
+				<view class="content">
+					<u--input v-model="orderParmes.remark" placeholder="订单备注..." maxlength="20" @focus="focusTakeCode"
+						placeholderStyle="color: #b3b3b3;" clearable border="none"></u--input>
+				</view>
+			</view>
 			<view class="bot">
 				<view class="nextStep">
 					<button class="btn" @click="$u.throttle(confirmPayOrder,500)">提交订单</button>
@@ -54,6 +68,8 @@
 					/** 联系方式=电话   string required: */
 					addrId: null,
 					/** 地址ID   integer required: */
+					takeCode: null,
+					remark: null,
 					/** 订单数据   object required: */
 					orderData: {
 						commodityIds: [
@@ -76,6 +92,7 @@
 			this.invoryMax = this.orderDetail.inventory
 			this.wxUserInfo = getApp().globalData.wxUserInfo
 			this.getAddressIdData()
+			this.orderParmes.addrId = opt.addrId
 		},
 		methods: {
 			async getSkuIdPames() {
@@ -99,8 +116,12 @@
 				this.price = e.value * (this.orderDetail.price / 100)
 
 			},
+			focusTakeCode() {
+				if (!this.orderParmes.addrId) {
+					return this.selfMsg('请先选择收货地址', 'warning')
+				}
+			},
 			async confirmPayOrder() {
-				this.orderParmes.addrId = this.addrId
 				const obj = {}
 				obj[this.orderDetail.skuId] = this.value
 				console.log(this.orderDetail.skuId, this.value);
@@ -138,6 +159,11 @@
 					},
 					fail: res => {
 						this.selfMsg('可在我的订单重新支付', 'error')
+						setTimeout(() => {
+							uni.switchTab({
+								url: '/pages/shop/shop'
+							})
+						}, 1000)
 					}
 				})
 
@@ -192,6 +218,36 @@
 			.mid {}
 
 			.right {}
+
+
+		}
+
+		.remak {
+
+			display: flex;
+			padding: 40rpx;
+			margin-top: 20rpx;
+			color: #a2a2a2;
+			font-size: 30rpx;
+			align-items: center;
+			background-color: #ffffff;
+
+			.title {
+				font-size: 35rpx;
+				color: #000000;
+				padding-right: 30rpx;
+			}
+
+			.content {
+				display: contents;
+
+				/* #ifdef MP-QQ */
+				u--input {
+					margin-top: 15rpx;
+				}
+
+				/* #endif*/
+			}
 		}
 
 		.bot {

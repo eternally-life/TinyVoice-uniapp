@@ -4,7 +4,7 @@
 			<view class="goBack" @tap="handleGoBack">
 				<text class="iconfont icon-fanhui"></text>
 			</view>
-			<view class="isRead" @click="allDelShoppingCart">清空购物车</view>
+			<view class="isRead" @click="allDelShoppingCart" v-if="goods.length">清空购物车</view>
 			<view class="title">购物车</view>
 		</view>
 		<view class="empty" v-if="!goods.length">
@@ -19,7 +19,7 @@
 						<view class="goods-left">
 							<checkbox-group @change="selected(item)">
 								<label>
-									<checkbox class="selected" color="#555555" :checked="checked" /><text></text>
+									<checkbox class="selected" :checked="checked" /><text></text>
 								</label>
 							</checkbox-group>
 						</view>
@@ -304,6 +304,29 @@
 
 <style lang="scss" scoped>
 	.container {
+
+		radio::before,
+		checkbox::before {
+			font-family: 'cuIcon';
+			content: '√';
+			position: absolute;
+			color: var(--white) !important;
+			top: 50%;
+			margin-top: -8px;
+			right: 5px;
+			font-size: 32rpx;
+			line-height: 16px;
+			pointer-events: none;
+			-webkit-transform: scale(1, 1);
+			transform: scale(1, 1);
+			transition: all 0.3s ease-in-out 0s;
+			z-index: 9;
+			transition-duration: 0.3s;
+			transition-timing-function: ease-in-out;
+			transition-delay: 0s;
+			transition-property: all;
+		}
+
 		.header {
 			position: fixed;
 			top: 0;
@@ -413,11 +436,6 @@
 			display: flex;
 			align-items: baseline;
 
-			.notice {
-				font-size: 25rpx;
-				padding: 0 50rpx 10rpx;
-				color: #60c5ba;
-			}
 
 			.del {
 				.u-tag-wrapper {
