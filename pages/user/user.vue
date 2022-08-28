@@ -396,9 +396,12 @@ export default {
 
 				.item_text {
 					color: #676767;
+					align-content: center;
+					text-align: center;
 				}
 
 				.item_number {
+					align-content: center;
 					text-align: center;
 					color: #aaa;
 				}
