@@ -25,6 +25,7 @@
 
 		<!-- 课程详情模态框 -->
 		<edu-course-modal />
+		<ty-tabbar></ty-tabbar>
 	</view>
 </template>
 

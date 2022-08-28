@@ -75,6 +75,7 @@
 		>
 			<view class="slot-content"><rich-text :nodes="content"></rich-text></view>
 		</u-modal>
+		<ty-tabbar></ty-tabbar>
 	</view>
 </template>
 

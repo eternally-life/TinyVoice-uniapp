@@ -16,6 +16,7 @@
         </u-grid-item>
       </u-grid>
     </u-popup> -->
+	<ty-tabbar></ty-tabbar>
   </view>
 </template>
 

@@ -41,6 +41,7 @@
 			</view>
 		</view>
 		<u-divider text="更多功能开发中，敬请期待!"></u-divider>
+		<ty-tabbar></ty-tabbar>
 	</view>
 </template>
 

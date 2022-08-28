@@ -29,6 +29,7 @@
 			</scroll-view>
 		</view>
 		<u-toast ref="uToast"></u-toast>
+		<ty-tabbar></ty-tabbar>
 	</view>
 </template>
 
