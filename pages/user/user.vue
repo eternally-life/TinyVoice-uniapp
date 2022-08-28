@@ -88,7 +88,9 @@ import { systemSysmsgPage_Get } from '@/api/SYSTEM/消息提醒.js';
 import { getSetInfo_QQ, getSetInfo_WX, getNaviList, getOtherInfo_WX, getOtherInfo_QQ } from './datalist.js';
 import { setGloalDataEduInfo } from '@/utils/loginUtil.js';
 import { systemParamsConfigKeyconfigKey_Get } from '@/api/SYSTEM/参数字典公告.js';
+import { tabbar_hid } from '@/components/mixins/tabbar.js';
 export default {
+	mixins: [tabbar_hid],
 	data() {
 		return {
 			showSignExplain: false, // 是否显示音符说明

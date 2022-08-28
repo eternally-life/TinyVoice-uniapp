@@ -5,6 +5,7 @@
 		:fixed="true"
 		:placeholder="true"
 		:safeAreaInsetBottom="true"
+		activeColor="#2dc1cf"
 	>
 		<u-tabbar-item
 			:text="item.text"
@@ -20,8 +21,5 @@ import { tabbar_mixins } from '@/components/mixins/tabbar.js';
 export default {
 	name: 'ty-tabbar',
 	mixins: [tabbar_mixins],
-	mounted() {
-		uni.hideTabBar();
-	}
 };
 </script>

@@ -33,11 +33,13 @@
 import eduCalendarControl from './eduCalendarControl';
 import eduCourseControl from './eduCourseControl';
 import { mapState, mapMutations } from 'vuex';
+import { tabbar_hid } from '@/components/mixins/tabbar.js';
 export default {
 	components: {
 		eduCalendarControl,
 		eduCourseControl
 	},
+	mixins: [tabbar_hid],
 	data() {
 		return {
 			calenTypeList: ['日', '周', '月'],

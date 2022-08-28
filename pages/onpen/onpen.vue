@@ -1,10 +1,8 @@
-<template>
-	<view class="open"><u-loading-page :loading="true" :image="src" :loading-text="appName"></u-loading-page></view>
-</template>
-
+<!-- 开屏页 -->
 <script>
 import { systemParamsConfigKeyconfigKey_Get } from '@/api/SYSTEM/参数字典公告.js';
 import { tabbar_mixins } from '@/components/mixins/tabbar.js';
+import { tabbar_default } from './default';
 export default {
 	mixins: [tabbar_mixins],
 	data() {
@@ -24,11 +22,12 @@ export default {
 				uni.switchTab({
 					url: '/pages/user/user'
 				});
-			}, 1000);
+			}, 1500);
 		},
 		// 异常时 使用默认数据
 		netErr(e) {
 			console.log('请求异常，使用默认tabbar数据');
+			this.setTabbarList(tabbar_default());
 			this.openOver();
 		}
 	},
@@ -39,7 +38,7 @@ export default {
 			configKey: 'sys.tabbar'
 		})
 			.then(res => {
-				if (res.data.code == 200) {
+				if (res.data.code == 200 && res.data.msg != '') {
 					try {
 						const tabbarData = JSON.parse(res.data.msg).map(val => ({
 							pagePath: val.p,
@@ -67,3 +66,6 @@ export default {
 	}
 };
 </script>
+<template>
+	<view class="open"><u-loading-page :loading="true" :image="src" :loading-text="appName"></u-loading-page></view>
+</template>
