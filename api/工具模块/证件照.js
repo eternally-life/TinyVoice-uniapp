@@ -22,11 +22,11 @@ let creatIdPhoto_params = {
 
 
 export function creatIdPhoto_post(creatIdPhoto_params, file) {
-	console.log(creatIdPhoto_params)
+	console.log("=========================")
 	console.log(file)
 	console.log("=========================")
 	return requestFile({
-		url: `/community/tinyservephotos/save`,
+		url: `/community/tinyphotos/save`,
 		method: 'post',
 		params: creatIdPhoto_params,
 		file: file
@@ -55,7 +55,7 @@ export function getTinyPhotoSpec_get(getTinyPhotoSpec_params) {
 }
 
 /***  ===========================================================================
- * path: /community/tinyphotosspec/page
+ * path: /community/tinyphotosspec/pagebyname
  * summary: 模糊搜索并且分页
  * 
  */
@@ -68,7 +68,7 @@ let searchPhotoSpec_params = {
 
 export function searchPhotoSpec_get(searchPhotoSpec_params) {
 	return request({
-		url: `/community/tinyphotosspec/page`,
+		url: `/community/tinyphotosspec/pagebyname`,
 		method: 'get',
 		params: searchPhotoSpec_params,
 	})
@@ -124,7 +124,7 @@ let deletePhotoById_params={
 }
 
 export function deletePhotoById_delete(deletePhotoById_params) {
-	console.log(getPhotoData_params)
+	console.log(deletePhotoById_params)
 	console.log('==============================')
 	return request({
 		url: `/community/tinyphotos/delete`,

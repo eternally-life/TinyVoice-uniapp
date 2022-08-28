@@ -31,7 +31,7 @@
 				<!-- 底部分页 -->
 				<view class="paging">
 					<view @click="backPage">上一页</view>
-					<text class="pageNum">第{{ getSpecData.pageNum }}页</text>
+					<text class="pageNum">第{{ currentPageNum }}页</text>
 					<view @click="nextPage">下一页</view>
 				</view>
 			</view>
@@ -112,7 +112,7 @@
 					pageSize: 10, // 页码大小
 					sort: 2, // 排序方式 1-默认 2-下载量 3-热门
 				},
-				totalPage: 22, // 返回数据的总页数 total/pageSize
+				currentPageNum: 1, // 当前第几页
 				
 				show: false,		//自定义规格遮罩控制
 				diySpec:{
@@ -123,9 +123,9 @@
 					beauty_degree: null//自定义照片美颜系数
 				},
 				diyLimitSpec:{		// 自定义限制用户输入规格系数
-					maxWide: 800, 	// 最大宽度
+					maxWide: 650, 	// 最大宽度
 					minWide: 50, 	// 最小宽度
-					maxHigh: 800, 	// 最大高度
+					maxHigh: 900, 	// 最大高度
 					minHigh: 50, 	// 最小高度
 					maxBeauty_degree: 5.0, 	// 最大美颜系数
 					minBeauty_degree: 1.0, 	// 最小美颜系数
@@ -152,19 +152,33 @@
 				if (res.data.code !== 200) {
 					this.selfMsg("获取规格数据失败，请重试", "warning")
 				}
-
-				// this.totalPage = Math.ceil(res.data.data.total / this.getSpecData.pageSize)
-				// const specArr = res.data.data.records
+				
 				const specArr = res.data.data
-				for (let i = 0; i < specArr.length; i++) {
-					if (specArr[i].id !== '12'){// 剔除id为12对象，12为自定义规格不需要渲染
-						this.hotType.push(specArr[i])
-					}else{
-						this.diySpec.id = specArr[i].id
-						this.diySpec.color = specArr[i].color
+				if(specArr.length > 0){
+					this.hotType = [] // 置空原数组
+					for (let i = 0; i < specArr.length; i++) {
+						if (specArr[i].id !== '12'){// 剔除id为12对象，12为自定义规格不需要渲染
+							this.hotType.push(specArr[i])
+						}else{
+							this.diySpec.id = specArr[i].id
+							this.diySpec.color = specArr[i].color
+						}
+							
 					}
-						
+					this.currentPageNum = this.getSpecData.pageNum
+				}else{
+					this.getSpecData.pageNum = this.getSpecData.pageNum-1
+					return this.selfMsg("已经是最后一页了哦", "warning")
 				}
+				// for (let i = 0; i < specArr.length; i++) {
+				// 	if (specArr[i].id !== '12'){// 剔除id为12对象，12为自定义规格不需要渲染
+				// 		this.hotType.push(specArr[i])
+				// 	}else{
+				// 		this.diySpec.id = specArr[i].id
+				// 		this.diySpec.color = specArr[i].color
+				// 	}
+						
+				// }
 			},
 			// 上一页-----------------------------------------------------------------------------
 			backPage() {
@@ -173,19 +187,14 @@
 				} else {
 					this.getSpecData.pageSize = 9
 				}
-				if (this.getSpecData.pageNum == 1) { // 当处于第一页时不允许在进行上一页操作
+				if (this.currentPageNum == 1) { // 当处于第一页时不允许在进行上一页操作
 					return this.selfMsg("已经是第一页了哦", "warning")
 				}
 				this.getSpecData.pageNum -= 1
-				this.hotType = [] // 置空原数组
 				this.getTinyPhotospec(this.getSpecData)
 			},
 			// 下一页-----------------------------------------------------------------------------
 			nextPage() {
-				this.hotType = [] // 置空原数组
-				if (this.getSpecData.pageNum == this.totalPage) {
-					return this.selfMsg("已经是最后一页了哦", "warning")
-				}
 				this.getSpecData.pageSize = 9
 				this.getSpecData.pageNum += 1
 				this.getTinyPhotospec(this.getSpecData)

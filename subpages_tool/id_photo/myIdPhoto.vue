@@ -83,7 +83,9 @@
 			async getIdPhotoData(params){
 				const res = await getPhotoData_get(params)
 				if(res.data.code == 200){
-					this.photoRecords = res.data.data.records
+					// this.photoRecords = res.data.data.records
+					const results =  res.data.data.records
+					this.photoRecords = results.reverse()
 					this.totalPage = Math.ceil(res.data.data.total/this.getPhotoData.pageSize)
 					console.log(this.totalPage)
 					// 转换时间格式
@@ -101,11 +103,34 @@
 				
 			},
 			// 删除的处理函数-----------------------------------------------------------------------------
-			async toDelete(photosId){
-				const res = await deletePhotoById_delete({photosId})
-				console.log(res)
-				console.log('++++++++++++++++++++++++++++++++=')
-				this.getIdPhotoData(this.getPhotoData)
+			toDelete(photosId){
+				const _this = this
+				uni.showModal({
+					title: '提示',
+					content: '确定删除这张照片吗',
+					confirmColor: '#0099ff',
+					cancelColor: '#000000',
+					success: function (res) {
+						if (res.confirm) {
+							_this.deleteIdPhotoById(photosId)
+						} else if (res.cancel) {
+						}
+					}
+				});
+			},
+			async deleteIdPhotoById(photosId){
+				const res = await deletePhotoById_delete([photosId])
+				console.log(res.data)
+				if(res.data.code == 200){
+					this.getIdPhotoData(this.getPhotoData)
+					uni.showModal({
+						content: '删除成功！',
+						showCancel: false
+					});
+				}else{
+					this.selfMsg("删除失败", "warning")
+				}
+				
 			},
 			// 下载的处理函数-----------------------------------------------------------------------------
 			toDownload(filePath){

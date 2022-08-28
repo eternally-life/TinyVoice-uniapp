@@ -2,7 +2,10 @@
 	<view>
 		<!-- 搜索区 -->
 		<view class="searchBox">
-			<u-search @search="toSearch" shape="round" borderColor="#a39d95" placeholder="搜索需要的证件照" v-model="searchSpecData.name"></u-search>
+			<u-search @search="toSearch" shape="round" borderColor="#a39d95"
+			 placeholder="搜索需要的证件照" v-model="searchSpecData.name"
+			 @custom="toSearch" 
+			 ></u-search>
 		</view>
 		<!-- 内容主体区 -->
 		<!-- 空内容 -->
@@ -26,7 +29,7 @@
 			<!-- 底部分页 -->
 			<view class="paging">
 				<view @click="backPage">上一页</view>
-				<text class="pageNum">第{{ searchSpecData.pageNum }}页</text>
+				<text class="pageNum">第{{ currentPageNum }}页</text>
 				<view @click="nextPage">下一页</view>
 			</view>
 		</view>
@@ -45,11 +48,11 @@
 				active: true,	
 				searchSpecData: { // 搜索证件照规格的参数
 					pageNum: 1, // 第几页
-					pageSize: 10, // 页码大小
+					pageSize: 9, // 页码大小
 					name: '', // 排序方式 1-默认 2-下载量 3-热门
 				},
 				rearchResult:[], 	//返回数据结果
-				totalPage: 22, // 返回数据的总页数 total/pageSize
+				currentPageNum: 1, // 当前页
 			}
 		},
 		methods: {
@@ -59,21 +62,30 @@
 				this.searchSpecData.pageNum = 1
 				if(this.searchSpecData.name !== ''){
 					this.getSearchResult(this.searchSpecData)
-						this.active = false
 				}
 
 			},
 			// 获取搜索结果的函数-----------------------------------------------------------------------------
 			async getSearchResult(params){
 				const res = await searchPhotoSpec_get(params)
-				
-				// this.totalPage = Math.floor(res.data.data.total / this.searchSpecData.pageSize)
 				const specArr = res.data.data
-				for (let i = 0; i < specArr.length; i++) {
-					if (specArr[i].id !== '12'){ // 剔除id为12对象，12为自定义规格不需要渲染
-						this.rearchResult.push(specArr[i])
+				if(specArr.length > 0){
+					this.rearchResult = [] // 置空原数组
+					for (let i = 0; i < specArr.length; i++) {
+						if (specArr[i].id !== '12'){ // 剔除id为12对象，12为自定义规格不需要渲染
+							this.rearchResult.push(specArr[i])
+						}
 					}
+					this.active = false
+					this.currentPageNum = this.searchSpecData.pageNum
+				}else{
+					this.searchSpecData.pageNum = this.searchSpecData.pageNum-1
+					if(this.rearchResult.length != 0){
+						return this.selfMsg("已经是最后一页了哦", "warning")
+					}
+					
 				}
+				
 			},
 			// 选择规格-----------------------------------------------------------------------------
 			chooseSpec(specid,color){
@@ -83,25 +95,15 @@
 			},
 			// 上一页-----------------------------------------------------------------------------
 			backPage() {
-				if (this.searchSpecData.pageNum == 2) { //当在第二页进行上一页操作时，需要将页面大小改为10，因为第一页需要剔除返回数据的第一个自定义元素，所以剔除后还有9个需要渲染
-					this.searchSpecData.pageSize = 10
-				} else {
-					this.searchSpecData.pageSize = 9
-				}
-				if (this.searchSpecData.pageNum == 1) { // 当处于第一页时不允许在进行上一页操作
+				
+				if (this.currentPageNum == 1) { // 当处于第一页时不允许在进行上一页操作
 					return this.selfMsg("已经是第一页了哦", "warning")
 				}
 				this.searchSpecData.pageNum -= 1
-				this.rearchResult = [] // 置空原数组
 				this.getSearchResult(this.searchSpecData)
 			},
 			// 下一页-----------------------------------------------------------------------------
 			nextPage() {
-				if (this.searchSpecData.pageNum == this.totalPage) {
-					return this.selfMsg("已经是最后一页了哦", "warning")
-				}
-				this.rearchResult = [] // 置空原数组
-				this.searchSpecData.pageSize = 9
 				this.searchSpecData.pageNum += 1
 				this.getSearchResult(this.searchSpecData)
 			},

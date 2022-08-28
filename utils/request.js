@@ -1,8 +1,8 @@
 // const BASE_URL = 'https://tiny-voice.glowxq.com/prod-api'  // 不可用 api
 
-const BASE_URL = 'http://106.52.58.11:28080' // 开发api
+// const BASE_URL = 'http://106.52.58.11:28080' // 开发api
 // const BASE_URL = 'http://127.0.0.1:8080' 
-// const BASE_URL = 'http://106.52.58.11:12574' // 开发api
+const BASE_URL = 'http://106.52.58.11:12574' // 开发api
 // const BASE_URL = 'https://tinyvoice.glowxq.com/prod-api'  // 微音生产 api
 
 const loginUtil = require('./loginUtil.js')
@@ -55,8 +55,8 @@ export function requestFile({
 	uni.showLoading({
 		title: '加载中'
 	})
-	// console.log(file);
-	// console.log("++++++++++++++++++++++++++");
+	console.log("文件临时地址");
+	console.log(file);
 	return new Promise(function(resolve, reject) {
 		uni.uploadFile({
 			url: BASE_URL + url + urlencode(params),
@@ -68,6 +68,10 @@ export function requestFile({
 					flag && loginUtil.loginStatus(res.data.code)
 					resolve(res)
 				}
+			},
+			fail: (err) => {
+				console.error(url + "请求失败")
+				reject(err)
 			},
 			complete: () => {
 				uni.hideLoading()
@@ -98,7 +102,8 @@ export function getFileHeader() {
 		token = uni.getStorageSync("token")
 	}
 	let header = {
-		Authorization: token
+		Authorization: token,
+		"content-type":"multipart/form-data"
 	}
 	return header;
 }

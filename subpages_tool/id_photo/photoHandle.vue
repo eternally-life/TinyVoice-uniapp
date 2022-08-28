@@ -29,7 +29,7 @@
 		<!-- 提交 -->
 		<view class="submit_photo">
 			<u-button shape="circle" customStyle=" fontSize:28rpx" type="primary"
-				@click="creatIdPhoto(specid,color,photosFile)">
+				@click="creatIdPhoto(specid,color,photowide,photohigh,beauty_degree,photosFile)">
 				下载证件照
 			</u-button>
 		</view>
@@ -46,13 +46,13 @@
 		data() {
 			return {
 				// 照片规格参数
-					specid: '', //证件照ID(必须)
-					color: '', //照片底色(必须)
-					photosFile: '', //照片文件
-					photowide: '', //自定义像素宽
-					photohigh: '', //自定义像素高
-					// fileSize: '', //期望的文件大小 [最小值,最大值]单位(kb) 超过这个区间默认无效
-					beauty_degree: '', //美颜系数 [1.0-5.0] 超过这个区间默认无效
+				specid: '', //证件照ID(必须)
+				color: '', //照片底色(必须)
+				photosFile: '', //照片文件
+				photowide: '', //自定义像素宽
+				photohigh: '', //自定义像素高
+				// fileSize: '', //期望的文件大小 [最小值,最大值]单位(kb) 超过这个区间默认无效
+				beauty_degree: '', //美颜系数 [1.0-5.0] 超过这个区间默认无效
 				choosedphotoSpecid: { //父级页面跳转传过来的参数
 					// specid: null,
 					color: []
@@ -85,7 +85,8 @@
 					sizeType: ['original', 'compressed'],
 					sourceType: ['album'],
 					success: function(res) {
-						let imgUrl = res.tempFilePaths[0]
+						console.log(res);
+						let imgUrl = res.tempFiles[0].path
 						let imgSuffix = imgUrl.substring(imgUrl.lastIndexOf('.') + 1) // 图片后缀名
 						if (imgSuffix === 'gif') { // 禁选的图片格式
 							return _this.selfMsg("请选择正确的图片格式哦", "warning")
@@ -95,27 +96,33 @@
 				});
 			},
 			// 创建证件照---------------------------------------------------------------------------
-			async creatIdPhoto(specid,color, photosFile) {
+			async creatIdPhoto(specid, color,photowide,photohigh,beauty_degree, photosFile) {
 				if (photosFile == '') {
 					return this.selfMsg("照片别忘了选哦", "warning")
 				}
 				if (color == '') {
 					return this.selfMsg("底色别忘了选哦", "warning")
 				}
-					const res = await creatIdPhoto_post({specid,color}, photosFile)
-					// const res = await this.uploadFilePromise(specid,color,photosFile)
-					console.log(res)
-				console.log('++++++++++++++')
-			// if (res.data.code === 200) { //请求成功
-			// 	this.afterImage = res.data.photosUrl
-			// 	// 预览图片
-			// 	const _this = this
-			// 	uni.navigateTo({
-			// 		url: `/subpages_tool/id_photo/previewPhoto?imgUrl=${_this.afterImage}`
-			// 	})
-			// } else {
-			// 	return this.selfMsg(ps.msg, "warning")
-			// }
+				const res = await creatIdPhoto_post({
+					specid,
+					color,
+					photowide,
+					photohigh,
+					beauty_degree
+				}, photosFile)
+				const str = JSON.parse(res.data)
+				// console.log(str)
+				// console.log('++++++++++++++')
+				const _this = this
+				if (str.code === 200) { //请求成功
+					this.afterImage = str.data.photosUrl
+					// 预览图片
+					uni.navigateTo({
+						url: `/subpages_tool/id_photo/previewPhoto?imgUrl=${_this.afterImage}`
+					})
+				} else {
+					return _this.selfMsg(str.msg, "warning")
+				}
 			},
 			// 选择底色-----------------------------------------------------------------------------------
 			chooseBackColor(color) {
@@ -123,25 +130,6 @@
 				const backcolor = this.reChangeColor(color) //转换颜色格式
 				this.color = backcolor
 			},
-			// //定义上传照片的函数----------------------------------------------------------------------------------------
-			// uploadFilePromise(specid,color,fileUrl) {
-			// 	return new Promise((resolve, reject) => {
-			// 		let a = uni.uploadFile({
-			// 			url: 'http://106.52.58.11:28080/community/tinyservephotos/save', // 仅为示例，非真实的接口地址
-			// 			filePath: fileUrl,
-			// 			name: 'photosFile',
-			// 			formData: {
-			// 				specid: specid,
-			// 				color: color
-			// 			},
-			// 			success: (res) => {
-			// 				setTimeout(() => {
-			// 					resolve(res.data.data)
-			// 				}, 1000)
-			// 			}
-			// 		});
-			// 	})
-			// },
 			// 消息提示---------------------------------------------------------------------------------------
 			selfMsg(msg, mod) {
 				this.$refs.uToast.show({
