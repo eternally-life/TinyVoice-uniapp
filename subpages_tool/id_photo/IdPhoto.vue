@@ -153,7 +153,7 @@
 					this.selfMsg("获取规格数据失败，请重试", "warning")
 				}
 
-				// this.totalPage = Math.floor(res.data.data.total / this.getSpecData.pageSize)
+				// this.totalPage = Math.ceil(res.data.data.total / this.getSpecData.pageSize)
 				// const specArr = res.data.data.records
 				const specArr = res.data.data
 				for (let i = 0; i < specArr.length; i++) {

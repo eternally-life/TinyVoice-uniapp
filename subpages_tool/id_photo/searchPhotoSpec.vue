@@ -49,7 +49,7 @@
 					name: '', // 排序方式 1-默认 2-下载量 3-热门
 				},
 				rearchResult:[], 	//返回数据结果
-				totalPage: 0, // 返回数据的总页数 total/pageSize
+				totalPage: 22, // 返回数据的总页数 total/pageSize
 			}
 		},
 		methods: {
@@ -67,8 +67,8 @@
 			async getSearchResult(params){
 				const res = await searchPhotoSpec_get(params)
 				
-				this.totalPage = Math.floor(res.data.data.total / this.searchSpecData.pageSize)
-				const specArr = res.data.data.records
+				// this.totalPage = Math.floor(res.data.data.total / this.searchSpecData.pageSize)
+				const specArr = res.data.data
 				for (let i = 0; i < specArr.length; i++) {
 					if (specArr[i].id !== '12'){ // 剔除id为12对象，12为自定义规格不需要渲染
 						this.rearchResult.push(specArr[i])

@@ -102,7 +102,7 @@
 				if (color == '') {
 					return this.selfMsg("底色别忘了选哦", "warning")
 				}
-					const res = await creatIdPhoto_post({specid:14,color:'blue'}, photosFile)
+					const res = await creatIdPhoto_post({specid,color}, photosFile)
 					// const res = await this.uploadFilePromise(specid,color,photosFile)
 					console.log(res)
 				console.log('++++++++++++++')
@@ -138,7 +138,6 @@
 			// 				setTimeout(() => {
 			// 					resolve(res.data.data)
 			// 				}, 1000)
-			// 				console.log(res)
 			// 			}
 			// 		});
 			// 	})
