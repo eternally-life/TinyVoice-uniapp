@@ -174,7 +174,47 @@ export default {
 
 
 
+## 其他
 
+### 动态tabbar
 
+**组件使用的格式 **：数组
 
+```json
+[{
+		pagePath: "pages/edu/edu",
+		text: "学习",
+		iconPath: "/static/tabBar/unchecked_home.png",
+		selectedIconPath: "/static/tabBar/select_home.png"
+	},
+ 	......
+]
+```
+
+接口参数定义的数据：字符串（用于审核）
+
+```tex
+[{"p":"pages/shop/shop","t":"商城","i":"unchecked_shopping.png","si":"select_shopping.png"},{"p":"pages/community/community","t":"微音","i":"unchecked_tinyVoice.png","si":"select_tinyVoice.png"},{"p":"pages/appliance/appliance","t":"服务","i":"unchecked_tool.png","si":"select_tool.png"},{"p":"pages/user/user","t":"我的","i":"unchecked_my.png","si":"select_my.png"}]
+```
+
+**注意事项**
+
+1. 修改前，先JSON转String，省略图标路径前缀。
+
+2. 读取时，先String转JSON，补充图标路径前缀。
+
+3. 省略的路径：/static/tabBar/。
+
+4. 压缩键名取首字母，对应关系如下：
+
+    p <--> pagePath、
+    t <--> text、
+    i <--> iconPath、
+    si <--> selectedIconPath。
+
+5. **`断网`**状态下，将会默认显示所有tabbar数据，且点击第一个tabbar 控制台会输出完整的格式化数据。此数据用于写入接口实现动态tabbar
+
+```javascript
+[{"p":"pages/shop/shop","t":"商城","i":"unchecked_shopping.png","si":"select_shopping.png"},{"p":"pages/community/community","t":"微音","i":"unchecked_tinyVoice.png","si":"select_tinyVoice.png"},{"p":"pages/appliance/appliance","t":"服务","i":"unchecked_tool.png","si":"select_tool.png"},{"p":"pages/user/user","t":"我的","i":"unchecked_my.png","si":"select_my.png"}]
+```
 
