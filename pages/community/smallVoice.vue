@@ -1,6 +1,6 @@
 <template>
 	<view class="all">
-		<view v-if='audit =="true"' class="audit">
+<!-- 		<view v-if='audit =="true"' class="audit">
 			<view class="container">
 				<view class="bgColor"></view>
 				<view class="top">
@@ -26,9 +26,9 @@
 
 				</view>
 			</view>
-		</view>
+		</view> -->
 
-		<view v-if="audit=='false'" class="small_voice_wrap">
+		<view  class="small_voice_wrap">
 			<u-sticky bgColor="#fff">
 				<u-tabs :list="menuList" lineColor="#31B6C3" :activeStyle="{
 					color: '#31B6C3',
