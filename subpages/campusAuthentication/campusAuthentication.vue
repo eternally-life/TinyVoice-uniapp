@@ -1,5 +1,9 @@
 <template>
 	<view>
+		<view v-if="audit=='true'" class="notic">
+			<view class="notic_title">{{ notice2.title }}</view>
+			<u-parse :content="notice2.noticeContent"></u-parse>
+		</view>
 		<view v-if="audit=='false'" class="ufrom">
 			<u-form :rules="rules" ref="uForm" :model="formData">
 				<!-- 身份 -->
@@ -49,6 +53,10 @@ export default {
 	data() {
 		return {
 			audit:'true',
+			notice2: {
+				title: '维护中,暂不开放认证',
+				noticeContent: '维护中,暂不开放认证'
+			},
 			notice: {
 				title: '校园微音公告标题',
 				noticeContent: '校园微音公告标题内容'
@@ -150,10 +158,16 @@ export default {
 	},
 	onLoad() {
 		systemParamsNotenoticeId_Get({ noticeId: 20 }).then(res => {
-			console.log('公告数据', res);
 			if (res.data.code == 200) {
 				this.notice.title = res.data.data.noticeTitle;
 				this.notice.noticeContent = res.data.data.noticeContent;
+			}
+		});
+		
+		systemParamsNotenoticeId_Get({ noticeId: 21 }).then(res => {
+			if (res.data.code == 200) {
+				this.notice2.title = res.data.data.noticeTitle;
+				this.notice2.noticeContent = res.data.data.noticeContent;
 			}
 		});
 	}
@@ -164,18 +178,20 @@ export default {
 $com_w: 70vw;
 .ufrom {
 	width: $com_w;
-	margin: 20vh auto;
+	margin: 10vh auto;
 	.btn {
-		margin-top: 10vh;
+		margin-top: 5vh;
 		width: 100%;
 	}
 }
 .notic {
 	width: $com_w;
 	padding: 10px;
-	margin: 0 auto;
+	margin: 10rpx auto;
 	border-radius: 10px;
-	background-color: #fcbd71;
+	background-color: #fff;
+	 box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+	// background-color: #fcbd71;
 	&_title {
 		width: 100%;
 		margin-top: 10rxp;

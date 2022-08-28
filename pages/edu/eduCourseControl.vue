@@ -33,7 +33,9 @@ export default {
 	computed: {
 		...mapState('edu', ['calendarType', 'eduTime', 'tempEduTime2', 'week2TimeFlage', 'eduSwitch'])
 	},
+	
 	methods: {
+	
 		// 读取本地课表缓存
 		getStroCourse() {
 			try {
@@ -104,16 +106,16 @@ export default {
 				// 生成看门狗
 				this.creatWatchDog();
 
-				const termRes = await systemParamsConfigKeyconfigKey_Get({ configKey: 'edu:guet:term' });
-				console.log('获取到学期参数', termRes);
-				//判断是否离线
-				if (termRes.data.code != 200) {
-					this.$ShowToastSuc('服务器获取学期异常');
-					this.killWatchDog();
-					return;
-				}
+				// const termRes = await systemParamsConfigKeyconfigKey_Get({ configKey: 'edu:guet:term' });
+				// console.log('获取到学期参数', termRes);
+				// //判断是否离线
+				// if (termRes.data.code != 200) {
+				// 	this.$ShowToastSuc('服务器获取学期异常');
+				// 	this.killWatchDog();
+				// 	return;
+				// }
 
-				let temp = await eduGuetCourseTable_Post({ term: termRes.data.msg }).then(res => {
+				let temp = await eduGuetCourseTable_Post().then(res => {
 					console.log('课表请求', res);
 					if (res.data.code == 200) {
 						//清除看门狗
@@ -129,10 +131,17 @@ export default {
 						this.onecFlag = true;
 						return this.grouping(res.data.data);
 					} else {
-						// this.$ShowToastErr('课表请求异常');
+						this.$ShowToastErr(res.data.msg);
+						if(res.data.code===4444){
+							
+							uni.navigateTo({
+								url: '/subpages/campusAuthentication/campusAuthentication'
+							});
+						}
+						
 						this.$refs.uToast.show({
 							type: 'error',
-							message: '课表请求异常：' + res.data.code,
+							message: '课表请求异常：' + res.data.msg,
 							duration: 1000,
 							position: 'bottom'
 						});

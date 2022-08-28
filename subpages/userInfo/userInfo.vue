@@ -1,7 +1,12 @@
 <template>
 	<view>
+		
 		<view class="avatar">
 			<u-avatar :src="showAvatarUrl" size="90" @click="selectImg"></u-avatar>
+		</view>
+		<view v-if="audit=='true'" class="notic">
+			<view class="notic_title">{{ notice2.title }}</view>
+			<u-parse :content="notice2.noticeContent"></u-parse>
 		</view>
 		<view v-if="audit == 'false'" class="">
 			<u-cell-group>
@@ -41,6 +46,10 @@
 	export default {
 		data() {
 			return {
+				notice2: {
+					title: '维护中,暂不开放认证',
+					noticeContent: '维护中,暂不开放认证'
+				},
 				audit: 'true',
 				userInfo: {},
 				isShowPicke: false,
@@ -79,6 +88,17 @@
 		},
 		created() {
 			this.getParam();
+
+		},
+		onLoad() {
+			systemParamsNotenoticeId_Get({
+				noticeId: 21
+			}).then(res => {
+				if (res.data.code == 200) {
+					this.notice2.title = res.data.data.noticeTitle;
+					this.notice2.noticeContent = res.data.data.noticeContent;
+				}
+			});
 		},
 		methods: {
 			getParam() {
@@ -283,6 +303,25 @@
 
 		.pop_item {
 			margin-bottom: $mar;
+		}
+	}
+
+	.notic {
+		width: 70vm;
+		padding: 10px;
+		margin: 10rpx auto;
+		border-radius: 10px;
+		background-color: #fff;
+		box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+
+		// background-color: #fcbd71;
+		.notic_title {
+			width: 100%;
+			margin-top: 20rpx;
+			margin-bottom: 30rpx;
+			font-size: 16px;
+			text-align: center;
+			font-weight: bolder;
 		}
 	}
 </style>
