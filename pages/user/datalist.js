@@ -50,7 +50,7 @@ module.exports = {
 		return [{
 				icon: 'iconfont icon-fabu1',
 				title: '我的发布',
-				path: '/pages/small_voice/MyVoice'
+				path: '/pages/small_voice/myVoice'
 			},
 			{
 				icon: 'iconfont icon-dingdan',

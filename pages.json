@@ -39,6 +39,13 @@
 				"navigationBarTitleText": "工具",
 				"enablePullDownRefresh": true
 			}
+		},
+    {
+			"path": "pages/small_voice/myVoice",
+			"style": {
+				"navigationBarTitleText": "我的发布",
+				"enablePullDownRefresh": true
+			}
 		}
 	   
     ],
@@ -282,6 +289,13 @@
 					}
 				},
 				{
+					"path": "id_photo/myIdPhoto",
+					"style": {
+						"navigationBarTitleText": "我的证件照",
+						"enablePullDownRefresh": false
+					}
+				},
+				{
 					"path": "id_photo/previewPhoto",
 					"style": {
 						"navigationBarTitleText": "图片预览",
@@ -295,7 +309,16 @@
 						"enablePullDownRefresh": false
 					}
 				}
-				, {
+				, 
+				{
+				    "path" : "id_photo/searchPhotoSpec",
+				    "style" :                                                                                    
+				{
+				    "navigationBarTitleText": "搜索",
+				    "enablePullDownRefresh": false
+				}
+				
+				},{
 					"path": "resources/resources",
 					"style": {
 						"navigationBarTitleText": "资源共享",
@@ -321,7 +344,155 @@
                     "enablePullDownRefresh": false
                 	}
                 }
+                ,{
+                    "path" : "resourcePublishing/resourcePublishing",
+                    "style" :                                                                                    
+                {
+                    "navigationBarTitleText": "资源发布",
+                    "enablePullDownRefresh": false
+                }
+                
+                }
+                ,{
+                    "path" : "blog/blog",
+                    "style" :                                                                                    
+                {
+                    "navigationBarTitleText": "",
+                    "enablePullDownRefresh": false
+                }
+                
+                }
+                ,{
+                    "path" : "web/web",
+                    "style" :                                                                                    
+                {
+                    "navigationBarTitleText": "",
+                    "enablePullDownRefresh": false
+                }
+                
+                }
+                
+                
             ]
+		},
+		// 工具箱分包
+		{
+			"root": "subpages_toolkit",
+			"pages": [{
+					"path": "index/index",
+					"style": {
+						"navigationBarTitleText": "主页",
+						"enablePullDownRefresh": false
+					}
+				},
+				{
+					"path": "creat/blank/blank",
+					"style": {
+						"navigationBarTitleText": "blank",
+						"enablePullDownRefresh": false
+					}
+				
+				}, {
+					"path": "creat/color/color",
+					"style": {
+						"navigationBarTitleText": "color",
+						"enablePullDownRefresh": false
+					}
+
+				}, {
+					"path": "creat/combine/combine",
+					"style": {
+						"navigationBarTitleText": "combine",
+						"enablePullDownRefresh": false
+					}
+
+				}, {
+					"path": "creat/cut/cut",
+					"style": {
+						"navigationBarTitleText": "cut",
+						"enablePullDownRefresh": false
+					}
+
+				}, {
+					"path": "creat/emojy/emojy",
+					"style": {
+						"navigationBarTitleText": "emojy",
+						"enablePullDownRefresh": false
+					}
+
+				}, {
+					"path": "creat/fly/fly",
+					"style": {
+						"navigationBarTitleText": "fly",
+						"enablePullDownRefresh": false
+					}
+
+				}, {
+					"path": "creat/screaming/screaming",
+					"style": {
+						"navigationBarTitleText": "screaming",
+						"enablePullDownRefresh": false
+					}
+
+				}, {
+					"path": "creat/tel/tel",
+					"style": {
+						"navigationBarTitleText": "tel",
+						"enablePullDownRefresh": false
+					}
+
+				}, {
+					"path": "creat/typeface/typeface",
+					"style": {
+						"navigationBarTitleText": "typeface",
+						"enablePullDownRefresh": false
+					}
+
+				}, {
+					"path": "creat/word/word",
+					"style": {
+						"navigationBarTitleText": "word",
+						"enablePullDownRefresh": false
+					}
+
+				}
+				
+		    ]
+		},
+		//小空调分包
+		{
+			"root": "subpages_ice",
+			"pages": [{
+					"path": "index/index",
+					"style": {
+						"navigationBarTitleText": "主页",
+						"enablePullDownRefresh": false
+					}
+				},
+				{
+					"path": "cure/poem",
+					"style": {
+						"navigationBarTitleText": "poem",
+						"enablePullDownRefresh": false
+					}
+				
+				}, {
+					"path": "help/index",
+					"style": {
+						"navigationBarTitleText": "help",
+						"enablePullDownRefresh": false
+					}
+		
+				}, {
+					"path": "home/home",
+					"style": {
+						"navigationBarTitleText": "小空调",
+						"enablePullDownRefresh": false
+					}
+		
+				}
+				
+		    ]
 		}
 	],
 	"globalStyle": {
@@ -336,12 +507,13 @@
 		"color": "#000000",
 		"selectedColor": "#2dc1cf",
 		"backgroundColor": "#FFFFFF",
-		"list": [{
-				"pagePath": "pages/edu/edu",
-				"text": "学习",
-				"iconPath": "static/tabBar/unchecked_home.png",
-				"selectedIconPath": "static/tabBar/select_home.png"
-			},
+		"list": [
+			// {
+			// 	"pagePath": "pages/edu/edu",
+			// 	"text": "学习",
+			// 	"iconPath": "static/tabBar/unchecked_home.png",
+			// 	"selectedIconPath": "static/tabBar/select_home.png"
+			// },
 			{
 				"pagePath": "pages/shop/shop",
 				"text": "商城",
@@ -356,7 +528,7 @@
 			},
 			{
 				"pagePath": "pages/appliance/appliance",
-				"text": "工具",
+				"text": "服务",
 				"iconPath": "static/tabBar/unchecked_tool.png",
 				"selectedIconPath": "static/tabBar/select_tool.png"
 			},

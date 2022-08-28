@@ -53,8 +53,6 @@
 			<view class="end-right" @click="allPay(totalNum)">
 				结算({{totalNum}})
 			</view>
-
-
 		</view>
 		<u-toast ref="uToast"></u-toast>
 	</view>
@@ -414,6 +412,12 @@
 			padding: 20rpx 0rpx 100rpx;
 			display: flex;
 			align-items: baseline;
+
+			.notice {
+				font-size: 25rpx;
+				padding: 0 50rpx 10rpx;
+				color: #60c5ba;
+			}
 
 			.del {
 				.u-tag-wrapper {

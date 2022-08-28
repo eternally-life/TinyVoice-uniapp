@@ -2,7 +2,8 @@
 	<view class="wrap">
 		<view class="wrap_background">
 			<view class="bac_logo">
-				Logo <i class="iconfont "></i>
+				<u--image :showLoading="true" :src="logo" width="80rpx" height="80rpx">
+				</u--image>
 			</view>
 		</view>
 		<view class="searchBox">
@@ -17,49 +18,54 @@
 			</view>
 		</view>
 
-		<view class="wrap_block" v-for="(item,index) in resourceData" :key="index" @click="enterResourcesUrl(item.id)">
+		<view class="wrap_block" v-for="(item,index) in resourceData" :key="index">
 			<view class="block_content">
-				<view class="res_name">
+				<view class="res_name" @click="enterResourcesUrl(index)">
 					{{item.name}}
 				</view>
-				<view class="res_msg">
+				<view class="res_msg" @click="enterResourcesUrl(index)">
 					{{$u.timeFormat(item.createTime, 'yyyy-mm-dd')}}
 					下载数：{{item.downNum}}
 					所需积分：{{item.integral}}
 				</view>
 				<view class="res_size">
-					文件大小{{item.size}}m
+					文件大小{{item.size > 1048576? parseInt(item.size/1024/1024)+ "m" : parseInt(item.size/1024) + "kb"}}
 				</view>
 				<view class="download_btn">
-					<u-button color="linear-gradient(to right, rgb(66, 83, 216), rgb(213, 51, 186))" @click="filedownload">下载</u-button>
+					<u-button shape="circle" color="linear-gradient(to right,rgb(12,235,235), rgb(32,227,178), rgb(41,255,198))"
+						@click="filedownload(item.resourceId,item.url)">下载</u-button>
 				</view>
 			</view>
 		</view>
 		<view class="loadmore_wrap" v-if="resourceData.length !== 0">
 			<text>{{ isNoMore ? '到底啦' : '' }}</text>
 		</view>
+		<view class="uploading" @click="uploading">
+			 <u-button icon="plus" size="large" shape="circle" iconColor="#31b6c3" @click="openPopup"></u-button>
+		</view>
 	</view>
 </template>
 
 <script>
 	import {
-		communityTinyserveresourceSave_Post,
-		communityTinyserveresourceByResourceId_Get,
 		communityTinyserveresourceDown_Get,
 		communityTinyserveresourcePage_Get
-	} from "@/api/社区模块/资源共享.js"
+	} from "@/api/工具模块/资源共享.js"
+	import {
+		systemParamsNoteList_Get,
+		systemParamsNotenoticeId_Get
+	} from '@/api/SYSTEM/参数字典公告.js'
 	export default {
 		data() {
 			return {
+				logo: getApp().globalData.logo, //全局logo
 				windowHeight: null,
-				searchMsg: "",
-				resourceData: [],
+				searchMsg: "", //搜索关键字
+				resourceData: [], //数据列表
 				currentPageNumber: 1, //页号
 				isloading: false,
 				isNoMore: false,
-				keyword: '',
 				id: '',
-				fileUlr: ''
 			};
 		},
 		onLoad(options) {
@@ -85,21 +91,25 @@
 						pageSize: 10,
 						//tatol 服务器内总共资源数
 					})
-					let datas = res.data.data
+					var datas = res.data.data
+					// console.log(typeof(datas));
+					this.datas = datas
 					if (res.data.msg === "还没有资源快来第一个上传吧~") {
 						this.isNoMore = true
 					}
 					// console.log(res.data.msg);
 					this.currentPageNumber++
 					this.resourceData = [...this.resourceData, ...datas.records]
+					// this.fileUlrList = [...this.fileUlrList, ...datas.url]
+					// console.log(this.fileUlrList);
 					this.isLoading = false
-					
+
 				} catch (error) {
 					//处理异常
 					console.log(error);
 				}
 			},
-			//	文件内容跳转  后期可改模态框
+			//	文件内容跳转  可改模态框
 			enterResourcesUrl(index) {
 				uni.navigateTo({
 					url: '/subpages_tool/resourcesDetail/resourcesDetail',
@@ -111,9 +121,87 @@
 				})
 			},
 			//	资源下载
-			filedownload() {
-				console.log("asad");
-				
+			filedownload(id, url) {
+
+				if (true) {
+					communityTinyserveresourceDown_Get({
+						id: id,
+					})
+					uni.downloadFile({
+						url,
+						success: (res) => {
+							if (res.statusCode === 200) {
+								this.handleFile(res.tempFilePath)
+								console.log(222, 'down1', res)
+							}
+						}
+					})
+
+				} else {
+					uni.showModal({
+						content: '您的积分还不够哦！',
+						showCancel: false
+					});
+				}
+
+
+			},
+
+			// 对不同文件的处理
+			handleFile(filePath) {
+				const filetype = filePath.split('.')[1],
+					typeObj = {
+						gif: 'img',
+						GIF: 'img',
+						png: 'img',
+						PNG: 'img',
+						jpg: 'img',
+						JPG: 'img',
+						jpeg: 'img',
+						mp4: 'video',
+						doc: 'doc',
+						docx: 'doc',
+						xls: 'doc',
+						xlsx: 'doc',
+						ppt: 'doc',
+						pptx: 'doc',
+						pdf: 'doc'
+					},
+					result = (ok = '成功保存到相册', no = '保存失败') => {
+						return {
+							filePath,
+							success: res => {
+								uni.showToast({
+									title: ok
+								})
+							},
+							fail: err => {
+								uni.showToast({
+									title: no
+								})
+							}
+						}
+					}
+
+				if (typeObj[filetype] === 'video') {
+					// 保存视频到系统相册:mp4
+					uni.saveVideoToPhotosAlbum(result())
+				} else if (typeObj[filetype] === 'img') {
+					// 保存图片到系统相册:gif,jpg,jpeg,png,GIF,JPG,PNG
+					uni.saveImageToPhotosAlbum(result())
+				} else {
+					// 打开文件:doc,docx,xls,xlsx,ppt,pptx,pdf
+					uni.openDocument({
+						...result('打开文档成功', '打开文档失败'),
+						showMenu: true //showMenu是否显示右上角菜单
+					});
+				}
+			},
+			//跳转上传页
+			uploading(){
+				uni.navigateTo({
+					url: '/subpages_tool/resourcePublishing/resourcePublishing'
+				})
 			},
 			//	资源搜索
 			search(keyword) {
@@ -124,11 +212,15 @@
 			},
 			//	触底加载新页面
 			onReachBottom() {
-				uni.showLoading()
-				setTimeout(() => {
-					this.getResourcesMessage()
-					uni.hideLoading()
-				}, 500);
+				if (this.isNoMore) {
+					return
+				} else {
+					uni.showLoading()
+					setTimeout(() => {
+						this.getResourcesMessage()
+						uni.hideLoading()
+					}, 100);
+				}
 			},
 
 		}
@@ -144,6 +236,12 @@
 			height: 200rpx;
 			width: 100%;
 			background-color: #60C5BA;
+			border-radius: 5rpx;
+
+			.bac_logo {
+				padding-left: 30rpx;
+				padding-top: 30rpx;
+			}
 		}
 
 		.searchBox {
@@ -239,6 +337,12 @@
 			color: #888888;
 			background: #f1f1f1;
 			padding: 10rpx 0 20rpx 0;
+		}
+		.uploading{
+			position: fixed;
+			bottom: 60rpx;
+			right: 60rpx;
+			width: 50px;
 		}
 	}
 </style>

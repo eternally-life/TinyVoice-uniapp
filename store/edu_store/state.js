@@ -55,7 +55,6 @@ export default {
 	modelShow: false, //课程详情模态框
 	courseDetails: null, //课程详情模态框参数
 	eduSwitch: { //教务相关开关
-		shortQA: false, //Q&A视窗高度
 		firstOpen: false, //初始页显示教务开关
 		animateState_course_details: true, //课程详情动画开关
 		animateState_course: true, //课表动画开关

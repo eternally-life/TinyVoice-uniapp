@@ -2,24 +2,45 @@
 	<view class="wrap">
 		<!-- 轮播图 -->
 		<view class="banner">
-			<u-swiper :list="list" indicator indicatorMode="dot" height="160" previousMargin="30" nextMargin="30" circular
-				:autoplay="false" radius="5"></u-swiper>
+			<u-swiper :list="list" indicatorInactiveColor="rgba(255,255,255,0.7)"
+				indicatorActiveColor="rgba(45,193,207,0.7)" indicator indicatorMode="dot" height="150"
+				previousMargin="30" nextMargin="30" circular :autoplay="false" radius="5"></u-swiper>
 		</view>
 		<!-- 应用列表 -->
-		<view class="comments_title">
-			<view class="comments_border"></view>
-			<view class="comments_content">是工具呀</view>
+		<view class="column_title">
+			<view class="column_border"></view>
+			<view class="column_content">快来看看 \(￣︶￣*\))</view>
 		</view>
 		<view class="centerInfo" v-if="navs.length > 0">
-			<view class="myItem" @click="navItemClick(item.jumpUrl,item.jumpType)" v-for="(item, index) in navs" :key="index">
+			<view class="myItem" @click="navItemClick(item.jumpUrl,item.appId,item.jumpType)" v-for="(item, index) in navsWeb"
+				:key="index">
 				<view class="myIcon">
-					<!-- <image :src="item.img"  mode="widthFix" /> -->
-					<view class="fix" :class="item.icon"></view>
+					<view class="fix" v-if="item.iconType == 1" :class="item.icon"></view>
+					<view class="fix" v-if="item.iconType == 2">
+						<image :src="item.image" mode="widthFix" />
+					</view>
 				</view>
 				<text>{{ item.name }}</text>
 			</view>
 		</view>
-		<u-divider>更多功能开发中，敬请期待!</u-divider>
+		<!-- 应用列表 -->
+		<view class="column_title">
+			<view class="column_border"></view>
+			<view class="column_content">是工具呀 →_→</view>
+		</view>
+		<view class="centerInfo" v-if="navs.length > 0">
+			<view class="myItem" @click="navItemClick(item.jumpUrl,item.appId,item.jumpType)"
+				v-for="(item, index) in navsTool" :key="index">
+				<view class="myIcon">
+					<view class="fix" v-if="item.iconType == 1" :class="item.icon"></view>
+					<view class="fix" v-if="item.iconType == 2">
+						<image :src="item.image" mode="widthFix" />
+					</view>
+				</view>
+				<text>{{ item.name }}</text>
+			</view>
+		</view>
+		<u-divider text="更多功能开发中，敬请期待!"></u-divider>
 	</view>
 </template>
 
@@ -32,7 +53,9 @@
 		data() {
 			return {
 				list: [],
-				navs: []
+				navs: [],
+				navsWeb: [],
+				navsTool: []
 			};
 		},
 		methods: {
@@ -44,47 +67,56 @@
 					console.log('结果', res);
 					if (res.data.code == 200 && res.data.data.records.length > 0) {
 						let temp = []
-							.concat(res.data.data.records)
-							.concat(res.data.data.records)
 							.concat(res.data.data.records);
 						this.list = temp.map(value => value.url);
 					}
 				});
 			},
-			navItemClick(path,jumpType) {
+			navItemClick(path, appId, jumpType) {
 				// jumpType跳转类型：1.普通页面,2.tabbar页面,3.网页,4.小程序
-				// console.log(path);
-				switch(jumpType){
-					case 1: 
-					uni.navigateTo({
+				console.log(path);
+				console.log(jumpType);
+				switch (jumpType) {
+					case 1:
+						uni.navigateTo({
 							url: path
-					});break;
+						});
+						break;
 					case 2:
-					uni.switchTab({
-						url: path
-					});break;
-					case 3:
-					uni.navigateTo({
-						url: path
-					});break;
-					case 4:
-					uni.navigateToMiniProgram({
-						appId: path,
-					});break;
-					default:
-					uni.navigateTo({
+						uni.switchTab({
 							url: path
-					});break;
+						});
+						break;
+					case 3:
+						console.log(path)
+						console.log(123132)
+						uni.navigateTo({
+							url: '/subpages_tool/web/web?url=' + path
+						});
+						break;
+					case 4:
+						uni.navigateToMiniProgram({
+							appId: appId,
+						});
+						break;
+					default:
+						uni.navigateTo({
+							url: path
+						});
+						break;
 				}
 			},
-			async getTool () {
+			async getTool() {
 				const res = await toolsList_Get()
 				// this.$ShowToastNone('刷新成功~')
-				if (res.data.code === 200 && res.data.data.length > 0){
+				if (res.data.code === 200 && res.data.data.length > 0) {
 					setTimeout(() => {
 						uni.stopPullDownRefresh()
 					}, 1000)
 					this.navs = res.data.data
+					this.navsWeb = res.data.data.filter(e => e.jumpType == 3)
+					this.navsTool = res.data.data.filter(e => e.jumpType != 3)
+
 					this.isLoading = false
 					console.log(res.data.data)
 				}
@@ -137,21 +169,42 @@
 			align-items: center;
 			background: white;
 		}
+		.column_title{
+			display: flex;
+			align-items: center;
+			padding: 30rpx;
+			margin-top: 30rpx;
+			
+			.column_border{
+			width: 8rpx;
+			height: 50rpx;
+			background: #2dc1cf;
+			border-top-left-radius: 10rpx;
+			border-top-right-radius: 10rpx;
+			border-bottom-left-radius: 10rpx;
+			border-bottom-right-radius: 10rpx;
+			}
+			.column_content{
+				color: #4a4a4a;
+				margin-left: 10rpx;
+				// font-weight: bold;
+			}
+		}
 
 		.centerInfo {
 			// 横排显示
 			display: flex;
-			flex-wrap: wrap; 
-    		justify-content: flex-start;
+			flex-wrap: wrap;
+			justify-content: flex-start;
 			background-color: #fff;
 			border-radius: 30rpx;
-			padding: 20rpx 10rpx 40rpx;
+			padding: 20rpx 10rpx 35rpx;
 			margin: 10rpx 50rpx;
 
 			.myItem {
 				// 5个区域 每个占25%
 				text-align: center;
-				margin: 0 20rpx;
+				width: 25%;
 
 				.myIcon {
 					width: 100rpx;
@@ -159,13 +212,15 @@
 					line-height: 100rpx;
 					// border-radius: 15rpx;
 					// // 图片居中
-					margin: 10rpx auto;
+					margin: 20rpx auto;
 					border-bottom: #8a8a8a;
 					// 修改图标颜色大小
 					background-image: linear-gradient(45deg, #ffffff, #ffffff);
 
 					.fix {
 						// color: #fff;
+						width: 100%;
+						height: 100%;
 						font-size: 50rpx;
 					}
 				}

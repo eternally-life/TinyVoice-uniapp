@@ -12,6 +12,17 @@
 			</view>
 
 		</view>
+		<view class="top">
+			<view class="title">
+				<u--image :showLoading="true" radius="20rpx" :src="logo" width="80rpx" height="80rpx">
+				</u--image>
+				<text class="name">{{noticeVData.noticeTitle}}</text>
+			</view>
+			<view class="content">
+				<rich-text :nodes="noticeVData.noticeContent"></rich-text>
+			</view>
+
+		</view>
 		<!-- 	<view class="bot">
 			<view class="title">
 				<u--image :showLoading="true" radius="20rpx" :src="logo" width="60rpx" height="60rpx"></u--image>
@@ -34,11 +45,13 @@
 		data() {
 			return {
 				logo: getApp().globalData.logo,
-				noticeData: {}
+				noticeData: {},
+				noticeVData: {}
 			};
 		},
 		onLoad() {
 			this.getNoticeByNoticeID()
+			this.getNoticeByNoticeIDV()
 		},
 		methods: {
 			async getNoticeByNoticeID() {
@@ -47,7 +60,13 @@
 				})
 				this.noticeData = res.data.data
 			},
+			async getNoticeByNoticeIDV() {
 
+				const resV = await systemParamsNotenoticeId_Get({
+					noticeId: 19
+				})
+				this.noticeVData = resV.data.data
+			},
 			toDetail(index) {
 				console.log(index);
 			}
@@ -93,54 +112,6 @@
 				color: #6c6c6c;
 				font-size: 30rpx;
 				text-indent: 2em;
-			}
-		}
-
-		.center {
-			padding: 30rpx 50rpx;
-			border-radius: 30rpx;
-			margin: 40rpx 30rpx;
-			box-shadow: 10rpx 10rpx 10px #ccc;
-			background-color: #ffffff;
-			font-size: 28rpx;
-
-			.join {
-				display: flex;
-				padding-bottom: 20rpx;
-				border-bottom: 2rpx solid #ccc;
-				margin-bottom: 10rpx;
-				justify-content: space-between;
-
-				.left {
-					display: flex;
-
-					.joinInfo {
-						padding-left: 20rpx;
-						line-height: 40rpx;
-					}
-				}
-
-				.btn {
-					padding-top: 10rpx;
-
-					.u-tag {
-						height: 50rpx;
-						padding: 0 20rpx;
-
-						.u-tag__text {
-							font-size: 28rpx;
-						}
-					}
-				}
-			}
-
-			.other {
-				display: flex;
-				align-items: center;
-
-				.otherInfo {
-					padding-left: 20rpx;
-				}
 			}
 		}
 

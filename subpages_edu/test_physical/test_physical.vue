@@ -1,116 +1,190 @@
 <!-- 体测计算 -->
 <template>
 	<view>
-		<u-toast ref="uToast"></u-toast>
-		<u-modal :show="show" title="单 项 得 分" @confirm="showModleChange()">
-			<view class="slot-content"><rich-text :nodes="content"></rich-text></view>
+		<u-notify ref="uNotify" message="Hi uView"></u-notify>
+		<u-modal :show="show" title="单 项 得 分 详 情" @confirm="show = false">
+			<u-parse :content="content"></u-parse>
 		</u-modal>
 		<!-- 顶部成绩区块 -->
 		<view class="result_container">
 			<view class="box">
 				<view class="tit">成绩</view>
-				<view class="result">{{ score_all }}{{ extraPoints }}</view>
+				<view class="result">
+					<u-count-to :startVal="baseScore" :endVal="score_all"></u-count-to>
+					<text v-show="extraPoints">+</text>
+					<u-count-to :startVal="baseExtraScore" :endVal="extraPoints" v-if="extraPoints"></u-count-to>
+				</view>
 			</view>
 			<view class="box">
 				<view class="tit">BMI</view>
-				<view class="result">{{ BMI_result }}</view>
+				<view class="result">
+					<u-count-to :startVal="baseBMI" :endVal="BMI_result" :decimals="2"></u-count-to>
+				</view>
 			</view>
 		</view>
 		<!-- 中间表单域 -->
-		<!-- 注意  不遍历 是因为存在特殊输入框，切遍历后  存在输入异常 -->
-		<view class="from_container">
+		<view class="from">
 			<view class="input_list" style="display: block !important;">
-				<u-subsection :list="gradeList" :current="grade" @change="sectionChange" activeColor="#60c5ba" mode="subsection"></u-subsection>
+				<u-subsection
+					:list="gradeList"
+					:current="grade"
+					@change="sectionChange"
+					activeColor="#60c5ba"
+					mode="subsection"
+				></u-subsection>
 			</view>
-			<view class="input_list" @click="gender = !gender" hover-class="hoverStyle" hover-start-time="100">
-				<view class="tit">性别</view>
-				<view class="input_container">{{ getStr_Gender }} 生</view>
-			</view>
-			<view class="input_list">
-				<view class="tit">50米</view>
-				<view class="input_container">
-					<view class="run_input">
-						<view class="input_control">
-							<u-input @blur="lostFocus()" type="digit" inputAlign="center" border="bottom" v-model="val_obj.val_50" placeholder="0"></u-input>
+			<u-form labelPosition="left" :labelWidth="90">
+				<u-form-item label="性别">
+					<view class="inputStyle" @click="genderChange">
+						<u-input
+							:placeholder="getStr_Gender + ' 生 '"
+							placeholderStyle="color:#000"
+							inputAlign="center"
+							disabled
+						></u-input>
+					</view>
+				</u-form-item>
+				<u-form-item label="50米">
+					<view class="inputStyle" :class="focusInput == 'val_50' ? 'focusInput' : ''">
+						<u-input
+							type="digit"
+							inputAlign="right"
+							:suffixIconStyle="focusInput == 'val_50' ? { color: '#fff' } : ''"
+							v-model="val_obj.val_50"
+							@focus="focus({ value: val_obj.val_50, target: 'val_50' })"
+							@blur="blur"
+							placeholder="0"
+						>
+							<u-text text="秒" slot="suffix" margin="0 3px 0 3px"></u-text>
+						</u-input>
+					</view>
+				</u-form-item>
+				<u-form-item :label="getStr_diffProject">
+					<view class="inputStyle" :class="focusInput == 'diff_ProjectValue' ? 'focusInput' : ''">
+						<u-input
+							inputAlign="right"
+							type="number"
+							v-model="val_obj.diff_ProjectValue"
+							@focus="focus({ value: val_obj.diff_ProjectValue, target: 'diff_ProjectValue' })"
+							@blur="blur"
+							placeholder="0"
+						>
+							<u-text text="个" slot="suffix" margin="0 3px 0 3px"></u-text>
+						</u-input>
+					</view>
+				</u-form-item>
+				<u-form-item :label="getStr_longRun + '米'">
+					<view class="inputStyle doubInput">
+						<view :class="focusInput == 'm_8h_1k' ? 'focusInput' : ''">
+							<u-input
+								inputAlign="right"
+								type="number"
+								v-model="val_obj.m_8h_1k"
+								@focus="focus({ value: val_obj.m_8h_1k, target: 'm_8h_1k' })"
+								@blur="blur"
+								placeholder="0"
+							>
+								<u-text text="分" slot="suffix" margin="0 3px 0 3px"></u-text>
+							</u-input>
 						</view>
-						秒
-					</view>
-				</view>
-			</view>
-			<view class="input_list">
-				<view class="tit">{{ getStr_diffProject }}</view>
-				<view class="input_container">
-					<view class="nomal_input">
-						<u-input @blur="lostFocus()" type="number" inputAlign="right" border="bottom" v-model="val_obj.diff_ProjectValue" placeholder="0"></u-input>
-					</view>
-					个
-				</view>
-			</view>
-			<view class="input_list">
-				<view class="tit">{{ getStr_longRun }}米</view>
-				<view class="input_container">
-					<view class="run_input">
-						<view class="input_control">
-							<u-input @blur="lostFocus()" type="number" inputAlign="center" border="bottom" v-model="val_obj.m_8h_1k" placeholder="0"></u-input>
+						<view :class="focusInput == 's_8h_1k' ? 'focusInput' : ''">
+							<u-input
+								inputAlign="right"
+								type="number"
+								v-model="val_obj.s_8h_1k"
+								@focus="focus({ value: val_obj.s_8h_1k, target: 's_8h_1k' })"
+								@blur="blur"
+								placeholder="0"
+							>
+								<u-text text="秒" slot="suffix" margin="0 3px 0 3px"></u-text>
+							</u-input>
 						</view>
-						分
-						<view class="input_control">
-							<u-input @blur="lostFocus()" type="number" inputAlign="center" border="bottom" v-model="val_obj.s_8h_1k" placeholder="0"></u-input>
-						</view>
-						秒
 					</view>
-				</view>
-			</view>
-			<view class="input_list">
-				<view class="tit">身高</view>
-				<view class="input_container">
-					<view class="nomal_input">
-						<u-input @blur="lostFocus()" type="digit" inputAlign="right" border="bottom" v-model="val_obj.height" placeholder="0"></u-input>
+				</u-form-item>
+				<u-form-item label="身高">
+					<view class="inputStyle" :class="focusInput == 'height' ? 'focusInput' : ''">
+						<u-input
+							inputAlign="right"
+							type="digit"
+							v-model="val_obj.height"
+							@focus="focus({ value: val_obj.height, target: 'height' })"
+							@blur="blur"
+							placeholder="0"
+						>
+							<u-text :text="getStr_height" slot="suffix" margin="0 3px 0 3px"></u-text>
+						</u-input>
 					</view>
-					{{ getStr_height }}
-				</view>
-			</view>
-			<view class="input_list">
-				<view class="tit">体重</view>
-				<view class="input_container">
-					<view class="nomal_input">
-						<u-input @blur="lostFocus()" type="digit" inputAlign="right" border="bottom" v-model="val_obj.weight" placeholder="0"></u-input>
+				</u-form-item>
+				<u-form-item label="体重">
+					<view class="inputStyle" :class="focusInput == 'weight' ? 'focusInput' : ''">
+						<u-input
+							inputAlign="right"
+							v-model="val_obj.weight"
+							type="digit"
+							@focus="focus({ value: val_obj.weight, target: 'weight' })"
+							@blur="blur"
+							placeholder="0"
+						>
+							<u-text text="千克" slot="suffix" margin="0 3px 0 3px"></u-text>
+						</u-input>
 					</view>
-					千克
-				</view>
-			</view>
-			<view class="input_list">
-				<view class="tit">肺活量</view>
-				<view class="input_container">
-					<view class="nomal_input">
-						<u-input @blur="lostFocus()" type="digit" inputAlign="right" border="bottom" v-model="val_obj.vitalCapacity" placeholder="0"></u-input>
+				</u-form-item>
+				<u-form-item label="肺活量">
+					<view class="inputStyle" :class="focusInput == 'vitalCapacity' ? 'focusInput' : ''">
+						<u-input
+							inputAlign="right"
+							type="number"
+							v-model="val_obj.vitalCapacity"
+							@focus="focus({ value: val_obj.vitalCapacity, target: 'vitalCapacity' })"
+							@blur="blur"
+							placeholder="0"
+						>
+							<u-text text="毫升" slot="suffix" margin="0 3px 0 3px"></u-text>
+						</u-input>
 					</view>
-					毫升
-				</view>
-			</view>
-			<view class="input_list">
-				<view class="tit">立定跳远</view>
-				<view class="input_container">
-					<view class="nomal_input">
-						<u-input @blur="lostFocus()" type="digit" inputAlign="right" border="bottom" v-model="val_obj.longJump" placeholder="0"></u-input>
+				</u-form-item>
+				<u-form-item label="立定跳远">
+					<view class="inputStyle" :class="focusInput == 'longJump' ? 'focusInput' : ''">
+						<u-input
+							inputAlign="right"
+							type="digit"
+							v-model="val_obj.longJump"
+							@focus="focus({ value: val_obj.longJump, target: 'longJump' })"
+							@blur="blur"
+							placeholder="0"
+						>
+							<u-text text="厘米" slot="suffix" margin="0 3px 0 3px"></u-text>
+						</u-input>
 					</view>
-					厘米
-				</view>
-			</view>
-			<view class="input_list">
-				<view class="tit">坐位体前屈</view>
-				<view class="input_container">
-					<view class="nomal_input">
-						<u-input @blur="lostFocus()" type="digit" inputAlign="right" border="bottom" v-model="val_obj.sittingBodyFlex" placeholder="0"></u-input>
+				</u-form-item>
+				<u-form-item label="坐位体前屈">
+					<view class="inputStyle" :class="focusInput == 'sittingBodyFlex' ? 'focusInput' : ''">
+						<u-input
+							type="digit"
+							inputAlign="right"
+							v-model="val_obj.sittingBodyFlex"
+							@focus="focus({ value: val_obj.sittingBodyFlex, target: 'sittingBodyFlex' })"
+							@blur="blur"
+							placeholder="0"
+						>
+							<u-text text="厘米" slot="suffix" margin="0 3px 0 3px"></u-text>
+						</u-input>
 					</view>
-					厘米
-				</view>
-			</view>
+				</u-form-item>
+			</u-form>
 		</view>
+
 		<!-- 底部按钮区 -->
 		<view class="btn_view">
-			<view class="btn_list"><u-button type="error" text="清空所有" shape="circle" @click="restart()"></u-button></view>
-			<view class="btn_list"><u-button type="primary" text="查看分数详情" shape="circle" @click="showModleChange()"></u-button></view>
+			<view class="btn_list">
+				<u-button type="error" text="清空所有" shape="circle" @click="restart()"></u-button>
+			</view>
+			<view class="btn_list">
+				<u-button type="primary" text="查看分数详情" shape="circle" @click="showModleChange"></u-button>
+			</view>
+			<view class="btn_list">
+				<u-button type="warning" text="分享成绩" shape="circle" open-type="share"></u-button>
+			</view>
 		</view>
 	</view>
 </template>
@@ -125,6 +199,11 @@ export default {
 			gender: true,
 			grade: 0,
 			gradeList: ['大 一 / 大 二', '大 三 / 大 四'],
+			focusInput: '', //聚焦的input
+			oldValue: '', //旧的值
+			baseBMI: 0, // BMI 基础、起始计算分数
+			baseScore: 0, //总分 基础、起始计算分数
+			baseExtraScore: 0, //加分 基础、起始计算分数
 			val_obj: {
 				weight: '', //体重
 				height: '', //身高
@@ -139,9 +218,26 @@ export default {
 		};
 	},
 	methods: {
+		/* 聚焦 设置临时输入值 */
+		focus({ value, target }) {
+			this.focusInput = target;
+			this.oldValue = value;
+		},
+		/* 输入框失去焦点	 比较差异、存储  */
+		blur(value) {
+			this.focusInput = '';
+			if (this.oldValue == value) return;
+			this.saveStorageInput();
+		},
+
 		/* 组件方法 切换年级*/
 		sectionChange(index) {
 			this.grade = index;
+			this.saveStorageInput();
+		},
+		/* 点击修改性别 */
+		genderChange() {
+			this.gender = !this.gender;
 			this.saveStorageInput();
 		},
 
@@ -150,18 +246,13 @@ export default {
 			this.show = !this.show;
 		},
 
-		/* 输入框失去焦点时 存储*/
-		lostFocus() {
-			this.saveStorageInput();
-		},
-
-		/* 存储当前输入 */
+		/* 存储当前输入  并提示*/
 		saveStorageInput() {
 			try {
 				uni.setStorageSync(this.key, this.getPageInput());
-				this.$refs.uToast.show({ type: 'success', message: '成绩存储成功', duration: 1000 });
+				this.$refs.uNotify.show({ type: 'success', message: '成绩数据存储成功', duration: 1000 });
 			} catch (e) {
-				this.$refs.uToast.show({ type: 'error', message: '数据存储失败', duration: 1000 });
+				this.$refs.uNotify.show({ type: 'error', message: '成绩数据存储成功', duration: 1000 });
 			}
 		},
 
@@ -170,10 +261,8 @@ export default {
 			try {
 				const value = uni.getStorageSync(this.key);
 				if (value) {
-					this.$refs.uToast.show({ type: 'success', message: '记录读取成功', duration: 1000, position: 'bottom' });
 					this.setPageInput(value);
-				} else {
-					this.$refs.uToast.show({ type: 'error', message: '没有输入记录', duration: 1000, position: 'bottom' });
+					this.$refs.uNotify.show({ type: 'primary', message: '记录读取成功', duration: 3000 });
 				}
 			} catch (e) {
 				// error
@@ -208,8 +297,10 @@ export default {
 				m_8h_1k: '', //分钟-800/100米
 				s_8h_1k: '' //秒-800/1000米
 			};
+			this.gender = true;
+			this.grade = 0;
 			uni.removeStorageSync(this.key);
-			this.$refs.uToast.show({ type: 'success', message: '重置成功', duration: 1000, position: 'bottom' });
+			this.$refs.uNotify.show({ type: 'primary', message: '重置成功', duration: 2000 });
 		}
 	},
 	onReady() {
@@ -246,26 +337,33 @@ export default {
 
 		/* 模态框数据 */
 		content() {
-			return `
-				(15%) BMI			：${this.score_BMI} 分<br>
-				(20%) 50米		：${this.score_shortRun} 分<br>
-				(20%) ${this.getStr_longRun}米	：${this.score_longRun} 分<br>
-				(15%) 肺活量 		：${this.score_vitalCapacity} <br>
-				(10%) ${this.getStr_diffProject}	：${this.score_diff_ProjectValue} 分<br>
-				(10%) 立定跳远		：${this.score_longJump} 分<br>
-				(10%) 坐位体前屈	：${this.score_sittingBodyFlex} 分<br>
-				`;
+			return computeUtil.getRichText({
+				score_BMI: this.score_BMI,
+				score_shortRun: this.score_shortRun,
+				name_longRun: this.getStr_longRun,
+				score_longRun: this.score_longRun,
+				score_vitalCapacity: this.score_vitalCapacity,
+				name_diff_ProjectValue: this.getStr_diffProject,
+				score_diff_ProjectValue: this.score_diff_ProjectValue,
+				score_longJump: this.score_longJump,
+				score_sittingBodyFlex: this.score_sittingBodyFlex
+			});
 		},
 
 		/* 额外加分 */
 		extraPoints() {
-			let val_run = computeUtil.getExtraPoints_run(this.gender, this.grade, this.val_obj.m_8h_1k, this.val_obj.s_8h_1k),
+			let val_run = computeUtil.getExtraPoints_run(
+					this.gender,
+					this.grade,
+					this.val_obj.m_8h_1k,
+					this.val_obj.s_8h_1k
+				),
 				val_power = computeUtil.getExtraPoints_power(this.gender, this.grade, this.val_obj.diff_ProjectValue);
 			let val = val_run + val_power;
 			if (val != 0 && typeof val == 'number') {
-				return ' + ' + val;
+				return val;
 			} else {
-				return '';
+				return 0;
 			}
 		},
 
@@ -317,6 +415,17 @@ export default {
 		score_diff_ProjectValue() {
 			return computeUtil.getScore_diff_ProjectValue(this.gender, this.grade, this.val_obj.diff_ProjectValue);
 		}
+	},
+	watch: {
+		score_all(newValue, oldValue) {
+			this.baseScore = oldValue;
+		},
+		BMI_result(newValue, oldValue) {
+			this.baseBMI = oldValue;
+		},
+		extraPoints(newValue, oldValue) {
+			this.baseExtraScore = oldValue;
+		}
 	}
 };
 </script>
@@ -350,60 +459,39 @@ export default {
 	}
 }
 
-$list_pad_tb: 4px;
-@mixin list_box {
-	width: 75vw;
-	margin: 10px auto;
-	padding-top: $list_pad_tb;
-	padding-bottom: $list_pad_tb;
-}
-@mixin flex_box_right {
-	@include flex_box_father;
-	justify-content: flex-end;
-}
-@mixin input_bg {
-	background-color: rgba(223, 248, 249, 0.3);
-}
-.from_container {
-	width: 100%;
+.from {
+	padding: 2vh 10vw;
+	padding-bottom: 10vh;
 	background-color: #ffffff;
-	padding-top: $list_pad_tb;
-	padding-bottom: $list_pad_tb;
-	.input_list {
-		@include list_box;
-		@include flex_box_father;
-		justify-content: space-between;
-		border-bottom: 1rpx solid #3333332e;
-		.tit {
-			color: #b3b3b3;
-		}
-		.input_container {
-			@include flex_box_right;
-			// 普通输入框
-			.nomal_input {
-				width: 100px;
-				@include input_bg;
-			}
-			//跑步输入框样式
-			.run_input {
-				@include flex_box_right;
-				// 输入框样式控制
-				.input_control {
-					max-width: 60px;
-					@include input_bg;
-				}
-			}
-		}
+
+	.inputStyle {
+		width: 100%;
 	}
-	.hoverStyle {
-		background-color: #f8f8f8;
+	.focusInput {
+		background-color: #60c5ba38;
+	}
+	.doubInput {
+		display: flex;
+	}
+
+	/deep/ .u-form-item {
+		// padding: 0 0 30rpx;
+		.u-form-item__body {
+			padding: 10px 0 0 0;
+		}
 	}
 }
-$btn_mar_tb: 20px;
+
 .btn_view {
+	width: 100%;
+	padding: 10px;
+	position: fixed;
+	bottom: 0;
+	z-index: 10;
 	@include flex_box_father;
 	justify-content: space-around;
-	margin: $btn_mar_tb;
+	background-color: #ffffff;
+	border-top: 1px solid #eaeaea;
 	.btn_list {
 	}
 }

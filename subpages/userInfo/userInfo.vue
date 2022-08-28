@@ -54,8 +54,8 @@ export default {
 			inputValue: '', //输入框值
 			inpuType: '', //输入框修改类型
 			cellList: [
-				{
-					title: '昵称',
+						{
+			title: '昵称',
 					name: 'nickName'
 				},
 				{
@@ -79,14 +79,17 @@ export default {
 				// 	name: 'add'
 				// }
 			],
-			sexColumns: [['大哥哥', '小姐姐', '保密']]
+			sexColumns: [['小哥哥', '小姐姐', '保密']]
 		};
 	},
 	methods: {
 		/* 输入框按钮点击事件 */
 		checkInput() {
 			if (this.inpuType == 'email' && this.inputValue.indexOf('@') == -1) {
-				uni.showToast({ icon: 'none', title: '邮箱地址不合法' });
+				uni.showToast({
+					icon: 'none',
+					title: '邮箱地址不合法'
+				});
 				return;
 			}
 			let para = {};
@@ -111,7 +114,9 @@ export default {
 			})
 				//上传图片
 				.then(pathResult => {
-					uni.showLoading({ title: '新头像上传中' });
+					uni.showLoading({
+						title: '新头像上传中'
+					});
 					return new Promise(async (resolve, reject) => {
 						try {
 							const newUrl = await this.uploadFilePromise(pathResult);
@@ -141,7 +146,9 @@ export default {
 					});
 				})
 				.then(() => {
-					let para = { avatar: this.tempAvatar };
+					let para = {
+						avatar: this.tempAvatar
+					};
 					this.saveData(para);
 				})
 				.catch(err => {
@@ -155,7 +162,9 @@ export default {
 				return;
 			}
 			if (e.name == 'phone') {
-				uni.navigateTo({ url: '/subpages/phoneChange/phoneChange' });
+				uni.navigateTo({
+					url: '/subpages/phoneChange/phoneChange'
+				});
 				return;
 			}
 			this.inputValue = this.userInfo[e.name];
@@ -164,9 +173,11 @@ export default {
 		},
 		/* 确认性别 */
 		sexConfirm(e) {
-			console.log();
+			console.log('选中', e);
 			const sex = e.indexs.toString();
-			this.saveData({ sex });
+			this.saveData({
+				sex
+			});
 		},
 		saveData(para) {
 			if (!para) return;
@@ -210,7 +221,7 @@ export default {
 		genderString(sex) {
 			switch (sex) {
 				case '0':
-					return '大哥哥';
+					return '小哥哥';
 				case '1':
 					return '小姐姐';
 				default:
@@ -239,10 +250,13 @@ export default {
 	display: flex;
 	justify-content: center;
 }
+
 $mar: 2vh;
+
 .popView {
 	width: 80%;
 	margin: $mar auto;
+
 	.pop_item {
 		margin-bottom: $mar;
 	}

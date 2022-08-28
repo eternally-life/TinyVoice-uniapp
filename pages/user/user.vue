@@ -15,7 +15,7 @@
 				<view class="right" @click="toLogin">
 					<view class="user">
 						<text class="name">{{ wxUserInfo.nickName || '点击登录' }}</text>
-						<text class="desc">{{ wxUserInfo.isAuth ? '已校园认证' : '未校园认证' }}</text>
+						<text class="desc">{{ wxUserInfo.isAuth ? '' : '未校园认证' }}</text>
 					</view>
 				</view>
 				<view class="sign">
@@ -30,7 +30,7 @@
 					:key="index"
 					@click="navOtherItemClick(item.path, index)"
 				>
-					<view class="item_number">{{ item.num }}</view>
+					<view class="item_number"><u-count-to :startVal="0" :endVal="item.num"></u-count-to></view>
 					<view class="item_text">{{ item.text }}</view>
 				</view>
 			</view>
@@ -176,15 +176,15 @@ export default {
 		},
 
 		toLogin() {
-			if (this.wxUserInfo) {
-				uni.navigateTo({
-					url: '/subpages/userInfo/userInfo'
-				});
-				return;
+			try {
+				if (Object.keys(this.wxUserInfo).length > 0) {
+					uni.navigateTo({ url: '/subpages/userInfo/userInfo' });
+					return;
+				}
+				uni.navigateTo({ url: '/subpages/login/login' });
+			} catch (e) {
+				uni.navigateTo({ url: '/subpages/login/login' });
 			}
-			uni.navigateTo({
-				url: '/subpages/login/login'
-			});
 		},
 
 		// 获通知列表

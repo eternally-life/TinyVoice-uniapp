@@ -19,12 +19,13 @@
 						<view class="" v-if="disabled"
 							style="font-size: 24rpx;width: 140rpx;padding: 20rpx 0;color: #60c5ba;"
 							@tap="GetVerificationCode(phonenumber)">获取验证码</view>
-						<view class="" v-else style="font-size: 24rpx;width: 140rpx;padding: 20rpx 0;">重新获取{{timer}}s
+						<view class="" v-else style="font-size: 24rpx;width: 140rpx;padding: 20rpx 0;color: #aaaaaa;">
+							重新获取{{timer}}s
 						</view>
 					</view>
 				</view>
-				<view class="fogetPassword" @click="showMsg = true">
-					忘记密码？
+				<view class="fogetPassword" @click="showMsg = true" style="padding: 10rpx 0;">
+					<!-- 忘记密码？ -->
 				</view>
 				<view class="loginBtn">
 					<!-- <text class="btnValue">登 录</text> -->
@@ -91,7 +92,8 @@
 							<view class="" v-if="disabled"
 								style="font-size: 24rpx;width: 140rpx;padding: 20rpx 0;color: #60c5ba;"
 								@tap="GetVerificationCode(bindPhoneNumber)">获取验证码</view>
-							<view class="" v-else style="font-size: 24rpx;width: 140rpx;padding: 20rpx 0;">
+							<view class="" v-else
+								style="font-size: 24rpx;width: 140rpx;padding: 20rpx 0;color: #aaaaaa;">
 								重新获取{{timer}}s
 							</view>
 						</view>
@@ -171,29 +173,26 @@
 					}
 				})
 			},
-			judgesLogin() { // 评委登录
-				authLoginregisterLogin_Post({
+			async judgesLogin() { // 评委登录
+				const reslut = await authLoginregisterLogin_Post({
 					password: 'admin123',
 					username: 'admin'
-				}).then(reslut => {
-					if (reslut.data.code === 200) {
-						this.setNotic_Pamres()
-						// 存储全局 token
-						getApp().globalData.token = reslut.data.data.access_token
-						uni.setStorageSync("token", reslut.data.data.access_token)
-						uni.reLaunch({
-							url: '/pages/user/user',
-							success: res => {
-								this.$ShowToastNone('登录成功')
-							}
-						})
-						return
-					} else {
-						return this.selfMsg(reslut.data.msg, 'warning')
-					}
-				}).catch(err => {
-					console.log(err);
 				})
+				if (reslut.data.code === 200) {
+					this.setNotic_Pamres()
+					// 存储全局 token
+					getApp().globalData.token = reslut.data.data.access_token
+					uni.setStorageSync("token", reslut.data.data.access_token)
+					uni.reLaunch({
+						url: '/pages/user/user',
+						success: res => {
+							this.$ShowToastNone('登录成功')
+						}
+					})
+					return
+				} else {
+					return this.selfMsg(reslut.data.msg, 'warning')
+				}
 			},
 			// 跳转到注册页面
 			toRegist() {
@@ -225,8 +224,8 @@
 				const res = await authLoginregisterVerificationCode_Get({
 					phonenumber: phone
 				})
-				this.selfMsg(res.data.data, 'success');
 				if (res.data.code === 200) {
+					this.selfMsg(res.data.data, 'success');
 					this.disabled = false
 					const authTimer = setInterval(() => {
 						this.timer--
@@ -236,6 +235,8 @@
 							clearInterval(authTimer)
 						}
 					}, 1000)
+				} else {
+					return this.selfMsg(res.data.data, 'warning');
 				}
 				console.log(res);
 
@@ -258,88 +259,85 @@
 				if (timer !== null) {
 					clearTimeout(timer)
 				}
-				timer = setTimeout(() => {
-					authLoginregisterVerificationCodeLogin_Post({
+				timer = setTimeout(async () => {
+					const res = await authLoginregisterVerificationCodeLogin_Post({
 						phonenumber: this.phonenumber,
 						verificationCode: this.verificationCode,
-					}).then(res => {
-						console.log(res);
-						if (res.data.code === 200) {
-							this.setNotic_Pamres()
-							getApp().globalData.token = res.data.data.access_token
-							uni.setStorageSync("token", res.data.data.access_token)
-							// #ifdef MP-QQ
-							uni.login({
-								success: (resQQ) => {
-									authTokenauthBindQQ_Post({
-										password: this.password,
-										username: this.username,
-										qqCode: resQQ.code
-									}).then(reslut => {
-										if (reslut.data.code === 200) {
-											return this.$ShowToastNone('绑定成功，可使用快捷登录')
-										} else {
-											return this.$ShowToastNone('请先去微信小程序注册！')
-										}
-										uni.hideLoading()
-									})
-								},
-								fail: (erra) => {
-									console.log(erra, 'qq登录');
-								}
-							})
-							// #endif
-							uni.reLaunch({
-								url: '/pages/user/user',
-								success: res => {
-									// #ifdef MP-WEIXIN
-									this.$ShowToastNone('登录成功')
-									// #endif
-								}
-							})
-							return
-						} else {
-							uni.showModal({
-								title: '账号未注册',
-								confirmText: '去注册',
-								content: '账号密码来源于教务系统\r\n注册成功即可使用第三方快捷登录',
-								cancelText: '暂不注册',
-								confirmColor: '#0099ff',
-								cancelColor: '#000000',
-								success: (res) => {
-									if (res.confirm) {
-										uni.getUserProfile({
-											desc: '展示用户信息', // 声明获取用户个人信息后的用途，后续会展示在弹窗中，请谨慎填写
-											lang: 'zh_CN',
-											success: res => {
-												// uni.setStorageSync("wxuserInfo",res.userInfo)
-												var userInfo = JSON.stringify(res
-													.userInfo);
-												let loginData = {
-													password: this.password,
-													username: this.username,
-												}
-												uni.navigateTo({
-													url: '/subpages/regist/regist?userInfo=' +
-														userInfo +
-														'&loginData=' +
-														JSON.stringify(
-															loginData)
-												})
-											},
-											fail(err) {
-												console.log(err);
-											}
-										})
-									}
-								},
-							})
-							return
-						}
-						uni.hideLoading()
-					}).catch(err => {
-						console.log(err);
 					})
+					console.log(res);
+					if (res.data.code === 200) {
+						this.setNotic_Pamres()
+						getApp().globalData.token = res.data.data.access_token
+						uni.setStorageSync("token", res.data.data.access_token)
+						// #ifdef MP-QQ
+						uni.login({
+							success: async (resQQ) => {
+								const reslut = await authTokenauthBindQQ_Post({
+									password: this.password,
+									username: this.username,
+									qqCode: resQQ.code
+								})
+								if (reslut.data.code === 200) {
+									return this.$ShowToastNone('绑定成功，可使用快捷登录')
+								} else {
+									return this.$ShowToastNone('请先去微信小程序注册！')
+								}
+								uni.hideLoading()
+							},
+							fail: (erra) => {
+								console.log(erra, 'qq登录');
+							}
+						})
+						// #endif
+						uni.reLaunch({
+							url: '/pages/user/user',
+							success: res => {
+								// #ifdef MP-WEIXIN
+								this.$ShowToastNone('登录成功')
+								// #endif
+							}
+						})
+						return
+					} else {
+						uni.showModal({
+							title: '账号未注册',
+							confirmText: '去注册',
+							content: '账号密码来源于教务系统\r\n注册成功即可使用第三方快捷登录',
+							cancelText: '暂不注册',
+							confirmColor: '#0099ff',
+							cancelColor: '#000000',
+							success: (res) => {
+								if (res.confirm) {
+									uni.getUserProfile({
+										desc: '展示用户信息', // 声明获取用户个人信息后的用途，后续会展示在弹窗中，请谨慎填写
+										lang: 'zh_CN',
+										success: res => {
+											// uni.setStorageSync("wxuserInfo",res.userInfo)
+											var userInfo = JSON.stringify(res
+												.userInfo);
+											let loginData = {
+												password: this.password,
+												username: this.username,
+											}
+											uni.navigateTo({
+												url: '/subpages/regist/regist?userInfo=' +
+													userInfo +
+													'&loginData=' +
+													JSON.stringify(
+														loginData)
+											})
+										},
+										fail(err) {
+											console.log(err);
+										}
+									})
+								}
+							},
+						})
+						return
+					}
+					uni.hideLoading()
+
 				}, 300)
 			},
 			qqLogin() { // qq登录
@@ -352,31 +350,30 @@
 				}
 				timer = setTimeout(() => {
 					uni.login({
-						success: (res) => {
-							authTokenauthCommonLogin_Post({
+						success: async (res) => {
+							const reslut = await authTokenauthCommonLogin_Post({
 								loginType: 3,
 								qqCode: res.code
-							}).then(reslut => {
-								console.log(reslut);
-								if (reslut.data.code === 8081) {
-									return this.selfMsg('请先账号密码登录qq绑定', 'warning')
-								}
-								if (reslut.data.code === 200) {
-									this.setNotic_Pamres()
-									// 存储全局 token
-									getApp().globalData.token = reslut.data.data.access_token
-									uni.setStorageSync("token", reslut.data.data.access_token)
-									uni.reLaunch({
-										url: '/pages/user/user',
-										success: res => {
-											this.$ShowToastNone('QQ登录成功')
-										}
-									})
-									return
-								} else {
-									return this.selfMsg('账号不存在，请先注册', 'warning')
-								}
 							})
+							console.log(reslut);
+							if (reslut.data.code === 8081) {
+								return this.selfMsg('请先账号密码登录qq绑定', 'warning')
+							}
+							if (reslut.data.code === 200) {
+								this.setNotic_Pamres()
+								// 存储全局 token
+								getApp().globalData.token = reslut.data.data.access_token
+								uni.setStorageSync("token", reslut.data.data.access_token)
+								uni.reLaunch({
+									url: '/pages/user/user',
+									success: res => {
+										this.$ShowToastNone('QQ登录成功')
+									}
+								})
+								return
+							} else {
+								return this.selfMsg('账号不存在，请先注册', 'warning')
+							}
 							uni.hideLoading()
 						},
 						fail: (err) => {
@@ -398,29 +395,28 @@
 				}
 				timer = setTimeout(() => {
 					uni.login({
-						success: (res) => {
-							authLoginregisterWxLogin_Post({
+						success: async (res) => {
+							const reslut = await authLoginregisterWxLogin_Post({
 								wxCode: res.code
-							}).then(reslut => {
-								console.log(reslut);
-								if (reslut.data.code === 200) {
-									this.setNotic_Pamres()
-									// 存储全局 token
-									getApp().globalData.token = reslut.data.data.access_token
-									uni.setStorageSync("token", reslut.data.data.access_token)
-									uni.reLaunch({
-										url: '/pages/user/user',
-										success: res => {
-											this.$ShowToastNone('微信登录成功')
-										}
-									})
-									return
-								} else if (reslut.data.code === 5555) {
-									this.showBindPhone = true
-								} else {
-									return this.selfMsg(reslut.data.msg, 'warning')
-								}
 							})
+							console.log(reslut);
+							if (reslut.data.code === 200) {
+								this.setNotic_Pamres()
+								// 存储全局 token
+								getApp().globalData.token = reslut.data.data.access_token
+								uni.setStorageSync("token", reslut.data.data.access_token)
+								uni.reLaunch({
+									url: '/pages/user/user',
+									success: res => {
+										this.$ShowToastNone('微信登录成功')
+									}
+								})
+								return
+							} else if (reslut.data.code === 5555) {
+								this.showBindPhone = true
+							} else {
+								return this.selfMsg(reslut.data.msg, 'warning')
+							}
 							uni.hideLoading()
 						},
 						fail: (err) => {
