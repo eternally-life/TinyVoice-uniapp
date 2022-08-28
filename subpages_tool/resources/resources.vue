@@ -257,12 +257,12 @@
 		.wrap_background {
 			height: 500rpx;
 			width: 100%;
-			background-color: #3c9cff;
-			border-radius: 15rpx;
+			// background-color: #3c9cff;
+			// border-radius: 15rpx;
 
 			.bac_logo {
 				padding-left: 30rpx;
-				padding-top: 30rpx;
+				padding-top: 50rpx;
 				align-items: center;
 
 			}
