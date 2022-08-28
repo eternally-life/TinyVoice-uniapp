@@ -23,7 +23,8 @@
 		{
 			"path": "pages/edu/edu",
 			"style": {
-				"navigationBarTitleText": "教务相关"
+				"navigationBarTitleText": "教务相关",
+				"enablePullDownRefresh": true
 			}
 		},
 		{
