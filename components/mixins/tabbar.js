@@ -29,7 +29,7 @@ export const tabbar_mixins = {
 		},
 		// 输出结构
 		getNetData(name) {
-			if (name == 0) {
+			if (name == 0 && this.__tabbar_list.length == 5) {
 				const aaa = this.__tabbar_list.map(val => ({
 					p: val.pagePath,
 					t: val.text,
