@@ -210,7 +210,7 @@ export default {
 	onShow() {
 		// 当未认证时跳转认证
 		const value = getApp().globalData.eduInfo;
-		if (Object.keys(value) == '{}' || value == null || value == undefined) {
+		if (Object.keys(value).length == 0 || value == null || value == undefined) {
 			uni.reLaunch({
 				url: '/subpages/campusAuthentication/campusAuthentication'
 			});
