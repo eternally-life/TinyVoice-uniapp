@@ -3,7 +3,7 @@
 		<view class="avatar">
 			<u-avatar :src="showAvatarUrl" size="90" @click="selectImg"></u-avatar>
 		</view>
-		<view v-if="audit=='false'" class="">
+		<view  class="">
 			<u-cell-group>
 				<u-cell v-for="(item, index) in cellList" :key="index" :title="item.title" :value="getValue(item.name)"
 					:name="item.name" size="large" :isLink="true" :clickable="true" arrow-direction="right"
