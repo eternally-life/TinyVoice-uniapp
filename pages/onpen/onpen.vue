@@ -32,11 +32,17 @@ export default {
 		}
 	},
 	onLoad() {
+		// #ifdef MP-QQ
+		const configKey = 'sys.tabbar.qq';
+		// #endif
+
+		// #ifdef MP-WEIXIN
+		const configKey = 'sys.tabbar.wx';
+		// #endif
+
 		uni.hideTabBar();
 		const basePath = '/static/tabBar/';
-		systemParamsConfigKeyconfigKey_Get({
-			configKey: 'sys.tabbar'
-		})
+		systemParamsConfigKeyconfigKey_Get({ configKey })
 			.then(res => {
 				if (res.data.code == 200 && res.data.msg != '') {
 					try {

@@ -213,3 +213,8 @@ export default {
     si <--> selectedIconPath。
 
 5. **`断网`**状态下，将会默认显示所有tabbar数据，且点击第一个tabbar 控制台会输出完整的格式化数据。此数据用于写入接口实现动态tabbar
+
+```javascript
+[{"p":"pages/shop/shop","t":"商城","i":"unchecked_shopping.png","si":"select_shopping.png"},{"p":"pages/community/community","t":"微音","i":"unchecked_tinyVoice.png","si":"select_tinyVoice.png"},{"p":"pages/appliance/appliance","t":"服务","i":"unchecked_tool.png","si":"select_tool.png"},{"p":"pages/user/user","t":"我的","i":"unchecked_my.png","si":"select_my.png"}]
+```
+
