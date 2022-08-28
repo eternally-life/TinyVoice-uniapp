@@ -22,7 +22,7 @@
 								</view>
 							</view>
 							<view class="orderStatus">
-								{{item.status == '0' ? '已退款' : item.status == '1' ? '待付款' : item.status == '2' ? '已付款' : item.status == '3' ? '出库' : item.status == '4' ? '订单完成' : item.status == '5' ? '退款关闭' :  item.status == '6' ? '售后中' :'售后完成' }}
+								{{item.status == '0' ? '已退款' : item.status == '1' ? '待付款' : item.status == '2' ? '已付款' : item.status == '3' ? '出库' : item.status == '4' ? '订单完成' : item.status == '5' ? '退款成功' :  item.status == '6' ? '售后中' :'售后完成' }}
 							</view>
 						</view>
 						<view class="mid" v-for="(i,idx) in item.orderDataList" :key="idx"
@@ -47,7 +47,7 @@
 								<u-collapse-item title="其他信息" name="Docs guide" align="right">
 									<view class="bottom">
 										<view class="left">
-											<view class="remak">备注：{{item.remark == '' ? '用户无备注' : item.remark}}
+											<view class="remak">备注：{{item.remark == null ? '用户无备注' : item.remark}}
 											</view>
 											<view class="time">
 												下单时间：{{$u.timeFormat(item.createTime, 'mm月dd日-hh点MM分')}}</view>
@@ -399,7 +399,7 @@
 							display: flex;
 							flex-direction: column;
 							align-items: center;
-							width: 70rpx;
+							width: 100rpx;
 
 							.price {
 								color: #707070;
