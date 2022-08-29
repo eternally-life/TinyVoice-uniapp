@@ -175,19 +175,19 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-$com_w: 70vw;
+$com_w: 85vw;
 .ufrom {
 	width: $com_w;
-	margin: 10vh auto;
+	margin: 12vh 5vh 8vh;
 	.btn {
-		margin-top: 5vh;
+		margin-top: 10vh;
 		width: 100%;
 	}
 }
 .notic {
 	width: $com_w;
 	padding: 10px;
-	margin: 10rpx auto;
+	margin: 0rpx auto;
 	border-radius: 10px;
 	background-color: #fff;
 	 box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);

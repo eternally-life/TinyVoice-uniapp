@@ -44,12 +44,12 @@
 					</view>
 					<view class="viewComment_btn">
 						<u-button shape="circle"
-							color="linear-gradient(to right,rgb(12,235,235), rgb(32,227,178), rgb(41,255,198))"
+							color="linear-gradient(to right,rgb(118,204,232), rgb(118,204,232),rgb(118,204,232))"
 							@click="enterResourcesUrl(index)">评论</u-button>
 					</view>
 					<view class="download_btn">
 						<u-button shape="circle"
-							color="linear-gradient(to right,rgb(12,235,235), rgb(32,227,178), rgb(41,255,198))"
+							color="linear-gradient(to right,rgb(56,185,197), rgb(56,185,197), rgb(56,185,197))"
 							@click="filedownload(item.resourceId,item.url)">下载</u-button>
 					</view>
 				</view>
@@ -62,7 +62,7 @@
 		</view>
 		<!-- //	资源上传跳转 -->
 		<view class="uploading" @click="uploading">
-			<u-button icon="plus" size="large" shape="circle" iconColor="#31b6c3"></u-button>
+			上传资源赚音符<u-button icon="plus" size="large" shape="circle" iconColor="#31b6c3"></u-button>
 		</view>
 	</view>
 </template>
@@ -397,9 +397,8 @@
 		}
 
 		.uploading {
-			position: fixed;
-			bottom: 80rpx;
-			right: 80rpx;
+			
+			
 			width: 100rpx;
 			z-index: 2;
 		}

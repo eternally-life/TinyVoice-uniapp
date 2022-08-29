@@ -38,6 +38,7 @@
 			},
 		},
 		methods: {
+			//	校验后发送请求
 			pushMessage() {
 				if ( this.toName == "" ) {
 					uni.showModal({

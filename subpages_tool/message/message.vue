@@ -6,7 +6,7 @@
 					vale="userName" v-model="userName"></u--input>
 			</view>
 			<view class="button">
-				<u-button @click="getMessageContent(userName)">查看留言</u-button>
+				<u-button text="查看留言" color="#31b6c3" @click="getMessageContent(userName)"></u-button>
 			</view>
 		</view>
 
@@ -39,10 +39,7 @@
 			......
 		</view>
 		<view class="publish_btn">
-			<view class="publish_content">
-				<view class="iconfont icon-liuyan" fontSize="24px" @click="toMessaging"></view>
-				留言
-			</view>
+			<view class="iconfont icon-liuyan" fontSize="16px" @click="toMessaging"></view>
 		</view>
 	</view>
 </template>
@@ -60,14 +57,17 @@
 			};
 		},
 		methods: {
+			//	跳转“写留言”
 			toMessaging() {
 				uni.navigateTo({
 					url: "/subpages_tool/messaging/messaging"
 				})
 			},
+			//	监听输入，正在输入时留言内容取消渲染
 			inputChange() {
 				this.isShow = false
 			},
+			//	获取留言列表信息
 			getMessageContent() {
 				communityTinyservenoteByName_Get({
 					userName: this.userName
@@ -121,8 +121,6 @@
 			background-color: #fff;
 			padding: 40rpx;
 			margin: 20rpx auto;
-			border-radius: 30rpx;
-			box-shadow: 0rpx 0rpx 10px #ccc;
 			backdrop-filter: blur(10px);
 
 			.input {
@@ -136,9 +134,6 @@
 				margin: 30rpx auto;
 				width: 80%;
 
-				u-button {
-					background-color: #82ffcf;
-				}
 			}
 		}
 
@@ -150,7 +145,7 @@
 			.show_icon {
 				height: 28px;
 				width: 28px;
-				margin: 5rpx auto;
+				margin:  30rpx auto -30rpx;
 			}
 
 			.feedback_btn {
@@ -166,7 +161,7 @@
 				// display: flex;
 				// flex-direction: column;
 				// margin: 60rpx 0rpx;
-				
+
 				.item_list_box {
 					opacity: 0.9;
 					position: relative;
@@ -208,18 +203,17 @@
 			bottom: 100rpx;
 			right: 60rpx;
 			width: 100rpx;
-
-
-			.publish_content {
-				display: flex;
-				flex-direction: column;
-				justify-content: center;
-
-				.icon-liuyan {
-					right: 60rpx;
-					width: 50px;
-					font-size: 66rpx
-				}
+			height: 100rpx;
+			border-radius: 50%;
+			background-color: #31b6c3;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			.icon-liuyan {
+				height: 35rpx;
+				width: 35rpx;
+				font-size: 35rpx;
+				color: #fff;
 			}
 
 		}
