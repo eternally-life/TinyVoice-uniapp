@@ -71,7 +71,8 @@
 			},
 			checkAuth() {
 				let userinfo = uni.getStorageSync('wxUserInfo')
-				if (userinfo.isAuth != 1 || userinfo.isAuth != 2) {
+				console.log(userinfo.isAuth);
+				if (userinfo.isAuth != 1 && userinfo.isAuth != 2) {
 					uni.navigateTo({
 						url: '/subpages/campusAuthentication/campusAuthentication'
 					});
