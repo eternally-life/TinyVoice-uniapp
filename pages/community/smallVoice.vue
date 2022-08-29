@@ -668,8 +668,8 @@
 
 		.publish_btn {
 			position: fixed;
-			bottom: 30rpx;
-			right: 30rpx;
+			bottom: 15vh;
+			right: 5vh;
 			border-radius: 50%;
 		}
 	}
