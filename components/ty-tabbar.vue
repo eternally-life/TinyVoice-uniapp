@@ -64,7 +64,7 @@ export default {
 		query
 			.select('#tabtab')
 			.boundingClientRect(data => {
-				console.log('获取到高度', data.height);
+				// console.log('获取到高度', data.height);
 				this.saveSize = data.height;
 			})
 			.exec();

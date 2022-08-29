@@ -64,35 +64,6 @@ export default {
 				console.log('网络请求异常', err);
 				this.netErr(err);
 			});
-
-		return;
-		// 	systemParamsConfigKeyconfigKey_Get({ configKey })
-		// 		.then(res => {
-		// 			if (res.data.code == 200 && res.data.msg != '') {
-		// 				try {
-		// 					const tabbarData = JSON.parse(res.data.msg).map(val => ({
-		// 						pagePath: val.p,
-		// 						text: val.t,
-		// 						iconPath: basePath + val.i,
-		// 						selectedIconPath: basePath + val.si
-		// 					}));
-		// 					console.log('解析tabbar', tabbarData);
-		// 					this.setTabbarList(tabbarData);
-		// 					this.openOver();
-		// 				} catch (e) {
-		// 					console.log('tabbar数据解析异常', res);
-		// 					console.log('异常报错', e);
-		// 					this.openOver();
-		// 				}
-		// 			} else {
-		// 				console.log('异常', res);
-		// 				this.netErr(res);
-		// 			}
-		// 		})
-		// 		.catch(err => {
-		// 			console.log('网络请求异常', err);
-		// 			this.netErr(err);
-		// 		});
 	}
 };
 </script>

@@ -29,7 +29,7 @@ export const tabbar_mixins = {
 	},
 	computed: {
 		//导出当前tabbar索引、tabbar列表
-		...mapState(['__current_Index', '__tabbar_list', '__saveSize'])
+		...mapState(['__current_Index', '__tabbar_list'])
 	}
 }
 

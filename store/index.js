@@ -12,7 +12,6 @@ export default new Vuex.Store({
 		sys
 	},
 	state: {
-		__saveSize:0,
 		__current_Index: 0, //tabbar当前激素索引
 		// 内置默认数据
 		__tabbar_list: [{
