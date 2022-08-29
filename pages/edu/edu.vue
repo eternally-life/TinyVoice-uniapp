@@ -26,9 +26,7 @@
 		<!-- 课程详情模态框 -->
 		<edu-course-modal />
 
-		<!-- #ifdef MP-QQ -->
 		<ty-tabbar></ty-tabbar>
-		<!-- #endif -->
 	</view>
 </template>
 

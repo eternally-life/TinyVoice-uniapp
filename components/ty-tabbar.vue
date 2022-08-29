@@ -56,7 +56,10 @@ export default {
 		}
 	},
 	mounted() {
-		
+		// #ifdef MP-WEIXIN
+		console.log('微信跳过tabbar高度检测');
+		return;
+		// #endif
 		const query = uni.createSelectorQuery().in(this);
 		query
 			.select('#tabtab')

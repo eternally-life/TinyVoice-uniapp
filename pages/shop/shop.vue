@@ -29,9 +29,7 @@
 			</scroll-view>
 		</view>
 		<u-toast ref="uToast"></u-toast>
-		<!-- #ifdef MP-QQ -->
 		<ty-tabbar></ty-tabbar>
-		<!-- #endif -->
 	</view>
 </template>
 

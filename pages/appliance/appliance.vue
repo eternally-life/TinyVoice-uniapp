@@ -55,9 +55,7 @@
 			</view>
 		</view>
 		<u-divider text="更多功能开发中，敬请期待!"></u-divider>
-		<!-- #ifdef MP-QQ -->
 		<ty-tabbar></ty-tabbar>
-		<!-- #endif -->
 	</view>
 </template>
 

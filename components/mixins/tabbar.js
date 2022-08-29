@@ -25,25 +25,11 @@ export const tabbar_mixins = {
 					this.tabbarChange(name)
 				}
 			});
-			this.getNetData(name);
 		},
-		// 输出结构
-		getNetData(name) {
-			if (name == 0 && this.__tabbar_list.length == 5) {
-				const aaa = this.__tabbar_list.map(val => ({
-					p: val.pagePath,
-					t: val.text,
-					i: val.iconPath.replace(/\/static\/tabBar\//, ''),
-					si: val.selectedIconPath.replace(/\/static\/tabBar\//, '')
-				}))
-				const tab = JSON.stringify(aaa);
-				console.log(tab);
-			}
-		}
 	},
 	computed: {
 		//导出当前tabbar索引、tabbar列表
-		...mapState(['__current_Index', '__tabbar_list'])
+		...mapState(['__current_Index', '__tabbar_list', '__saveSize'])
 	}
 }
 
