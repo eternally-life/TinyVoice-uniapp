@@ -19,7 +19,7 @@
 				"navigationBarTitleText": "微音",
 				"enablePullDownRefresh": true
 			}
-		},{
+		}, {
 			"path": "pages/user/user",
 			"style": {
 				"navigationBarTitleText": "我的",
@@ -40,7 +40,7 @@
 				"enablePullDownRefresh": true
 			}
 		},
-		
+
 		{
 			"path": "pages/appliance/appliance",
 			"style": {
@@ -494,19 +494,20 @@
 		"selectedColor": "#2dc1cf",
 		"backgroundColor": "#FFFFFF",
 		"list": [{
-				"pagePath": "pages/edu/edu"
-			},
-			{
-				"pagePath": "pages/shop/shop"
-			},
-			{
-				"pagePath": "pages/community/community"
-			},
-			{
-				"pagePath": "pages/appliance/appliance"
-			}, {
-				"pagePath": "pages/user/user"
-			}
-		]
+			"pagePath": "pages/edu/edu",
+			"text": "学习"
+		}, {
+			"pagePath": "pages/shop/shop",
+			"text": "商城"
+		}, {
+			"pagePath": "pages/community/community",
+			"text": "微音"
+		}, {
+			"pagePath": "pages/appliance/appliance",
+			"text": "应用"
+		}, {
+			"pagePath": "pages/user/user",
+			"text": "我的"
+		}]
 	}
 }

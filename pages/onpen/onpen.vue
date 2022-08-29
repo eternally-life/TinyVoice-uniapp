@@ -37,7 +37,9 @@ export default {
 		// #endif
 
 		// #ifdef MP-WEIXIN
-		const configKey = 'sys.tabbar.wx';
+		// const configKey = 'sys.tabbar.wx';
+		this.openOver();
+		return;
 		// #endif
 
 		uni.hideTabBar();

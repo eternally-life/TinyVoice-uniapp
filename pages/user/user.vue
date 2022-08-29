@@ -75,7 +75,9 @@
 		>
 			<view class="slot-content"><rich-text :nodes="content"></rich-text></view>
 		</u-modal>
+		<!-- #ifdef MP-QQ -->
 		<ty-tabbar></ty-tabbar>
+		<!-- #endif -->
 	</view>
 </template>
 

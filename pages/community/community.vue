@@ -16,7 +16,9 @@
         </u-grid-item>
       </u-grid>
     </u-popup> -->
+		<!-- #ifdef MP-QQ -->
 		<ty-tabbar></ty-tabbar>
+		<!-- #endif -->
 	</view>
 </template>
 
