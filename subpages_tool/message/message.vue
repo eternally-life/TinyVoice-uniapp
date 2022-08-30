@@ -2,21 +2,26 @@
 	<view class="wrap">
 		<view class="wrap_input">
 			<view class="input">
-				<u--input placeholder="快输入Ta的名字或你的名字看看吧!" inputAlign="center" @change="inputChange()" border="bottom"
+				<u--input placeholder="请输入想查看的留言密码" inputAlign="center" @change="inputChange()" border="bottom"
 					vale="userName" v-model="userName"></u--input>
+				<view class="botton_content">
+					<view class= "iconfont icon-tishiyu">如Ta的名字、生日、星座、地名等等</view>
+				</view>
 			</view>
 			<view class="button">
-				<u-button text="查看留言" color="#31b6c3" @click="getMessageContent(userName)"></u-button>
+				<u-button color="#31b6c3" @click="getMessageContent(userName)" :customStyle="button">
+					<u-icon name="eye-fill" label="查看留言" space="5px" color="#fff" labelColor= "#fff"></u-icon>
+				</u-button>
 			</view>
 		</view>
 
-
+		<view class="show_icon" v-if="isShow">
+			<u-icon name="arrow-down-fill" size="28"></u-icon>
+		</view>
 		<view class="wrap_show" v-if="isShow">
-			<view class="show_icon">
-				<u-icon name="arrow-down-fill" size="28"></u-icon>
-			</view>
 
-			<view v-for="(item,index) in messageList" :key="index">
+
+			<view class="item-masonry" v-for="(item,index) in messageList" :key="index">
 
 				<view class="item_list">
 					<view class="item_list_box">
@@ -39,7 +44,7 @@
 			......
 		</view>
 		<view class="publish_btn">
-			<view class="iconfont icon-liuyan" fontSize="16px" @click="toMessaging"></view>
+			<view class="iconfont icon-shuxie" fontSize="16px" @click="toMessaging"></view>
 		</view>
 	</view>
 </template>
@@ -122,74 +127,88 @@
 			padding: 40rpx;
 			margin: 20rpx auto;
 			backdrop-filter: blur(10px);
-
+			border-radius: 15rpx;
 			.input {
 				opacity: 1;
 				margin: 30rpx auto;
 				width: 80%;
 			}
 
+			.botton_content {
+				text-align: center;
+				color: #8a8a8a;
+				margin: 5rpx auto;
+			}
+
 			.button {
 				opacity: 1;
 				margin: 30rpx auto;
 				width: 80%;
-
+				u-icon{
+					
+				}
 			}
+		}
+
+		.show_icon {
+			height: 28px;
+			width: 28px;
+			margin: 30rpx auto 0rpx;
 		}
 
 		.wrap_show {
 
-			position: relative;
-			margin: 20rpx 0rpx;
+			column-count: 2;
+			column-gap: 20rpx;
 
-			.show_icon {
-				height: 28px;
-				width: 28px;
-				margin:  30rpx auto -30rpx;
-			}
+			.item-masonry {
+				overflow: hidden;
+				break-inside: avoid;
+				/*避免在元素内部插入分页符*/
+				box-sizing: border-box;
+				margin-bottom: 0rpx;
 
-			.feedback_btn {
-				position: absolute;
-				bottom: 60rpx;
-				right: 60rpx;
-				width: 50px;
-			}
-
-			.item_list {
-
-				// box-shadow: #d5d5d5 3rpx;
-				// display: flex;
-				// flex-direction: column;
-				// margin: 60rpx 0rpx;
-
-				.item_list_box {
-					opacity: 0.9;
-					position: relative;
-					background-color: #fff;
-					border-radius: 30rpx;
-					box-shadow: 0rpx 0rpx 10px #ccc;
-					// border: #82ffcf 1px solid;
-					margin: 40rpx auto;
-					// height: 150rpx;
-					padding: 40rpx;
-
-					.item_content {
-						opacity: 1;
-						margin-bottom: 50rpx;
-					}
-
-					.item_time {
-						opacity: 1;
-						position: absolute;
-						font-size: 25rpx;
-						color: #ccc;
-						bottom: 30rpx;
-						right: 30rpx;
-					}
+				.feedback_btn {
+					position: absolute;
+					bottom: 60rpx;
+					right: 60rpx;
+					width: 50px;
 				}
 
-			}
+				.item_list {
 
+					// box-shadow: #d5d5d5 3rpx;
+					// display: flex;
+					// flex-direction: column;
+					// margin: 60rpx 0rpx;
+
+					.item_list_box {
+						opacity: 0.9;
+						position: relative;
+						background-color: #fff;
+						border-radius: 15rpx;
+						box-shadow: 0rpx 0rpx 10px #ccc;
+						// border: #82ffcf 1px solid;
+						margin: 20rpx auto;
+						// height: 150rpx;
+						padding: 40rpx;
+
+						.item_content {
+							opacity: 1;
+							margin-bottom: 50rpx;
+						}
+
+						.item_time {
+							opacity: 1;
+							position: absolute;
+							font-size: 25rpx;
+							color: #ccc;
+							bottom: 30rpx;
+							right: 30rpx;
+						}
+					}
+				}
+			}
 		}
 
 		.bottom {
@@ -209,7 +228,8 @@
 			display: flex;
 			justify-content: center;
 			align-items: center;
-			.icon-liuyan {
+
+			.icon-shuxie {
 				height: 35rpx;
 				width: 35rpx;
 				font-size: 35rpx;

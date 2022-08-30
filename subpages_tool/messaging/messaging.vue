@@ -30,9 +30,9 @@
 			customStyle: {
 				type: Object,
 				default: {
-					background: '#EFF9F8',
+					background: '#31b6c3',
 					border: 'none',
-					color: '#60C5BA',
+					color: '#ffffff',
 					borderRadius: '40rpx',
 				},
 			},
@@ -87,14 +87,14 @@
 		margin: 300rpx auto;
 		width: 600rpx;
 		height: 500rpx;
-		border-radius: 30rpx;
+		border-radius: 15rpx;
 		box-shadow: 0rpx 0rpx 10px #ccc;
 		background-color: #ffffff;
 
 		.wrap_message {
 			.message_name {
 				width: 350rpx;
-				margin: 0 auto;
+				margin: 10rpx auto;
 				background-color: #ffffff;
 			}
 
@@ -106,10 +106,8 @@
 		}
 
 		.publish_btn {
-			position: fixed;
-			bottom: 360rpx;
-			left: 20rpx;
-			right: 20rpx;
+			margin: 200rpx auto;
+			width: 600rpx;
 		}
 	}
 </style>
