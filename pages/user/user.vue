@@ -23,7 +23,7 @@
 			<view class="otherInfo">
 				<view class="bot_item" v-for="(item, index) in otherInfo" :key="index"
 					@click="navOtherItemClick(item.path, index)">
-					<view class="item_number">
+					<view class="item_number" @click="showSignExplain = true">
 						<u-count-to :startVal="0" :endVal="item.num"></u-count-to>
 					</view>
 					<view class="item_text" @click="showSignExplain = true">{{ item.text }}</view>

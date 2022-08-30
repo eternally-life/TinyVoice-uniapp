@@ -178,27 +178,6 @@
 					}
 				},
 				{
-					"path": "fleaMarket/fleaMarket",
-					"style": {
-						"navigationBarTitleText": "二手市场",
-						"enablePullDownRefresh": false
-					}
-				},
-				{
-					"path": "lostFound/lostFound",
-					"style": {
-						"navigationBarTitleText": "失物招领",
-						"enablePullDownRefresh": false
-					}
-				},
-				{
-					"path": "speakNow/speakNow",
-					"style": {
-						"navigationBarTitleText": "表白",
-						"enablePullDownRefresh": false
-					}
-				},
-				{
 					"path": "voice_details/voiceDetails",
 					"style": {
 						"navigationBarTitleText": "微音详情",
