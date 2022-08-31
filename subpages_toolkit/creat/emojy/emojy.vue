@@ -2,7 +2,7 @@
     <view class="bg-black">
         <view class="padding">
             <view @tap="CopyLink" class="cu-form-group bg-white" style="border-radius: 20rpx">
-                <textarea :disabled="modalName != null" maxlength="-1" :value="textareaValue"></textarea>
+                <textarea  maxlength="-1" :value="textareaValue"></textarea>
             </view>
         </view>
         <!-- parse <template is="change" data></template> -->

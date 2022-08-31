@@ -5,16 +5,16 @@
 			<view>添加到我的小程序</view>
 			<view>随时玩随时测</view>
 		</view>
-		<view class="show-nan">
+		<view class="show-nan" >
 			<image class="image-show" :src="xzList[indexNan].image"></image>
 			<image class="shadow" :src="myImg + '/match/shadow.png'"></image>
-			<view @tap="showPopupFun" class="name-show">{{ replaceTest('男') }} ⇌</view>
+			<view @tap="showPopupFun" class="name-show">{{ util.replace(xzList[indexNan].name, '座', '男') }} ⇌</view>
 		</view>
 		<image class="love" :src="myImg + '/match/love.png'"></image>
 		<view class="show-nv">
 			<image class="image-show" :src="xzList[indexNv].image"></image>
 			<image class="shadow" :src="myImg + '/match/shadow.png'"></image>
-			<view @tap="showPopupFun" class="name-show">{{ replaceTest('女') }} ⇌</view>
+			<view @tap="showPopupFun" class="name-show">{{ util.replace(xzList[indexNv].name, '座', '女') }} ⇌</view>
 		</view>
 		<navigator class="link" :url="'detail?indexNan=' + indexNan + '&&indexNv=' + indexNv">星座配对</navigator>
 		<view @tap="hidePopup" class="model-mask" v-if="showPopup"></view>
@@ -44,7 +44,7 @@
 							:class="'scroll-item ' + (index == indexNan ? 'active nan' : '')"
 							:data-index="index"
 							v-for="(item, index) in nanList"
-							:key="index"
+							:key="item"
 						>
 							<image class="xz-image" :src="item.image"></image>
 
@@ -71,7 +71,7 @@
 							:class="'scroll-item ' + (index == indexNv ? 'active nv' : '')"
 							:data-index="index"
 							v-for="(item, index) in nvList"
-							:key="index"
+							:key="item"
 						>
 							<image class="xz-image" :src="item.image"></image>
 
@@ -84,6 +84,7 @@
 		</view>
 	</view>
 </template>
+<script module="util" lang="wxs" src="../../utils/util.wxs"></script>
 <script>
 import { getXZList, getNanList, getNavList } from './detail_data.js';
 var app = getApp();
@@ -93,7 +94,6 @@ export default {
 		return {
 			myImg: imgBserUrl,
 			xzList: getXZList(),
-
 			nanList: getNanList(),
 
 			nvList: getNavList(),
@@ -119,7 +119,7 @@ export default {
 	onShareAppMessage: function() {},
 	methods: {
 		replaceTest: function(sex) {
-			console.log(this.indexNan, 'this.indexNan');
+			console.log(this.xzList[this.indexNan].name, 'this.indexNan');
 			if (sex == '男')
 				return this.xzList[this.indexNan].name.substr(0, this.xzList[this.indexNan].name.length - 1) + sex;
 			else return this.xzList[this.indexNv].name.substr(0, this.xzList[this.indexNv].name.length - 1) + sex;
@@ -159,15 +159,18 @@ export default {
 			this.setData({
 				animationData: i.export()
 			});
-			setTimeout(() => {
-				i.translateY(0).step();
-				this.setData({
-					animationData: i.export(),
-					showPopup: false,
-					scrollTopNan: e * n * 220,
-					scrollTopNv: a * n * 220
-				});
-			}, 100);
+			setTimeout(
+			    function () {
+			        i.translateY(0).step();
+			        this.setData({
+			            animationData: i.export(),
+			            showPopup: false,
+			            scrollTopNan: e * n * 220,
+			            scrollTopNv: a * n * 220
+			        });
+			    }.bind(this),
+			    100
+			);
 		},
 
 		scrollNan: function(e) {
