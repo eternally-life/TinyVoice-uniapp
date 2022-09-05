@@ -3,6 +3,7 @@
 import { systemTinytabbarPage_Get } from '@/api/SYSTEM/tabbar页面.js';
 import { tabbar_mixins } from '@/components/mixins/tabbar.js';
 import { tabbar_default } from './default';
+import { systemParamsConfigKeyconfigKey_Get } from '@/api/SYSTEM/参数字典公告.js';
 const basePath = '/static/tabBar/';
 export default {
 	mixins: [tabbar_mixins],
@@ -24,6 +25,15 @@ export default {
 				});
 			}, 1500);
 		},
+		async setEduOpenTime() {
+			const timeNodeRes = await systemParamsConfigKeyconfigKey_Get({
+				configKey: 'system:edu:opentime'
+			});
+			console.log('获取开学时间', timeNodeRes);
+			if (timeNodeRes.data.code == 200) {
+				this.$store.commit('edu/setTimeNode', Number(timeNodeRes.data.msg));
+			}
+		},
 		// 异常时 使用默认数据
 		netErr(e) {
 			console.log('请求异常，使用默认tabbar数据');
@@ -33,6 +43,7 @@ export default {
 		}
 	},
 	onLoad() {
+		this.setEduOpenTime();
 		// #ifdef MP-QQ
 		const type = '2';
 		// #endif
