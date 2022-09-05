@@ -4,7 +4,7 @@
             <view class="cu-form-group bg-white" style="border-radius: 20rpx">
                 <textarea
                     @input="bindKeyInput"
-                    :disabled="modalName != null"
+                    
                     maxlength="-1"
                     placeholder="请输入需转换的文字，然后点击下方类别自动会进行转换"
                     :value="textareaValue"

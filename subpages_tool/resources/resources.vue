@@ -30,9 +30,9 @@
 						{{item.name}}
 					</view>
 					<view class="res_describe" @click="enterResourcesUrl(index)">
-						 <view style="color: rgba(170, 170, 170, 0.8);">
+						<view style="color: rgba(170, 170, 170, 0.8);">
 							描述：{{item.describe}}
-						</view> 
+						</view>
 					</view>
 					<view class="res_msg" @click="enterResourcesUrl(index)">
 						{{$u.timeFormat(item.createTime, 'yyyy-mm-dd')}}
@@ -43,14 +43,12 @@
 						文件大小{{item.size > 1048576? parseInt(item.size/1024/1024)+ "m" : parseInt(item.size/1024) + "kb"}}
 					</view>
 					<view class="viewComment_btn">
-						<u-button shape="circle"
-							color="linear-gradient(to right,rgb(118,204,232), rgb(118,204,232),rgb(118,204,232))"
+						<u-button shape="circle" color="linear-gradient(to right,rgb(118,204,232),rgb(130, 226, 255))"
 							@click="enterResourcesUrl(index)">评论</u-button>
 					</view>
 					<view class="download_btn">
-						<u-button shape="circle"
-							color="linear-gradient(to right,rgb(56,185,197), rgb(56,185,197), rgb(56,185,197))"
-							@click="filedownload(item.resourceId,item.url)">下载</u-button>
+						<u-button shape="circle" color="#31b6c3" @click="filedownload(item.resourceId,item.url)">下载
+						</u-button>
 					</view>
 				</view>
 			</view>
@@ -62,7 +60,7 @@
 		</view>
 		<!-- //	资源上传跳转 -->
 		<view class="uploading" @click="uploading">
-			上传资源赚音符<u-button icon="plus" size="large" shape="circle" iconColor="#31b6c3"></u-button>
+			<u-button icon="plus" size="large" shape="circle" iconColor="#31b6c3"></u-button>
 		</view>
 	</view>
 </template>
@@ -261,7 +259,7 @@
 			// border-radius: 15rpx;
 
 			.bac_logo {
-				padding-left: 30rpx;
+				padding-left: 50rpx;
 				padding-top: 50rpx;
 				align-items: center;
 
@@ -397,10 +395,12 @@
 		}
 
 		.uploading {
-			
-			
-			width: 100rpx;
+			position: fixed;
+			bottom: 100rpx;
+			right: 100rpx;
+			width: 50px;
 			z-index: 2;
+
 		}
 	}
 </style>

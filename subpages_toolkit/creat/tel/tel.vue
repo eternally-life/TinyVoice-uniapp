@@ -6,7 +6,7 @@
                     <textarea
                         autoFocus
                         @input="bindKeyInput"
-                        :disabled="modalName != null"
+                        
                         maxlength="-1"
                         placeholder="请输入需转换的号码，仅支持数字转换"
                         type="number"
