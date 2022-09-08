@@ -4,7 +4,9 @@ import Vuex from 'vuex'
 import edu from './edu_store'
 import sys from './system'
 Vue.use(Vuex);
-import { tabbar_default } from '@/pages/index/default';
+import {
+	tabbar_default
+} from '@/pages/index/default';
 
 export default new Vuex.Store({
 	modules: {
@@ -12,7 +14,7 @@ export default new Vuex.Store({
 		sys
 	},
 	state: {
-		__current_Index: 0, //tabbar当前激素索引
+		__current_Index: tabbar_default().length - 1, //tabbar当前激素索引
 		// 内置默认数据
 		__tabbar_list: tabbar_default()
 	},
