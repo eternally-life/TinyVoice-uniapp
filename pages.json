@@ -279,6 +279,13 @@
 					}
 				},
 				{
+					"path": "id_photo/myIdPhoto",
+					"style": {
+						"navigationBarTitleText": "我的证件照",
+						"enablePullDownRefresh": false
+					}
+				},
+				{
 					"path": "id_photo/previewPhoto",
 					"style": {
 						"navigationBarTitleText": "图片预览",
@@ -286,12 +293,22 @@
 					}
 				},
 				{
-					"path": "id_photo/photo_handle",
+					"path": "id_photo/photoHandle",
 					"style": {
 						"navigationBarTitleText": "选择照片",
 						"enablePullDownRefresh": false
 					}
-				}, {
+				}
+				, 
+				{
+				    "path" : "id_photo/searchPhotoSpec",
+				    "style" :                                                                                    
+				{
+				    "navigationBarTitleText": "搜索",
+				    "enablePullDownRefresh": false
+				}
+				
+				},{
 					"path": "resources/resources",
 					"style": {
 						"navigationBarTitleText": "资源共享",
