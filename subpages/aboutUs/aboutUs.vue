@@ -39,7 +39,8 @@
 	const prf = 't-';
 	import {
 		systemParamsNoteList_Get,
-		systemParamsNotenoticeId_Get
+		systemParamsNotenoticeId_Get,
+		systemParamsConfigKeyconfigKey_Get
 	} from '@/api/SYSTEM/参数字典公告.js'
 	export default {
 		data() {

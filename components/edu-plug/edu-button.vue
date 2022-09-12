@@ -61,12 +61,12 @@ export default {
 					src: 'english',
 					transferType: -1
 				},
-				{
-					name: '代查',
-					icon: prf + 'icon-pingjiao',
-					src: 'substitute_query_menu',
-					transferType: -1
-				}
+				// {
+				// 	name: '代查',
+				// 	icon: prf + 'icon-pingjiao',
+				// 	src: 'substitute_query_menu',
+				// 	transferType: -1
+				// }
 				/*{
 					name: '空教室',
 					icon: prf + 'icon-pingjiao',

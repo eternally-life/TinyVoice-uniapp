@@ -15,7 +15,7 @@
 				<view class="right" @click="toLogin">
 					<view class="user">
 						<text class="name">{{ wxUserInfo.nickName || '点击登录' }}</text>
-						<text class="desc">{{ wxUserInfo.isAuth ? '' : '未校园认证' }}</text>
+						<text class="desc">{{ wxUserInfo.isAuth | isAuth }}</text>
 					</view>
 				</view>
 				<view class="sign">
@@ -73,8 +73,9 @@
 			closeOnClickOverlay
 			@close="showSignExplain = false"
 		>
-			<view class="slot-content"><rich-text :nodes="content"></rich-text></view>
+			<view class="slot-content"><rich-text :nodes="content.noticeContent"></rich-text></view>
 		</u-modal>
+		<ty-tabbar></ty-tabbar>
 	</view>
 </template>
 
@@ -85,13 +86,18 @@ import { systemParamsNoteList_Get, systemParamsConfList_Get } from '@/api/SYSTEM
 import { systemSyssignPage_Get, systemSyssignSave_Post } from '@/api/SYSTEM/签到.js';
 import { systemSysmsgPage_Get } from '@/api/SYSTEM/消息提醒.js';
 import { getSetInfo_QQ, getSetInfo_WX, getNaviList, getOtherInfo_WX, getOtherInfo_QQ } from './datalist.js';
+import { setGloalDataEduInfo } from '@/utils/loginUtil.js';
+import { systemParamsNotenoticeId_Get } from '@/api/SYSTEM/参数字典公告.js';
+import { tabbar_hid } from '@/components/mixins/tabbar.js';
 export default {
+	mixins: [tabbar_hid],
 	data() {
 		return {
 			showSignExplain: false, // 是否显示音符说明
-			content: '', // 富文本内容
+			content: {}, // 富文本内容
 			noticeTitle: '', // 音符说明标题
 			wxUserInfo: {},
+			eduInfo: {},
 			signined: false, //是否已签到
 			token: '',
 			// 导航区数据
@@ -111,6 +117,7 @@ export default {
 	onLoad() {
 		this.token = getApp().globalData.token;
 		this.getUserInfo();
+		this.getSignExplain();
 		uni.$on('refresh', () => {
 			this.getUserInfo();
 		});
@@ -178,12 +185,18 @@ export default {
 		toLogin() {
 			try {
 				if (Object.keys(this.wxUserInfo).length > 0) {
-					uni.navigateTo({ url: '/subpages/userInfo/userInfo' });
+					uni.navigateTo({
+						url: '/subpages/userInfo/userInfo'
+					});
 					return;
 				}
-				uni.navigateTo({ url: '/subpages/login/login' });
+				uni.navigateTo({
+					url: '/subpages/login/login'
+				});
 			} catch (e) {
-				uni.navigateTo({ url: '/subpages/login/login' });
+				uni.navigateTo({
+					url: '/subpages/login/login'
+				});
 			}
 		},
 
@@ -214,6 +227,9 @@ export default {
 				console.log('获取个人信息', res);
 				if (res.data.code == 200) {
 					this.wxUserInfo = res.data.user;
+					this.eduInfo = res.data.guet;
+					setGloalDataEduInfo(res.data.guet);
+					this.$store.commit('edu/setEduInfo', res.data.guet);
 					this.otherInfo[0].num = res.data.user.integral;
 					getApp().globalData.wxUserInfo = res.data.user;
 					uni.setStorageSync('wxUserInfo', res.data.user);
@@ -222,9 +238,21 @@ export default {
 				}
 			});
 		},
+		//	音符公告获取
+		async getSignExplain() {
+			const res = await systemParamsNotenoticeId_Get({
+				noticeId: 22
+			});
+			this.content = res.data.data;
+			console.log(res);
+		},
 		// 导航栏点击跳转
 		navOtherItemClick(path, index) {
 			console.log(index);
+			if (index == 0) {
+				this.showSignExplain = true;
+				return;
+			}
 			uni.navigateTo({
 				url: path
 			});
@@ -293,6 +321,19 @@ export default {
 	},
 	computed: {
 		...mapState('edu', ['eduSwitch'])
+	},
+	filters: {
+		// 身份过滤器
+		isAuth(value) {
+			switch (value) {
+				case 1:
+					return '教师认证';
+				case 2:
+					return '学生认证';
+				default:
+					return '未认证';
+			}
+		}
 	}
 };
 </script>
@@ -369,9 +410,12 @@ export default {
 
 				.item_text {
 					color: #676767;
+					align-content: center;
+					text-align: center;
 				}
 
 				.item_number {
+					align-content: center;
 					text-align: center;
 					color: #aaa;
 				}

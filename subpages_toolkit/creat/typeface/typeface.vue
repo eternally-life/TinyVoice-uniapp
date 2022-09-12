@@ -5,7 +5,7 @@
                 <view class="cu-form-group bg-white" style="border-radius: 20rpx">
                     <textarea
                         @input="bindKeyInput"
-                        :disabled="modalName != null"
+                        
                         maxlength="-1"
                         placeholder="输入需转换的文字，点击下方字体会自动转换"
                         :value="textareaValue"
@@ -68,7 +68,7 @@ export default {
         return {
             scrollTop: 0,
             textareaValue: '',
-            modalName: ''
+            modalName: '1'
         };
     },
     onLoad: function (t) {},

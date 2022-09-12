@@ -16,7 +16,7 @@
 </template>
 
 <script>
-// import { eduGuetCreditPoints_Post } from '@/api/GUET/教务开放接口.js';
+import { eduGuetCreditPoints_Post } from '@/api/GUET/教务开放接口';
 export default {
 	name: 'EduCredit',
 	data() {

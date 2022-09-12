@@ -17,20 +17,30 @@
 		<!-- 滑动检测 -->
 		<view @touchstart.native.prevent="touchStart" @touchend.native.prevent="toucheEnd" :style="[getDynamicHeight]">
 			<!-- 日期模块 -->
-			<edu-calendar-control />
+			<eduCalendarControl />
 
 			<!-- 课块区域 -->
-			<edu-course-control ref="course" />
+			<eduCourseControl ref="course" />
 		</view>
 
 		<!-- 课程详情模态框 -->
 		<edu-course-modal />
+
+		<ty-tabbar></ty-tabbar>
 	</view>
 </template>
 
 <script>
+import eduCalendarControl from './eduCalendarControl';
+import eduCourseControl from './eduCourseControl';
 import { mapState, mapMutations } from 'vuex';
+import { tabbar_hid } from '@/components/mixins/tabbar.js';
 export default {
+	components: {
+		eduCalendarControl,
+		eduCourseControl
+	},
+	mixins: [tabbar_hid],
 	data() {
 		return {
 			calenTypeList: ['日', '周', '月'],
@@ -45,6 +55,9 @@ export default {
 			lastTimeKEY: getApp().globalData.storageKey.courseFTimeKEY
 		};
 	},
+	onLoad() {
+		this.checkAuth();
+	},
 	methods: {
 		...mapMutations('edu', ['setCalendarType', 'setModelShow', 'setCourseDetails']),
 		//课表类型点击切换
@@ -54,7 +67,15 @@ export default {
 
 			this.setCalendarType(clickTypeID);
 		},
-
+		checkAuth() {
+			let userinfo = uni.getStorageSync('wxUserInfo');
+			console.log(userinfo.isAuth);
+			if (userinfo.isAuth != 1 && userinfo.isAuth != 2) {
+				uni.navigateTo({
+					url: '/subpages/campusAuthentication/campusAuthentication'
+				});
+			}
+		},
 		/**滑动事件组
 		 * 	touchStart()触摸开始 获取起始按下坐标X Y
 		 * 	toucheEnd() 触摸结束 获取结束抬手坐标X Y
@@ -198,46 +219,55 @@ export default {
 		this.setModelShow(false);
 		this.setCourseDetails(null);
 	},
-	// onReady() {
-	// 	try {
-	// 		const value = uni.getStorageSync('wxUserInfo');
-	// 		if (value) {
-	// 			this.$store.commit('edu/setEduInfo', value.eduGuetUser);
-	// 		} else {
-	// 			throw '获取wxUserInfo缓存数据为' + value;
-	// 		}
-	// 	} catch (e) {
-	// 		console.warn(e);
-	// 	}
-	// },
+	onShow() {
+		// 当未认证时跳转认证
+		const value = getApp().globalData.eduInfo;
+		if (Object.keys(value).length == 0 || value == null || value == undefined) {
+			uni.reLaunch({
+				url: '/subpages/campusAuthentication/campusAuthentication'
+			});
+		}
+	},
+	onReady() {
+		try {
+			const value = uni.getStorageSync('eduInfo');
+			if (value) {
+				this.$store.commit('edu/setEduInfo', value);
+			} else {
+				throw '获取eduInfo缓存数据为' + value;
+			}
+		} catch (e) {
+			console.warn(e);
+		}
+	},
 	// 允许下拉刷新
-	// onPullDownRefresh() {
-	// 	let key = this.lastTimeKEY;
-	// 	let lastTime = uni.getStorageSync(key),
-	// 		nowTime = parseInt(new Date().valueOf() / 1000);
-	// 	//符合条件  通过ref调用组件内的课表刷新方法
-	// 	if (this.isCantRefresh(nowTime, lastTime)) {
-	// 		this.$refs.uToast.show({
-	// 			type: 'success',
-	// 			message: '尝试更新课表数据',
-	// 			duration: 1000,
-	// 			position: 'bottom'
-	// 		});
-	// 		this.$refs.course.getCourse();
+	onPullDownRefresh() {
+		let key = this.lastTimeKEY;
+		let lastTime = uni.getStorageSync(key),
+			nowTime = parseInt(new Date().valueOf() / 1000);
+		//符合条件  通过ref调用组件内的课表刷新方法
+		if (this.isCantRefresh(nowTime, lastTime)) {
+			this.$refs.uToast.show({
+				type: 'success',
+				message: '尝试更新课表数据',
+				duration: 1000,
+				position: 'bottom'
+			});
+			this.$refs.course.getCourse();
 
-	// 		setTimeout(() => {
-	// 			uni.stopPullDownRefresh();
-	// 		}, 2000);
-	// 	} else {
-	// 		this.$refs.uToast.show({
-	// 			type: 'error',
-	// 			message: '距离上次更新还没过1小时，请稍后再试',
-	// 			duration: 1500,
-	// 			position: 'bottom'
-	// 		});
-	// 		uni.stopPullDownRefresh();
-	// 	}
-	// }
+			setTimeout(() => {
+				uni.stopPullDownRefresh();
+			}, 2000);
+		} else {
+			this.$refs.uToast.show({
+				type: 'error',
+				message: '距离上次更新还没过1小时，请稍后再试',
+				duration: 1500,
+				position: 'bottom'
+			});
+			uni.stopPullDownRefresh();
+		}
+	}
 };
 </script>
 
@@ -247,6 +277,7 @@ export default {
 	position: sticky;
 	top: 0;
 }
+
 .home_wrap {
 	.typeSwitch {
 		$pad_lr: 5%;

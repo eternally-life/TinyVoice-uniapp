@@ -2,8 +2,8 @@
 	<view>
 		<view class="calenderNav">
 			<text v-show="calendarType == 0">{{ showTime.month + 1 }} 月</text>
-			<text v-show="calendarType == 1" @click="goBack">第 {{ showTime.weekSeq + 1 }} 周</text>
-			<text v-show="calendarType == 1" @click="goBack" class="smText">{{ goBackStr }}</text>
+			<text v-show="calendarType == 1 && timeNode > 0" @click="goBack">第 {{ showTime.weekSeq + 1 }} 周</text>
+			<text v-show="calendarType == 1 && timeNode > 0" @click="goBack" class="smText">{{ goBackStr }}</text>
 			<text v-show="calendarType == 2">{{ showTime.year }} 年 {{ showTime.month + 1 }} 月</text>
 		</view>
 		<edu-calendar-week ref="weekStyle" />
@@ -12,9 +12,9 @@
 </template>
 
 <script>
-import { mapState, mapGetters, mapMutations } from 'vuex';
+import { mapState, mapMutations } from 'vuex';
 export default {
-	name: 'edu-calendar-control',
+	name: 'eduCalendarControl',
 	data() {
 		return {};
 	},
@@ -37,7 +37,7 @@ export default {
 			} else {
 				tempTime.weekSeq = this.eduTime.weekSeq;
 			}
-
+			console.log('数据变动', tempTime);
 			this.setTempEduTime2(tempTime);
 		},
 
@@ -50,7 +50,7 @@ export default {
 		}
 	},
 	computed: {
-		...mapState('edu', ['calendarType', 'eduTime', 'week2TimeFlage', 'eduTime', 'tempEduTime2']),
+		...mapState('edu', ['calendarType', 'eduTime', 'week2TimeFlage', 'eduTime', 'tempEduTime2', 'timeNode']),
 		showTime() {
 			if (this.week2TimeFlage) {
 				return this.tempEduTime2;
@@ -62,7 +62,9 @@ export default {
 		/** 显示 返回显示
 		 * */
 		goBackStr() {
-			return this.eduTime.weekSeq == this.showTime.weekSeq ? '' : '（点此返回第 ' + (this.eduTime.weekSeq + 1) + ' 周）';
+			return this.eduTime.weekSeq == this.showTime.weekSeq
+				? ''
+				: '（点此返回第 ' + (this.eduTime.weekSeq + 1) + ' 周）';
 		}
 	},
 	created() {

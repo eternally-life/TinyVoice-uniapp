@@ -1,47 +1,66 @@
 <template>
 	<view class="wrap">
+		<!-- //	Logo -->
 		<view class="wrap_background">
 			<view class="bac_logo">
 				<u--image :showLoading="true" :src="logo" width="80rpx" height="80rpx">
 				</u--image>
+
+				<view class="bac_content">
+					微音资源共享
+				</view>
 			</view>
 		</view>
-		<view class="searchBox">
+		<!-- //	索引 -->
+		<!-- <view class="searchBox">
 			<view class="searchInput">
 				<u--input placeholder="搜索你感兴趣的内容" prefixIcon="search" v-model="searchMsg"
 					prefixIconStyle="font-size: 22px;color: #909399">
 				</u--input>
-				<!-- <uni-search-bar class="search" placeholder="搜索" cancelButton="none" bgColor="#EEEEEE" @input="search" /> -->
 			</view>
 			<view class="searchButtom">
 				<u-button @click="search(searchMsg)">搜索</u-button>
 			</view>
-		</view>
-
-		<view class="wrap_block" v-for="(item,index) in resourceData" :key="index">
-			<view class="block_content">
-				<view class="res_name" @click="enterResourcesUrl(index)">
-					{{item.name}}
-				</view>
-				<view class="res_msg" @click="enterResourcesUrl(index)">
-					{{$u.timeFormat(item.createTime, 'yyyy-mm-dd')}}
-					下载数：{{item.downNum}}
-					所需积分：{{item.integral}}
-				</view>
-				<view class="res_size">
-					文件大小{{item.size > 1048576? parseInt(item.size/1024/1024)+ "m" : parseInt(item.size/1024) + "kb"}}
-				</view>
-				<view class="download_btn">
-					<u-button shape="circle" color="linear-gradient(to right,rgb(12,235,235), rgb(32,227,178), rgb(41,255,198))"
-						@click="filedownload(item.resourceId,item.url)">下载</u-button>
+		</view> -->
+		<!-- //	资源列表 -->
+		<view class="block">
+			<view class="wrap_block" v-for="(item,index) in resourceData" :key="index">
+				<view class="block_content">
+					<view class="res_name" @click="enterResourcesUrl(index)">
+						{{item.name}}
+					</view>
+					<view class="res_describe" @click="enterResourcesUrl(index)">
+						<view style="color: rgba(170, 170, 170, 0.8);">
+							描述：{{item.describe}}
+						</view>
+					</view>
+					<view class="res_msg" @click="enterResourcesUrl(index)">
+						{{$u.timeFormat(item.createTime, 'yyyy-mm-dd')}}
+						下载数：{{item.downNum}}
+						所需积分：{{item.integral}}
+					</view>
+					<view class="res_size">
+						文件大小{{item.size > 1048576? parseInt(item.size/1024/1024)+ "m" : parseInt(item.size/1024) + "kb"}}
+					</view>
+					<view class="viewComment_btn">
+						<u-button shape="circle" color="linear-gradient(to right,rgb(118,204,232),rgb(130, 226, 255))"
+							@click="enterResourcesUrl(index)">评论</u-button>
+					</view>
+					<view class="download_btn">
+						<u-button shape="circle" color="#31b6c3" @click="filedownload(item.resourceId,item.url)">下载
+						</u-button>
+					</view>
 				</view>
 			</view>
 		</view>
+
+		<!-- //	底部 -->
 		<view class="loadmore_wrap" v-if="resourceData.length !== 0">
 			<text>{{ isNoMore ? '到底啦' : '' }}</text>
 		</view>
+		<!-- //	资源上传跳转 -->
 		<view class="uploading" @click="uploading">
-			 <u-button icon="plus" size="large" shape="circle" iconColor="#31b6c3" @click="openPopup"></u-button>
+			<u-button icon="plus" size="large" shape="circle" iconColor="#31b6c3"></u-button>
 		</view>
 	</view>
 </template>
@@ -94,6 +113,7 @@
 					var datas = res.data.data
 					// console.log(typeof(datas));
 					this.datas = datas
+					console.log(this.datas);
 					if (res.data.msg === "还没有资源快来第一个上传吧~") {
 						this.isNoMore = true
 					}
@@ -198,7 +218,7 @@
 				}
 			},
 			//跳转上传页
-			uploading(){
+			uploading() {
 				uni.navigateTo({
 					url: '/subpages_tool/resourcePublishing/resourcePublishing'
 				})
@@ -233,15 +253,23 @@
 		height: 100%;
 
 		.wrap_background {
-			height: 200rpx;
+			height: 500rpx;
 			width: 100%;
-			background-color: #60C5BA;
-			border-radius: 5rpx;
+			// background-color: #3c9cff;
+			// border-radius: 15rpx;
 
 			.bac_logo {
-				padding-left: 30rpx;
-				padding-top: 30rpx;
+				padding-left: 50rpx;
+				padding-top: 50rpx;
+				align-items: center;
+
 			}
+
+			.bac_content {
+				margin-left: 130rpx;
+				margin-top: -60rpx;
+			}
+
 		}
 
 		.searchBox {
@@ -274,61 +302,87 @@
 			}
 		}
 
-		.wrap_block {
-			margin: 30rpx auto;
-			width: 700rpx;
-			height: 200rpx;
-			border-radius: 15rpx;
-			box-shadow: 0rpx 0rpx 10rpx #ccc;
-			background-color: #ffffff;
-			position: relative;
+		.block {
+			margin-top: -350rpx;
 
-			.block_content {
-				.res_name {
-					position: absolute;
-					left: 24rpx;
-					top: 20rpx;
-					width: 415rpx;
-					height: 118rpx;
-					display: block;
-					box-sizing: border-box
-				}
+			.wrap_block {
+				margin: 30rpx auto;
+				width: 700rpx;
+				height: 250rpx;
+				border-radius: 15rpx;
+				box-shadow: 0rpx 0rpx 10rpx #ccc;
+				background-color: #ffffff;
+				position: relative;
+				z-index: 1;
 
-				.res_msg {
-					position: absolute;
-					left: 10rpx;
-					top: 154rpx;
-					width: 438rpx;
-					height: 42rpx;
-					display: block;
-					box-sizing: border-box;
-					font-size: 24rpx;
-					color: #888888;
-				}
+				.block_content {
+					.res_name {
+						position: absolute;
+						left: 24rpx;
+						top: 20rpx;
+						width: 415rpx;
+						height: 42rpx;
+						display: block;
+						box-sizing: border-box
+					}
 
-				.res_size {
-					position: absolute;
-					right: 0rpx;
-					top: 154rpx;
-					width: 222rpx;
-					height: 42rpx;
-					display: block;
-					box-sizing: border-box;
-					font-size: 28rpx;
-					color: #888888;
-				}
+					.res_describe {
+						position: absolute;
+						left: 24rpx;
+						top: 72rpx;
+						width: 415rpx;
+						height: 110rpx;
+						display: block;
+						box-sizing: border-box
+					}
 
-				.download_btn {
-					position: absolute;
-					left: 488rpx;
-					top: 55rpx;
-					width: 174rpx;
-					height: 66rpx;
-					display: block;
-					box-sizing: border-box;
+					.res_msg {
+						position: absolute;
+						left: 24rpx;
+						top: 196rpx;
+						width: 438rpx;
+						height: 42rpx;
+						display: block;
+						box-sizing: border-box;
+						font-size: 24rpx;
+						color: #888888;
+					}
+
+					.res_size {
+						position: absolute;
+						left: 492rpx;
+						top: 196rpx;
+						width: 222rpx;
+						height: 42rpx;
+						display: block;
+						box-sizing: border-box;
+						font-size: 28rpx;
+						color: #888888;
+					}
+
+					.viewComment_btn {
+						position: absolute;
+						width: 180rpx;
+						left: 492rpx;
+						top: 15rpx;
+						font-size: 10px;
+						height: 65rpx;
+					}
+
+					.download_btn {
+						position: absolute;
+						left: 492rpx;
+						top: 110rpx;
+						width: 180rpx;
+						font-size: 10px;
+						height: 65rpx;
+						display: block;
+						box-sizing: border-box;
+					}
 				}
 			}
 		}
+
 
 		.loadmore_wrap {
 			width: 750rpx;
@@ -336,13 +390,17 @@
 			font-size: 24rpx;
 			color: #888888;
 			background: #f1f1f1;
-			padding: 10rpx 0 20rpx 0;
+			padding: 0 0 50rpx 0;
+			margin-top: 50rpx;
 		}
-		.uploading{
+
+		.uploading {
 			position: fixed;
-			bottom: 60rpx;
-			right: 60rpx;
+			bottom: 100rpx;
+			right: 100rpx;
 			width: 50px;
+			z-index: 2;
+
 		}
 	}
 </style>

@@ -29,13 +29,16 @@
 			</scroll-view>
 		</view>
 		<u-toast ref="uToast"></u-toast>
+		<ty-tabbar></ty-tabbar>
 	</view>
 </template>
 
 <script>
 import { payTinymallPageMallType_Get, payTinymallPageMallCommodity_Get } from '@/api/商城模块/商品信息下单.js';
 import { systemParamsNoteList_Get, systemParamsNotenoticeId_Get } from '@/api/SYSTEM/参数字典公告.js';
+import { tabbar_hid } from '@/components/mixins/tabbar.js';
 export default {
+	mixins: [tabbar_hid],
 	data() {
 		return {
 			// 左侧数据

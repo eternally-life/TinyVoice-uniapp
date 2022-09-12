@@ -34,7 +34,7 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex';
-// import { eduGuetSelectSource_Post } from '@/api/GUET/教务开放接口.js';
+import { eduGuetSelectSource_Post } from '@/api/GUET/教务开放接口';
 export default {
 	data() {
 		return {

@@ -1,7 +1,7 @@
 export default {
 	online: false, //教务允许接入状态
 	calendarType: 1, // 课表类型 0日 1周 2月
-	timeNode: 1645977600, //开学第一天 每86400一天
+	timeNode: 0, //开学第一天 每86400一天
 	nowTime: new Date(),
 	// 时间
 	eduTime: {

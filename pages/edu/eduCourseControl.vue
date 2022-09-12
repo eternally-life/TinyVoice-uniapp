@@ -10,10 +10,11 @@
 
 <script>
 import { mapState, mapMutations, mapAction } from 'vuex';
-// const GUET = require('@/api/GUET/教务开放接口.js');
+import { eduGuetCourseTable_Post } from '@/api/GUET/教务开放接口';
+import { systemParamsConfigKeyconfigKey_Get } from '@/api/SYSTEM/参数字典公告.js';
 const manageData = require('@/utils/manageData.js');
 export default {
-	name: 'edu-course-control',
+	name: 'eduCourseControl',
 	data() {
 		return {
 			all_course_data: null,
@@ -32,7 +33,9 @@ export default {
 	computed: {
 		...mapState('edu', ['calendarType', 'eduTime', 'tempEduTime2', 'week2TimeFlage', 'eduSwitch'])
 	},
+	
 	methods: {
+	
 		// 读取本地课表缓存
 		getStroCourse() {
 			try {
@@ -98,14 +101,22 @@ export default {
 		/* 接口请求课表 */
 		async getCourse() {
 			let token = getApp().globalData.token;
-			console.log('token: ', token);
+			// console.log('token: ', token);
 			if (token != null || token != undefined) {
 				// 生成看门狗
 				this.creatWatchDog();
 
-				//判断是否离线
-				let temp = await GUET.eduGuetCourseTable_Post({ token: token }).then(res => {
-					console.log(res);
+				// const termRes = await systemParamsConfigKeyconfigKey_Get({ configKey: 'edu:guet:term' });
+				// console.log('获取到学期参数', termRes);
+				// //判断是否离线
+				// if (termRes.data.code != 200) {
+				// 	this.$ShowToastSuc('服务器获取学期异常');
+				// 	this.killWatchDog();
+				// 	return;
+				// }
+
+				let temp = await eduGuetCourseTable_Post().then(res => {
+					console.log('课表请求', res);
 					if (res.data.code == 200) {
 						//清除看门狗
 						this.killWatchDog();
@@ -120,10 +131,17 @@ export default {
 						this.onecFlag = true;
 						return this.grouping(res.data.data);
 					} else {
-						// this.$ShowToastErr('课表请求异常');
+						this.$ShowToastErr(res.data.msg);
+						if(res.data.code===4444){
+							
+							uni.navigateTo({
+								url: '/subpages/campusAuthentication/campusAuthentication'
+							});
+						}
+						
 						this.$refs.uToast.show({
 							type: 'error',
-							message: '课表请求异常：' + res.data.code,
+							message: '课表请求异常：' + res.data.msg,
 							duration: 1000,
 							position: 'bottom'
 						});
@@ -257,8 +275,15 @@ export default {
 		// 挂载完成再操作
 		try {
 			[this.timeInfo.nowWeek, this.timeInfo.nowNum] = manageData.timeAnalysis(this.$store.state.edu.timeNode);
+			// 当前时间为负数时 则归为0
+			this.timeInfo.nowWeek = this.timeInfo.nowWeek < 0 ? 0 : this.timeInfo.nowWeek;
 			this.timeInfo.weekActiveFlag = this.timeInfo.nowWeek;
+
+			console.log('计算周数', this.timeInfo);
 			// 更新vuex中的时间公共数据
+			if (this.$store.state.edu.timeNode > new Date().getTime()) {
+				this.$store.commit('edu/setTimeNode', 0);
+			}
 			this.$store.dispatch('edu/setWeek', [this.timeInfo.nowWeek, this.timeInfo.nowNum]);
 			// console.log('时间分析', this.timeInfo);
 

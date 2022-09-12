@@ -93,7 +93,7 @@ export default {
 				//transferType = 1 传递学分绩参数
 				let allObj = {
 					...termObj,
-					stid: this.eduInfo.stid.toString(),
+					stid: this.eduInfo.studentNumber.toString(),
 					stype: this.stype.toString(),
 					chk: this.check.toString()
 				};
